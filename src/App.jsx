@@ -7,6 +7,10 @@ import HomePage from "./Components/HomePage";
 import UserDashboardPage from "./Components/UserDashboardPage";
 import SupportPage from "./Components/SupportPage";
 import AboutPage from "./Components/AboutPage";
+import AdminDashboardPage from "./Components/Admin/AdminDashboardPage";
+import QuizManager from "./Components/Admin/QuizManager";
+import AddQuiz from "./Components/Admin/AddQuiz";
+import AdminRoute from "./Components/Admin/AdminRoute";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -20,6 +24,11 @@ function App() {
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/contact" element={<SupportPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/admin" element={<AdminRoute />}>
+            <Route path="dashboard" element={<AdminDashboardPage />} />
+            <Route path="quiz" element={<QuizManager />} />
+          </Route>
+
           <Route path="/user-dashboard" element={<UserDashboardPage />} />
         </Routes>
       </BrowserRouter>
