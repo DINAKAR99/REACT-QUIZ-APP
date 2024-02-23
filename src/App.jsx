@@ -11,6 +11,7 @@ import AdminDashboardPage from "./Components/Admin/AdminDashboardPage";
 import QuizManager from "./Components/Admin/QuizManager";
 import AddQuiz from "./Components/Admin/AddQuiz";
 import AdminRoute from "./Components/Admin/AdminRoute";
+import Mod from "./Components/Admin/modals/Mod";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -24,6 +25,7 @@ function App() {
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/contact" element={<SupportPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/modal" element={<Mod />} />
           <Route path="/admin" element={<AdminRoute />}>
             <Route path="dashboard" element={<AdminDashboardPage />} />
             <Route path="quiz" element={<QuizManager />} />

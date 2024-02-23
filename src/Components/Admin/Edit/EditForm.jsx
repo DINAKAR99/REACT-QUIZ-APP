@@ -1,85 +1,71 @@
 import React, { useEffect, useState } from "react";
-import { Button, Container, Input } from "reactstrap";
-import {
-  createQuestion,
-  getQuestionCount,
-  updateQuestion,
-} from "../Helper/QuizHelper";
+import { Button, Card, CardBody, Container, Input } from "reactstrap";
 
-const AddQuiz = () => {
-  ///
-
-  const [categories, setCategories] = useState([
-    { categoryTitle: "java", categoryId: 2 },
-    { categoryTitle: "react", categoryId: 4 },
-    ,
-    { categoryTitle: "spring", categoryId: 5 },
-  ]);
-  const [questionCount, setQuestionCount] = useState(0);
-
-  const [questionData, setQuestionData] = useState({
-    questionId: "",
-    question: "",
+const EditForm = ({ packet }) => {
+  //------------
+  const [questionPacket, setQuestionPacket] = useState({
+    question: "sample",
     options: {
-      A: "",
-      B: "",
-      C: "",
-      D: "",
+      A: "wdw",
+      B: "dwd",
+      C: "dw",
+      D: "x",
     },
     category: { categoryId: "", categoryTitle: "" },
     correctAnswer: "",
   });
-  ////
-  //-----------------functions---------------------------------
-  useEffect(() => {});
-  //submmit function
-  const handleSubmit = (event) => {
+
+  const [categories, setCategories] = useState([
+    { categoryTitle: "java", categoryId: 1 },
+    { categoryTitle: "react", categoryId: 2 },
+    ,
+    { categoryTitle: "spring", categoryId: 3 },
+  ]);
+  //------------
+  //edit function
+  const handleEdit = (event) => {
     event.preventDefault();
-    console.log(questionData);
+    console.log(questionPacket);
     //pushing into firebase db
     //get question count
-
-    getQuestionCount(questionData.category.categoryTitle)
-      .then((Response) => {
-        console.log(Response.data.length);
-        setQuestionData({ ...questionData, questionId: Response.data.length });
-
-        return Response.data.length;
-      })
-      .then((length) => {
-        console.log(length);
-
-        createQuestion(
-          questionData.category.categoryTitle,
-          length,
-          questionData
-        );
-      });
+    updateQuestion(
+      questionPacket.category.categoryTitle,
+      length,
+      questionPacket
+    );
   };
 
+  //   ------------------
+  useEffect(() => {
+    setQuestionPacket(packet);
+    console.log(packet);
+  }, []);
+  //   ------------------
+
+  //-----------------functions---------------------------------
   //field changed function
   const fieldChanged = (event) => {
     //console.log(event)
-    setQuestionData({
-      ...questionData,
+    setQuestionPacket({
+      ...questionPacket,
       [event.target.name]: event.target.value,
     });
   };
 
   //option  change function
   const optionChanged = (event) => {
-    setQuestionData({
-      ...questionData,
+    setQuestionPacket({
+      ...questionPacket,
       options: {
-        ...questionData.options,
+        ...questionPacket.options,
         [event.target.name]: event.target.value,
       },
     });
   };
   //correct answer change function
   const handleRadioChange = (event) => {
-    setQuestionData({
-      ...questionData,
+    setQuestionPacket({
+      ...questionPacket,
 
       correctAnswer: event.target.value,
     });
@@ -89,8 +75,8 @@ const AddQuiz = () => {
   const categoryChanged = (event) => {
     const selectedCategory = JSON.parse(event.target.value);
     console.log(selectedCategory);
-    setQuestionData({
-      ...questionData,
+    setQuestionPacket({
+      ...questionPacket,
       category: selectedCategory,
     });
   };
@@ -101,9 +87,9 @@ const AddQuiz = () => {
     <Container>
       <div>
         <div className="wrapper    justify-content-center align-items-center">
-          {JSON.stringify(questionData)}
+          {JSON.stringify(questionPacket)}
           <h3>CREATE QUESTION</h3>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleEdit}>
             <div className="my-3">
               <label htmlFor="content">
                 <b>Question</b>
@@ -115,6 +101,7 @@ const AddQuiz = () => {
                 className="rounded-0"
                 aria-rowcount={4}
                 name="question"
+                value={questionPacket.question}
                 onChange={fieldChanged}
               ></Input>
             </div>
@@ -130,7 +117,7 @@ const AddQuiz = () => {
                 className="rounded-0"
                 name="categoryId"
                 onChange={categoryChanged}
-                defaultValue={0}
+                value={questionPacket.category.categoryId}
               >
                 <option disabled value={0}>
                   --Select category--
@@ -155,7 +142,7 @@ const AddQuiz = () => {
                 type="text"
                 id="content"
                 placeholder="Enter here"
-                value={questionData.options.A}
+                value={questionPacket.options.A}
                 className="rounded-0"
                 style={{ height: "30px" }}
                 name="A"
@@ -171,7 +158,7 @@ const AddQuiz = () => {
                 id="content"
                 placeholder="Enter here"
                 className="rounded-0"
-                value={questionData.options.B}
+                value={questionPacket.options.B}
                 style={{ height: "30px" }}
                 name="B"
                 onChange={optionChanged}
@@ -186,7 +173,7 @@ const AddQuiz = () => {
                 id="content"
                 placeholder="Enter here"
                 className="rounded-0"
-                value={questionData.options.C}
+                value={questionPacket.options.C}
                 style={{ height: "30px" }}
                 name="C"
                 onChange={optionChanged}
@@ -201,7 +188,7 @@ const AddQuiz = () => {
                 type="text"
                 id="content"
                 placeholder="Enter here"
-                value={questionData.options.D}
+                value={questionPacket.options.D}
                 className="rounded-0"
                 style={{ height: "30px" }}
                 name="D"
@@ -215,25 +202,37 @@ const AddQuiz = () => {
               <Input
                 type="radio"
                 name="answer"
-                value={questionData.options.A}
+                checked={
+                  questionPacket.correctAnswer === questionPacket.options.A
+                }
+                value={questionPacket.options.A}
               ></Input>
               &nbsp;A &nbsp;
               <Input
                 type="radio"
                 name="answer"
-                value={questionData.options.B}
+                checked={
+                  questionPacket.correctAnswer === questionPacket.options.B
+                }
+                value={questionPacket.options.B}
               ></Input>
               &nbsp;B &nbsp;
               <Input
                 type="radio"
                 name="answer"
-                value={questionData.options.C}
+                checked={
+                  questionPacket.correctAnswer === questionPacket.options.C
+                }
+                value={questionPacket.options.C}
               ></Input>
               &nbsp;C &nbsp;
               <Input
                 type="radio"
                 name="answer"
-                value={questionData.options.D}
+                checked={
+                  questionPacket.correctAnswer === questionPacket.options.D
+                }
+                value={questionPacket.options.D}
               ></Input>
               &nbsp;D &nbsp;
             </div>
@@ -253,4 +252,4 @@ const AddQuiz = () => {
   );
 };
 
-export default AddQuiz;
+export default EditForm;

@@ -30,18 +30,9 @@ const QuizManager = () => {
                     <NavLink
                       className=" border-bottom border-black custom  "
                       href="#"
-                      onClick={() => handleSidebarButtonClick("createQuestion")}
-                    >
-                      create Question
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink
-                      className=" border-bottom border-black custom  "
-                      href="#"
                       onClick={() => handleSidebarButtonClick("allquiz")}
                     >
-                      all quiz
+                      All quiz
                     </NavLink>
                   </NavItem>
                   <NavItem>
@@ -49,7 +40,7 @@ const QuizManager = () => {
                       className=" border-bottom border-black custom  "
                       href="#"
                     >
-                      delete
+                      Delete
                     </NavLink>
                   </NavItem>
                   <NavItem>
@@ -57,7 +48,7 @@ const QuizManager = () => {
                       className=" border-bottom border-black custom  "
                       href="#"
                     >
-                      edit quiz
+                      Edit Quiz
                     </NavLink>
                   </NavItem>
                   <NavItem>
@@ -73,7 +64,7 @@ const QuizManager = () => {
             </Col>
             <Col sm="9" md="10" className="main-content">
               {/* Conditionally render the appropriate form */}
-              {selectedForm === "createQuestion" && <AddQuiz />}
+
               {selectedForm === "allquiz" && <AllQuiz />}
               {/* Add more conditions for other forms */}
             </Col>
