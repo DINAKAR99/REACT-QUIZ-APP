@@ -1,13 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Col, Collapse, Container, Row } from "reactstrap";
 import Mod from "./modals/Mod";
 import EditQuiz from "./Edit/EditQuiz";
+import {
+  deleteQuestion,
+  getAllQuestionsPerCategory,
+} from "../Helper/QuizHelper";
 
 const AllQuiz = () => {
   const [modal, setModal] = useState(false);
   const [modal2, setModal2] = useState(false);
   const [senderPacket, setSenderPacket] = useState({});
   const [backdrop, setBackdrop] = useState(true);
+  const [retrievedQuestions, setRetrievedQuestions] = useState();
 
   const categories = [
     { categorieName: "java", NoOfQuestions: "10" },
@@ -125,8 +130,28 @@ const AllQuiz = () => {
     index: "",
   });
 
+  //useeffect
+  useEffect(() => {
+    for (let index = 0; index < categories.length; index++) {
+      const catName = categories[index].categorieName;
+      // console.log(catName);
+      getAllQuestionsPerCategory(catName).then((qArray) => {
+        setRetrievedQuestions((prevState) => ({
+          ...prevState,
+          [catName]: Object.values(qArray.slice(1, -1)),
+        }));
+        //
+      });
+    }
+  }, []);
+
   //function to toggle modal
-  const toggle = () => setModal(!modal);
+  const toggle = () => {
+    setModal(!modal);
+
+    console.log(retrievedQuestions);
+  };
+  //edit toggle
   const edittoggle = (datapacket) => {
     setModal2(!modal2);
     setSenderPacket(datapacket);
@@ -138,7 +163,12 @@ const AllQuiz = () => {
     setQuizCategory(category_name);
   };
 
-  // Function to toggle collapse state
+  //delete function
+  const deleteHandler = (category, questionId) => {
+    deleteQuestion(category, questionId);
+  };
+
+  // Function to toggle collapse options
   const toggleCollapse = (category, index) => {
     if (toggleOptions.category === category && toggleOptions.index === index) {
       // Collapse if already open
@@ -193,62 +223,83 @@ const AllQuiz = () => {
             {quizCategory && (
               <div>
                 <h3> Questions for {quizCategory}</h3>
-
-                <ol type={1}>
-                  {sampleQuestions[quizCategory].map(
-                    (QuestionPacket, index) => (
-                      <div key={index}>
-                        <li key={index}>{QuestionPacket.question}</li>
-                        <Button
-                          className="me-2 bg-black "
-                          onClick={() => toggleCollapse(quizCategory, index)}
-                          size="sm"
-                        >
-                          options
-                        </Button>
-                        <Button
-                          className="me-2 bg-grey "
-                          size="sm"
-                          onClick={() => edittoggle(QuestionPacket)}
-                        >
-                          Edit
-                        </Button>
-                        <Button className="me-2 bg-danger   " size="sm">
-                          Delete
-                        </Button>
-
-                        <Collapse
-                          isOpen={
-                            toggleOptions.category == quizCategory &&
-                            toggleOptions.index == index
-                          }
-                        >
-                          <ol type="A">
-                            {Object.keys(QuestionPacket.options).map(
-                              (optionKey, indexx) => {
-                                return (
-                                  <li key={indexx}>
-                                    <input
-                                      type="radio"
-                                      value={QuestionPacket.options[optionKey]}
-                                      checked={
-                                        QuestionPacket.correctAnswer ===
-                                        QuestionPacket.options[optionKey]
-                                      }
-                                      readOnly
-                                    />
-
-                                    {QuestionPacket.options[optionKey]}
-                                  </li>
-                                );
-                              }
+                {retrievedQuestions && (
+                  <ol type={1}>
+                    {retrievedQuestions[quizCategory].map(
+                      (QuestionPacket, index) => (
+                        <div key={index}>
+                          <li key={index}>
+                            {Object.values(QuestionPacket)[0].question}
+                          </li>
+                          <Button
+                            className="me-2 bg-black "
+                            onClick={() => toggleCollapse(quizCategory, index)}
+                            size="sm"
+                          >
+                            options
+                          </Button>
+                          <Button
+                            className="me-2 bg-grey "
+                            size="sm"
+                            onClick={() =>
+                              edittoggle(Object.values(QuestionPacket)[0])
+                            }
+                          >
+                            Edit
+                          </Button>
+                          <Button
+                            className="me-2 bg-danger"
+                            size="sm"
+                            onClick={deleteHandler(
+                              quizCategory,
+                              Object.values(QuestionPacket)[0].questionId
                             )}
-                          </ol>
-                        </Collapse>
-                      </div>
-                    )
-                  )}
-                </ol>
+                          >
+                            Delete
+                          </Button>
+
+                          <Collapse
+                            isOpen={
+                              toggleOptions.category == quizCategory &&
+                              toggleOptions.index == index
+                            }
+                          >
+                            <ol type="A">
+                              {Object.values(QuestionPacket)[0].options &&
+                                Object.keys(
+                                  Object.values(QuestionPacket)[0].options
+                                ).map((optionKey, indexx) => {
+                                  return (
+                                    <li key={indexx}>
+                                      <input
+                                        type="radio"
+                                        value={
+                                          Object.values(QuestionPacket)[0]
+                                            .options[optionKey]
+                                        }
+                                        checked={
+                                          Object.values(QuestionPacket)[0]
+                                            .correctAnswer ===
+                                          Object.values(QuestionPacket)[0]
+                                            .options[optionKey]
+                                        }
+                                        readOnly
+                                      />
+
+                                      {
+                                        Object.values(QuestionPacket)[0]
+                                          .options[optionKey]
+                                      }
+                                    </li>
+                                  );
+                                })}
+                            </ol>
+                          </Collapse>
+                        </div>
+                      )
+                    )}
+                  </ol>
+                )}
               </div>
             )}
           </div>

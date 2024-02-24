@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Button, Card, CardBody, Container, Input } from "reactstrap";
+import { updateQuestion } from "../../Helper/QuizHelper";
 
 const EditForm = ({ packet }) => {
   //------------
   const [questionPacket, setQuestionPacket] = useState({
+    questionId: "",
     question: "sample",
     options: {
       A: "wdw",
@@ -30,7 +32,7 @@ const EditForm = ({ packet }) => {
     //get question count
     updateQuestion(
       questionPacket.category.categoryTitle,
-      length,
+      questionPacket.questionId,
       questionPacket
     );
   };
@@ -197,7 +199,7 @@ const EditForm = ({ packet }) => {
             </div>
 
             {/* ///radiobutton */}
-            <div className="my-3" onChange={handleRadioChange}>
+            <div className="my-3">
               <h5>Answer</h5>
               <Input
                 type="radio"
@@ -205,6 +207,7 @@ const EditForm = ({ packet }) => {
                 checked={
                   questionPacket.correctAnswer === questionPacket.options.A
                 }
+                onChange={handleRadioChange}
                 value={questionPacket.options.A}
               ></Input>
               &nbsp;A &nbsp;
@@ -214,6 +217,7 @@ const EditForm = ({ packet }) => {
                 checked={
                   questionPacket.correctAnswer === questionPacket.options.B
                 }
+                onChange={handleRadioChange}
                 value={questionPacket.options.B}
               ></Input>
               &nbsp;B &nbsp;
@@ -223,6 +227,7 @@ const EditForm = ({ packet }) => {
                 checked={
                   questionPacket.correctAnswer === questionPacket.options.C
                 }
+                onChange={handleRadioChange}
                 value={questionPacket.options.C}
               ></Input>
               &nbsp;C &nbsp;
@@ -232,6 +237,7 @@ const EditForm = ({ packet }) => {
                 checked={
                   questionPacket.correctAnswer === questionPacket.options.D
                 }
+                onChange={handleRadioChange}
                 value={questionPacket.options.D}
               ></Input>
               &nbsp;D &nbsp;

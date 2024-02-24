@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Button, Container, Input } from "reactstrap";
 import {
   createQuestion,
+  getQCount,
   getQuestionCount,
+  incrementQCount,
   updateQuestion,
 } from "../Helper/QuizHelper";
 
@@ -35,25 +37,22 @@ const AddQuiz = () => {
   //submmit function
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(questionData);
-    //pushing into firebase db
+
     //get question count
-
-    getQuestionCount(questionData.category.categoryTitle)
+    getQCount(questionData.category.categoryTitle)
       .then((Response) => {
-        console.log(Response.data.length);
-        setQuestionData({ ...questionData, questionId: Response.data.length });
+        console.log(Response.data.count);
 
-        return Response.data.length;
+        return Response.data.count;
       })
-      .then((length) => {
-        console.log(length);
-
-        createQuestion(
-          questionData.category.categoryTitle,
-          length,
-          questionData
-        );
+      .then((questionCount) => {
+        //pushing into firebase db
+        createQuestion(questionData.category.categoryTitle, questionCount, {
+          ...questionData,
+          questionId: questionCount,
+        });
+        ///after pushing question we increment the question count
+        incrementQCount(questionData.category.categoryTitle);
       });
   };
 

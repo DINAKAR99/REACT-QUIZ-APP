@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-import AddQuiz from "../AddQuiz";
+import React, { useEffect } from "react";
+import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import EditForm from "./EditForm";
 
 const EditQuiz = ({ modal2, backdrop2, setModal, packet }) => {
