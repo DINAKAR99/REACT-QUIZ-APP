@@ -3,21 +3,22 @@ import { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LoginPage from "./Authentication/LoginPage";
 import SignupPage from "./Authentication/SignupPage";
-import HomePage from "./Components/HomePage";
-import UserDashboardPage from "./Components/UserDashboardPage";
-import SupportPage from "./Components/SupportPage";
 import AboutPage from "./Components/AboutPage";
 import AdminDashboardPage from "./Components/Admin/AdminDashboardPage";
-import QuizManager from "./Components/Admin/QuizManager";
-import AddQuiz from "./Components/Admin/AddQuiz";
 import AdminRoute from "./Components/Admin/AdminRoute";
+import QuizManager from "./Components/Admin/QuizManager";
 import Mod from "./Components/Admin/modals/Mod";
+import HomePage from "./Components/HomePage";
+import SupportPage from "./Components/SupportPage";
+import UserDashboardPage from "./Components/UserDashboardPage";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
     <>
+      <Toaster />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomePage />} />

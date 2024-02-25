@@ -1,8 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Button, Card, CardBody, Container, Input } from "reactstrap";
+import React, { useContext, useEffect, useState } from "react";
+import { Button, Container, Input } from "reactstrap";
 import { updateQuestion } from "../../Helper/QuizHelper";
+import myContext from "../../context/ContextCore";
+import toast from "react-hot-toast";
 
-const EditForm = ({ packet }) => {
+const EditForm = ({ packet, toggle }) => {
+  // using context
+  const { setRefreshToken } = useContext(myContext);
   //------------
   const [questionPacket, setQuestionPacket] = useState({
     questionId: "",
@@ -28,13 +32,17 @@ const EditForm = ({ packet }) => {
   const handleEdit = (event) => {
     event.preventDefault();
     console.log(questionPacket);
-    //pushing into firebase db
-    //get question count
+    //pushing edit into firebase db and showing a success toast
     updateQuestion(
       questionPacket.category.categoryTitle,
       questionPacket.questionId,
       questionPacket
-    );
+    ).then(() => {
+      setRefreshToken((prev) => prev + 1);
+    });
+    toast.success("Question Updated!");
+    // modalToggle
+    toggle();
   };
 
   //   ------------------
@@ -245,7 +253,7 @@ const EditForm = ({ packet }) => {
 
             <Container className="text-center">
               <Button type="submit" className="rounded" color="dark">
-                Create Question
+                Update Question
               </Button>
               <Button type="reset" className="rounded ms-2  " color="danger">
                 Reset Content

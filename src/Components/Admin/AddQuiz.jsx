@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
+import toast from "react-hot-toast";
 import { Button, Container, Input } from "reactstrap";
 import {
   createQuestion,
   getQCount,
-  getQuestionCount,
   incrementQCount,
-  updateQuestion,
 } from "../Helper/QuizHelper";
+import myContext from "../context/ContextCore";
 
-const AddQuiz = () => {
-  ///
+const AddQuiz = ({ toggle }) => {
+  // using context
+  const { refreshToken, setRefreshToken } = useContext(myContext);
 
   const [categories, setCategories] = useState([
     { categoryTitle: "java", categoryId: 2 },
@@ -17,7 +18,6 @@ const AddQuiz = () => {
     ,
     { categoryTitle: "spring", categoryId: 5 },
   ]);
-  const [questionCount, setQuestionCount] = useState(0);
 
   const [questionData, setQuestionData] = useState({
     questionId: "",
@@ -33,7 +33,7 @@ const AddQuiz = () => {
   });
   ////
   //-----------------functions---------------------------------
-  useEffect(() => {});
+
   //submmit function
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -47,12 +47,25 @@ const AddQuiz = () => {
       })
       .then((questionCount) => {
         //pushing into firebase db
-        createQuestion(questionData.category.categoryTitle, questionCount, {
-          ...questionData,
-          questionId: questionCount,
-        });
+        toast.promise(
+          createQuestion(questionData.category.categoryTitle, questionCount, {
+            ...questionData,
+            questionId: questionCount,
+          }),
+          {
+            loading: "Creating...",
+            success: <b>Question Created!</b>,
+            error: <b>Could not create question</b>,
+          }
+        );
         ///after pushing question we increment the question count
         incrementQCount(questionData.category.categoryTitle);
+      })
+      .then(() => {
+        console.log(refreshToken);
+        setRefreshToken((prev) => prev + 1);
+        console.log(refreshToken);
+        toggle();
       });
   };
 

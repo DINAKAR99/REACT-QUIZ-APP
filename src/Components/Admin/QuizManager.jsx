@@ -2,17 +2,26 @@ import React, { useState } from "react";
 import CustomNavbar from "../CustomNavbar";
 import { Col, Container, Row } from "reactstrap";
 import { Nav, NavItem, NavLink } from "reactstrap";
-import AddQuiz from "./AddQuiz";
+
 import AllQuiz from "./AllQuiz";
+import AddCategory from "./modals/AddCategory";
 
 const QuizManager = () => {
   //clicked component state management
-
   const [selectedForm, setSelectedForm] = useState("allquiz");
+  //modal state
+  const [modal3, setModal3] = useState(false);
+  const [backdrop, setBackdrop] = useState(true);
+
+  //category toggle
+  const createCategory = () => {
+    setModal3(!modal3);
+  };
   // Function to handle button clicks in the sidebar
   const handleSidebarButtonClick = (component_name) => {
     setSelectedForm(component_name);
   };
+
   return (
     <div>
       <CustomNavbar />
@@ -35,14 +44,7 @@ const QuizManager = () => {
                       All quiz
                     </NavLink>
                   </NavItem>
-                  <NavItem>
-                    <NavLink
-                      className=" border-bottom border-black custom  "
-                      href="#"
-                    >
-                      Delete
-                    </NavLink>
-                  </NavItem>
+
                   <NavItem>
                     <NavLink
                       className=" border-bottom border-black custom  "
@@ -54,9 +56,9 @@ const QuizManager = () => {
                   <NavItem>
                     <NavLink
                       className=" border-bottom border-black custom  "
-                      href="/quizmanage"
+                      onClick={() => createCategory()}
                     >
-                      Quiz Management
+                      Add New Category
                     </NavLink>
                   </NavItem>
                 </Nav>
@@ -64,7 +66,11 @@ const QuizManager = () => {
             </Col>
             <Col sm="9" md="10" className="main-content">
               {/* Conditionally render the appropriate form */}
-
+              <AddCategory
+                modal={modal3}
+                backdrop={backdrop}
+                setModal={setModal3}
+              />
               {selectedForm === "allquiz" && <AllQuiz />}
               {/* Add more conditions for other forms */}
             </Col>

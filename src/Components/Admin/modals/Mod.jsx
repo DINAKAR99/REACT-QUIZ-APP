@@ -2,15 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import AddQuiz from "../AddQuiz";
 
-const Mod = ({ modal2, backdrop2, setModal }) => {
+const Mod = ({ modal2, backdrop, setModal }) => {
   const setModalFunc = setModal;
   const toggle = () => setModalFunc(!modal2);
   return (
     <div>
-      <Modal isOpen={modal2} toggle={toggle} backdrop={backdrop2}>
+      <Modal isOpen={modal2} toggle={toggle} backdrop={backdrop}>
         <ModalHeader toggle={toggle}>Modal title</ModalHeader>
         <ModalBody>
-          <AddQuiz />
+          <AddQuiz toggle={toggle} />
         </ModalBody>
         <ModalFooter>
           {/* <Button color="primary" onClick={toggle}>

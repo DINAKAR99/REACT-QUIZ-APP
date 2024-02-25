@@ -15,7 +15,7 @@ const EditQuiz = ({ modal2, backdrop2, setModal, packet }) => {
       <Modal isOpen={modal2} toggle={toggle} backdrop={backdrop2}>
         <ModalHeader toggle={toggle}>Modal title</ModalHeader>
         <ModalBody>
-          <EditForm packet={packet} />
+          <EditForm packet={packet} toggle={toggle} />
         </ModalBody>
         <ModalFooter>
           {/* <Button color="primary" onClick={toggle}>

@@ -4,12 +4,6 @@ const public_url =
   "https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/";
 //get question count
 
-export const getQuestionCount = (categoryTitle) => {
-  const createUrl = `${public_url}/questions/${categoryTitle}.json`;
-
-  return axios.get(createUrl);
-};
-
 /////
 export const getQCount = (categoryTitle) => {
   const createUrl = `${public_url}/questions/${categoryTitle}/questionCount.json`;
@@ -34,13 +28,37 @@ export const incrementQCount = (categoryTitle) => {
       });
     });
 };
-//////
+
+//create category
+export const createCategory = (categoryTitle) => {
+  const createUrl = `${public_url}/questions/${categoryTitle}/0.json`;
+
+  //for creating question count
+  const counturl = `${public_url}/questions/${categoryTitle}/questionCount.json`;
+  axios.put(counturl, { count: 0 });
+
+  // creating the 0 obejct
+  return axios
+    .post(createUrl, { sample: "sample" })
+    .then((Response) => console.log(Response.data));
+};
+
+//fecth categories
+export const getAllCategories = () => {
+  const createUrl = `${public_url}/questions.json`;
+
+  return axios.get(createUrl).then((Response) => {
+    return Object.keys(Response.data);
+  });
+};
+
+///////////////////////////////////////////////////////////////
 
 //create question
 export const createQuestion = (categoryTitle, questionId, questionPacket) => {
   const createUrl = `${public_url}/questions/${categoryTitle}/${questionId}.json`;
 
-  axios
+  return axios
     .post(createUrl, questionPacket)
     .then((Response) => console.log(Response.data));
 };
@@ -48,17 +66,17 @@ export const createQuestion = (categoryTitle, questionId, questionPacket) => {
 // update question
 export const updateQuestion = (categoryTitle, questionId, questionPacket) => {
   const createUrl = `${public_url}/questions/${categoryTitle}/${questionId}.json`;
-
-  axios
-    .put(createUrl, questionPacket)
-    .then((Response) => console.log(Response.data));
+  //first we delete the question
+  deleteQuestion(categoryTitle, questionId);
+  console.log("dlete success");
+  return createQuestion(categoryTitle, questionId, questionPacket);
 };
 
 // delete question
 export const deleteQuestion = (categoryTitle, questionId) => {
   const createUrl = `${public_url}/questions/${categoryTitle}/${questionId}.json`;
 
-  axios.delete(createUrl).then((Response) => console.log(Response.data));
+  return axios.delete(createUrl);
 };
 
 //get all questions
@@ -72,3 +90,5 @@ export const getAllQuestionsPerCategory = (categoryTitle) => {
     return Object.values(Response.data);
   });
 };
+
+///////////////////////////////////////////////////////////////
