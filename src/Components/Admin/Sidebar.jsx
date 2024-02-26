@@ -6,33 +6,32 @@ import { Nav, NavItem, NavLink } from "reactstrap";
 const Sidebar = ({ handleButtonClick }) => {
   return (
     <div
-      className="sidebar  rounded  border-3 border-black border   mt-3   "
-      style={{ height: "100vh", backgroundColor: "#B4B4B8" }}
+      className="sidebar    border-3        "
+      style={{ height: "100vh", backgroundColor: "#212529" }}
     >
-      <Nav vertical navbar fill>
+      <Nav vertical navbar fill className="text-white  ">
         <NavItem>
           <NavLink
-            className="custom   rounded-top  border-bottom border-black "
-            href="#"
-            onClick={() => handleButtonClick("createQuestion")}
+            className=" border-top   border-bottom border-opacity-50      border-white  custom "
+            href="quiz"
           >
-            Dashboard
-          </NavLink>
-        </NavItem>
-
-        <NavItem>
-          <NavLink className=" border-bottom border-black custom " href="quiz">
-            Quiz Management
+            Quiz Dashboard
           </NavLink>
         </NavItem>
         <NavItem>
-          <NavLink className=" border-bottom border-black custom " href="#">
+          <NavLink
+            className=" border-bottom border-white border-opacity-50   custom "
+            href="#"
+          >
             Users
           </NavLink>
         </NavItem>
 
         <NavItem>
-          <NavLink className=" border-bottom border-black custom " href="#">
+          <NavLink
+            className=" border-bottom border-white border-opacity-50  custom "
+            href="#"
+          >
             Settings
           </NavLink>
         </NavItem>

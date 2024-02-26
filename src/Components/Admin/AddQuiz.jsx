@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Button, Container, Input } from "reactstrap";
 import {
@@ -8,8 +8,9 @@ import {
 } from "../Helper/QuizHelper";
 import myContext from "../context/ContextCore";
 
-const AddQuiz = ({ toggle }) => {
+const AddQuiz = ({ toggle, categoryPacket, section }) => {
   // using context
+
   const { setRefreshToken } = useContext(myContext);
 
   const [categories, setCategories] = useState([
@@ -18,6 +19,20 @@ const AddQuiz = ({ toggle }) => {
     ,
     { categoryTitle: "spring", categoryId: 5 },
   ]);
+
+  useEffect(() => {
+    console.log(categoryPacket);
+    let catArray = [];
+    let temp = {};
+    categoryPacket?.forEach((category) => {
+      temp = { categoryTitle: category, categoryId: 1 };
+      catArray.push(temp);
+    });
+    setCategories(catArray);
+
+    console.log(catArray);
+    // setCategories(categoryPacket);
+  });
 
   const [questionData, setQuestionData] = useState({
     questionId: "",

@@ -1,18 +1,24 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+
+import styles from "react-awesome-button/src/styles/themes/theme-blue";
+
 import { Button, Col, Collapse, Container, Row } from "reactstrap";
 import Mod from "./modals/Mod";
 import EditQuiz from "./Edit/EditQuiz";
 import {
+  deleteCategory,
   deleteQuestion,
   getAllCategories,
   getAllQuestionsPerCategory,
 } from "../Helper/QuizHelper";
 import myContext from "../context/ContextCore";
 import toast from "react-hot-toast";
+import { AwesomeButton, AwesomeButtonProgress } from "react-awesome-button";
 
 const AllQuiz = ({ token }) => {
   const [modal, setModal] = useState(false);
   const [modal2, setModal2] = useState(false);
+  const [sectionCategory, setSectionCategory] = useState("");
 
   //usecontext
   // const { token } = useContext(myContext);
@@ -94,13 +100,17 @@ const AllQuiz = ({ token }) => {
   }, [fetchedCategory]);
 
   //function to toggle modal
-  const toggle = () => {
+  const toggle = (categoryTitle) => {
     setModal(!modal);
-
+    setSectionCategory((prev) => categoryTitle);
     console.log(retrievedQuestions);
   };
 
-  const deleteCategory = () => {};
+  const deleteCategoryy = (categoryTitle) => {
+    deleteCategory(categoryTitle).then(() => {
+      setRefreshToken((prev) => prev + 1);
+    });
+  };
 
   //edit toggle
   const edittoggle = (datapacket) => {
@@ -120,7 +130,7 @@ const AllQuiz = ({ token }) => {
     // deleteQuestion(category, questionId).then(() => {
     //   toast.success("Question deleted!");
     //   setRefreshToken((prev) => prev + 1);
-    sampleFunction(event);
+    // sampleFunction(event);
     // });
   };
 
@@ -157,7 +167,13 @@ const AllQuiz = ({ token }) => {
   return (
     <Container className="mt-3 ">
       <myContext.Provider value={{ refreshToken, setRefreshToken }}>
-        <Mod modal2={modal} backdrop={backdrop} setModal={setModal} />
+        <Mod
+          modal2={modal}
+          backdrop={backdrop}
+          setModal={setModal}
+          categoriesPacket={fetchedCategory}
+          section={sectionCategory}
+        />
         <EditQuiz
           modal2={modal2}
           backdrop2={backdrop}
@@ -168,54 +184,66 @@ const AllQuiz = ({ token }) => {
 
       <Row>
         <Col md={6}>
+          <div>
+            <h3>
+              <b>&nbsp; TECHNOLOGIES</b>
+            </h3>
+          </div>
           {fetchedCategory &&
             fetchedCategory.map((each, index) => {
               return (
-                <div className="border border-dark rounded p-3 mb-2  ">
-                  <h5>
-                    {index + 1}.{each}
-                  </h5>
-                  <h6>
-                    No Of Questions:{" "}
-                    {retrievedQuestions && (
-                      <>{retrievedQuestions[each]?.length}</>
-                    )}
-                  </h6>
+                <>
+                  <div className="border border-grey        rounded p-3 mb-2 shadow-lg  bg-white   ">
+                    <h5>
+                      {index + 1}.{each}
+                    </h5>
+                    <h6>
+                      No Of Questions:{" "}
+                      {retrievedQuestions && (
+                        <>{retrievedQuestions[each]?.length}</>
+                      )}
+                    </h6>
 
-                  <Button
-                    size="sm"
-                    onClick={() => handleShowQuestions(each)}
-                    className="me-2 bg-black "
-                  >
-                    Show Questions
-                  </Button>
-                  <Button
-                    size="sm"
-                    className="me-2 bg-success "
-                    onClick={toggle}
-                  >
-                    Add Question
-                  </Button>
-                  <Button
-                    size="sm"
-                    className="me-2 bg-danger  "
-                    onClick={toggle}
-                  >
-                    Delete
-                  </Button>
-                </div>
+                    <AwesomeButton
+                      onPress={() => handleShowQuestions(each)}
+                      className="me-2 "
+                      type="primary"
+                    >
+                      Show Questions
+                    </AwesomeButton>
+                    <AwesomeButton
+                      type="github"
+                      className="me-2   "
+                      onPress={() => toggle(each)}
+                    >
+                      Add Question
+                    </AwesomeButton>
+                    <AwesomeButton
+                      type="danger"
+                      className="me-2   "
+                      onPress={() => deleteCategoryy(each)}
+                    >
+                      Delete
+                    </AwesomeButton>
+                  </div>
+                </>
               );
             })}
         </Col>
 
         <Col md={6}>
+          <h3>
+            <b>&nbsp; QUESTIONS</b>
+          </h3>
           <div
-            className="border border-dark rounded p-3 mb-2     p-3 mb-2 overflow-y-scroll    "
+            className="border border-grey  shadow-lg bg-white  rounded p-3 mb-2       p-3 mb-2 overflow-y-scroll    "
             style={{ maxHeight: "405px" }}
           >
             {quizCategory && (
               <div>
-                <h3> Questions for {quizCategory}</h3>
+                <h3 className="text-center  ">
+                  <b> {quizCategory} </b>
+                </h3>
                 {retrievedQuestions && (
                   <ol type={1}>
                     {retrievedQuestions[quizCategory].map(
@@ -224,36 +252,39 @@ const AllQuiz = ({ token }) => {
                           <li key={index}>
                             {Object.values(QuestionPacket)[0].question}
                           </li>
-                          <Button
-                            className="me-2 bg-black "
-                            onClick={() => toggleCollapse(quizCategory, index)}
+                          <AwesomeButton
+                            className="me-2"
+                            type="facebook"
+                            onPress={() => toggleCollapse(quizCategory, index)}
                             size="sm"
                           >
                             options
-                          </Button>
-                          <Button
-                            className="me-2 bg-grey "
-                            size="sm"
-                            onClick={() =>
+                          </AwesomeButton>
+                          <AwesomeButton
+                            className="me-2"
+                            type="github"
+                            onPress={() =>
                               edittoggle(Object.values(QuestionPacket)[0])
                             }
                           >
                             Edit
-                          </Button>
-                          <Button
-                            className="me-2 bg-danger"
+                          </AwesomeButton>
+                          <AwesomeButton
+                            className="me-2  "
                             size="sm"
-                            onClick={() =>
+                            type="danger"
+                            onPress={() =>
                               deleteHandler(
                                 quizCategory,
-                                Object.values(QuestionPacket)[0].questionId
+                                Object.values(QuestionPacket)[0].questionId,
+                                event
                               )
                             }
                           >
                             Delete
-                          </Button>
+                          </AwesomeButton>
 
-                          {
+                          {/* {
                             <>
                               {" "}
                               <button
@@ -280,7 +311,7 @@ const AllQuiz = ({ token }) => {
                                 </div>
                               </button>
                             </>
-                          }
+                          } */}
 
                           <Collapse
                             isOpen={

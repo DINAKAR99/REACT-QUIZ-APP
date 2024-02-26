@@ -57,7 +57,7 @@ const AddCategory = ({ modal, backdrop, setModal, setToken }) => {
   return (
     <div>
       <Modal isOpen={modal} toggle={toggle} backdrop={backdrop}>
-        <ModalHeader toggle={toggle}>Enter Category</ModalHeader>
+        <ModalHeader toggle={toggle}>Category</ModalHeader>
         <ModalBody>
           <Form onSubmit={handleSubmit}>
             <Row className="row-cols-lg-auto g-3 align-items-center">

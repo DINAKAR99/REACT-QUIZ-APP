@@ -7,7 +7,7 @@ import AllQuiz from "./AllQuiz";
 import AddCategory from "./modals/AddCategory";
 import myContext from "../context/ContextCore";
 
-const QuizManager = () => {
+const QuizDashboard = () => {
   //clicked component state management
   const [selectedForm, setSelectedForm] = useState("allquiz");
   //modal state
@@ -35,15 +35,15 @@ const QuizManager = () => {
       <div className="admin-dashboard">
         <Container fluid>
           <Row>
-            <Col sm="3" md="2" className="sidebar">
+            <Col sm="3" md="2" className="sidebar text-white p-0  ">
               <div
-                className="sidebar  rounded  border-3 border-black border    mt-3   "
-                style={{ height: "100vh", backgroundColor: "#B4B4B8" }}
+                className="sidebar border-3 "
+                style={{ height: "100vh", backgroundColor: "#212529" }}
               >
                 <Nav vertical navbar fill>
                   <NavItem>
                     <NavLink
-                      className=" border-bottom border-black custom  "
+                      className=" border-top   border-bottom border-opacity-50      border-white custom  "
                       href="#"
                       onClick={() => handleSidebarButtonClick("allquiz")}
                     >
@@ -53,15 +53,15 @@ const QuizManager = () => {
 
                   <NavItem>
                     <NavLink
-                      className=" border-bottom border-black custom  "
-                      href="#"
+                      className=" border-bottom border-white border-opacity-50 custom  "
+                      href="/admin/dashboard"
                     >
-                      Edit Quiz
+                      Admin Dashboard
                     </NavLink>
                   </NavItem>
                   <NavItem>
                     <NavLink
-                      className=" border-bottom border-black custom  "
+                      className=" border-bottom border-white border-opacity-50 custom  "
                       onClick={() => createCategory()}
                     >
                       Add New Category
@@ -91,4 +91,4 @@ const QuizManager = () => {
   );
 };
 
-export default QuizManager;
+export default QuizDashboard;

@@ -31,7 +31,7 @@ const AdminDashboardPage = () => {
       <div className="admin-dashboard">
         <Container fluid>
           <Row>
-            <Col sm="3" md="2" className="sidebar ">
+            <Col sm="3" md="2" className="sidebar p-0  ">
               <Sidebar handleButtonClick={handleSidebarButtonClick} />
             </Col>
             <Col sm="9" md="10" className="main-content">
@@ -42,14 +42,14 @@ const AdminDashboardPage = () => {
                 <Container>
                   <Row>
                     <Col md={6}>
-                      <div className="border border-dark rounded p-3">
-                        Technologies
+                      <div className="border   rounded p-3 shadow-lg ">
+                        <b>Technologies</b>
                         <PieActiveArc />
                       </div>
                     </Col>
                     <Col md={6}>
-                      <div className="border border-dark rounded p-3">
-                        Performance Per Category
+                      <div className="border   rounded p-3 shadow-lg ">
+                        <b>Performance Per Category</b>
                         <PieActiveArc
                           colors={["#B47B84", "#7E6363", "#E1C78F"]}
                           data={data}

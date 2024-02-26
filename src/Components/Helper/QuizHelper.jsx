@@ -43,6 +43,11 @@ export const createCategory = (categoryTitle) => {
     .then((Response) => console.log(Response.data));
 };
 //create category
+export const deleteCategory = (categoryTitle) => {
+  const createUrl = `${public_url}/questions/${categoryTitle}.json`;
+
+  return axios.delete(createUrl);
+};
 
 //fecth categories
 export const getAllCategories = () => {
