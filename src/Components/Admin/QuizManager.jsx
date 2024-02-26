@@ -1,17 +1,23 @@
-import React, { useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import CustomNavbar from "../CustomNavbar";
 import { Col, Container, Row } from "reactstrap";
 import { Nav, NavItem, NavLink } from "reactstrap";
 
 import AllQuiz from "./AllQuiz";
 import AddCategory from "./modals/AddCategory";
+import myContext from "../context/ContextCore";
 
 const QuizManager = () => {
   //clicked component state management
   const [selectedForm, setSelectedForm] = useState("allquiz");
   //modal state
   const [modal3, setModal3] = useState(false);
+  const [token, setToken] = useState(0);
   const [backdrop, setBackdrop] = useState(true);
+  useEffect(() => {
+    console.log("in useeffect ");
+  }, [token]);
+  //refreshtoken
 
   //category toggle
   const createCategory = () => {
@@ -66,12 +72,16 @@ const QuizManager = () => {
             </Col>
             <Col sm="9" md="10" className="main-content">
               {/* Conditionally render the appropriate form */}
+
               <AddCategory
                 modal={modal3}
                 backdrop={backdrop}
                 setModal={setModal3}
+                setToken={setToken}
               />
-              {selectedForm === "allquiz" && <AllQuiz />}
+
+              {selectedForm === "allquiz" && <AllQuiz token={token} />}
+
               {/* Add more conditions for other forms */}
             </Col>
           </Row>

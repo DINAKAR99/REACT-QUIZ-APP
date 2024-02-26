@@ -10,7 +10,7 @@ import myContext from "../context/ContextCore";
 
 const AddQuiz = ({ toggle }) => {
   // using context
-  const { refreshToken, setRefreshToken } = useContext(myContext);
+  const { setRefreshToken } = useContext(myContext);
 
   const [categories, setCategories] = useState([
     { categoryTitle: "java", categoryId: 2 },
@@ -62,9 +62,8 @@ const AddQuiz = ({ toggle }) => {
         incrementQCount(questionData.category.categoryTitle);
       })
       .then(() => {
-        console.log(refreshToken);
         setRefreshToken((prev) => prev + 1);
-        console.log(refreshToken);
+
         toggle();
       });
   };

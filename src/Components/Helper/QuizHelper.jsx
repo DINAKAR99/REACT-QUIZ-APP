@@ -42,12 +42,14 @@ export const createCategory = (categoryTitle) => {
     .post(createUrl, { sample: "sample" })
     .then((Response) => console.log(Response.data));
 };
+//create category
 
 //fecth categories
 export const getAllCategories = () => {
   const createUrl = `${public_url}/questions.json`;
 
   return axios.get(createUrl).then((Response) => {
+    console.log(Object.keys(Response.data));
     return Object.keys(Response.data);
   });
 };
@@ -82,7 +84,7 @@ export const deleteQuestion = (categoryTitle, questionId) => {
 //get all questions
 
 export const getAllQuestionsPerCategory = (categoryTitle) => {
-  console.log(categoryTitle);
+  // console.log(categoryTitle);
   const createUrl = `${public_url}/questions/${categoryTitle}.json`;
 
   return axios.get(createUrl).then((Response) => {

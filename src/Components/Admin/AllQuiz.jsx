@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { Button, Col, Collapse, Container, Row } from "reactstrap";
 import Mod from "./modals/Mod";
 import EditQuiz from "./Edit/EditQuiz";
@@ -10,58 +10,19 @@ import {
 import myContext from "../context/ContextCore";
 import toast from "react-hot-toast";
 
-const AllQuiz = () => {
+const AllQuiz = ({ token }) => {
   const [modal, setModal] = useState(false);
   const [modal2, setModal2] = useState(false);
+
+  //usecontext
+  // const { token } = useContext(myContext);
 
   const [senderPacket, setSenderPacket] = useState({});
   const [backdrop, setBackdrop] = useState(true);
   const [retrievedQuestions, setRetrievedQuestions] = useState(null);
   const [refreshToken, setRefreshToken] = useState(0);
-
-  const categories = [
-    { categorieName: "java", NoOfQuestions: "10" },
-    { categorieName: "spring", NoOfQuestions: "30" },
-    { categorieName: "react", NoOfQuestions: "40" },
-  ];
-
-  // java: [
-  //   {
-  //     question: "What is a constructor in Java?",
-  //     options: {
-  //       A: "dwdw",
-  //       B: "wdw",
-  //       C: "s",
-  //       D: "add",
-  //     },
-  //     category: { categoryId: 1 },
-  //     correctAnswer: "wdw",
-  //   },
-  //   {
-  //     question: "What is a constructor in Java?",
-  //     options: {
-  //       A: "dwdw",
-  //       B: "wdw",
-  //       C: "s",
-  //       D: "add",
-  //     },
-  //     category: { categoryId: 2 },
-  //     correctAnswer: "A method used to create objects",
-  //   },
-  //   {
-  //     question: "What is a constructor in Java?",
-  //     options: {
-  //       A: "dwdw",
-  //       B: "wdw",
-  //       C: "s",
-  //       D: "add",
-  //     },
-  //     category: { categoryId: 2 },
-  //     correctAnswer: "A method used to create objects",
-  //   },
-  // ]
-
-  //using create context
+  const [isButtonActive, setIsButtonActive] = useState(false);
+  let buttonClassName = `button ${isButtonActive ? "delete" : ""}`;
 
   // ------------------------
   //clicked component state management
@@ -72,40 +33,62 @@ const AllQuiz = () => {
     index: "",
   });
   const questionsLoader = () => {
+    // Create an array to store all promises
+    const promises = [];
+
     console.log("in question loader");
     for (let index = 0; index < fetchedCategory.length; index++) {
       const catName = fetchedCategory[index];
-
-      console.log(catName);
       // console.log(catName);
-      getAllQuestionsPerCategory(catName).then((qArray) => {
-        console.log(qArray);
-        setRetrievedQuestions((prevState) => ({
-          ...prevState,
-          [catName]: Object.values(qArray.slice(1, -1)),
-        }));
-        //
-      });
+
+      // Push each promise into the promises array
+      promises.push(getAllQuestionsPerCategory(catName));
     }
+
+    Promise.all(promises)
+      .then((results) => {
+        // console.log(results);
+        const updatedQuestions = {};
+
+        // Iterate over results and update state accordingly
+        results.forEach((qArray, index) => {
+          const catName = fetchedCategory[index];
+          // console.log(qArray);
+          updatedQuestions[catName] = Object.values(qArray.slice(1, -1));
+        });
+        setRetrievedQuestions(updatedQuestions);
+
+        return updatedQuestions;
+        // Update the state once with all the retrieved questions
+      })
+      .then(() => {
+        console.log(retrievedQuestions);
+      })
+
+      .catch((error) => {
+        console.error("Error fetching questions:", error);
+      });
   };
   //useeffect
   useEffect(() => {
+    console.log("use effect of All quiz ");
     getAllCategories()
       .then((categoryArray) => {
         setFetchedCategory(categoryArray);
-        console.log(categoryArray);
+        // questionsLoader(categoryArray);
+        // console.log(categoryArray);
         return categoryArray;
       })
-      .then((categoryArray) => {
+      .then(() => {
         console.log(fetchedCategory);
         console.log("in second ");
-        questionsLoader();
+        // questionsLoader();
       });
-  }, [refreshToken]);
+  }, [refreshToken, token]);
 
   useEffect(() => {
-    if (fetchedCategory) {
-      console.log(fetchedCategory);
+    if (fetchedCategory && fetchedCategory.length > 0) {
+      // console.log(fetchedCategory);
       questionsLoader();
     }
   }, [fetchedCategory]);
@@ -116,6 +99,8 @@ const AllQuiz = () => {
 
     console.log(retrievedQuestions);
   };
+
+  const deleteCategory = () => {};
 
   //edit toggle
   const edittoggle = (datapacket) => {
@@ -130,11 +115,13 @@ const AllQuiz = () => {
   };
 
   //delete function
-  const deleteHandler = (category, questionId) => {
-    deleteQuestion(category, questionId).then(() => {
-      toast.success("Question deleted!");
-      setRefreshToken((prev) => prev + 1);
-    });
+  const deleteHandler = (category, questionId, event) => {
+    console.log(event.target);
+    // deleteQuestion(category, questionId).then(() => {
+    //   toast.success("Question deleted!");
+    //   setRefreshToken((prev) => prev + 1);
+    sampleFunction(event);
+    // });
   };
 
   // Function to toggle collapse options
@@ -147,6 +134,22 @@ const AllQuiz = () => {
       setToggleOptions({ ...toggleOptions, category: category, index });
       console.log(toggleOptions);
     }
+  };
+
+  const sampleFunction = (event) => {
+    // Toggle the state variable to change the class
+    console.log(event.target);
+    // Get the target button element
+    const button1 = event.target;
+
+    // Toggle the class name for the clicked button
+    button1.classList.add("delete");
+
+    // setIsButtonActive(!isButtonActive);
+
+    setTimeout(() => {
+      button1.classList.remove("delete");
+    }, 3200);
   };
 
   // ------------------------
@@ -174,7 +177,9 @@ const AllQuiz = () => {
                   </h5>
                   <h6>
                     No Of Questions:{" "}
-                    {/* {retrievedQuestions && retrievedQuestions[each].length} */}
+                    {retrievedQuestions && (
+                      <>{retrievedQuestions[each]?.length}</>
+                    )}
                   </h6>
 
                   <Button
@@ -190,6 +195,13 @@ const AllQuiz = () => {
                     onClick={toggle}
                   >
                     Add Question
+                  </Button>
+                  <Button
+                    size="sm"
+                    className="me-2 bg-danger  "
+                    onClick={toggle}
+                  >
+                    Delete
                   </Button>
                 </div>
               );
@@ -240,6 +252,35 @@ const AllQuiz = () => {
                           >
                             Delete
                           </Button>
+
+                          {
+                            <>
+                              {" "}
+                              <button
+                                class={buttonClassName}
+                                // onClick={() => sampleFunction()}
+                                onClick={() =>
+                                  deleteHandler(
+                                    quizCategory,
+                                    Object.values(QuestionPacket)[0].questionId,
+                                    event
+                                  )
+                                }
+                              >
+                                <div class="trash">
+                                  <div class="top">
+                                    <div class="paper"></div>
+                                  </div>
+                                  <div class="box"></div>
+                                  <div class="check">
+                                    <svg viewBox="0 0 8 6">
+                                      <polyline points="1 3.4 2.71428571 5 7 1"></polyline>
+                                    </svg>
+                                  </div>
+                                </div>
+                              </button>
+                            </>
+                          }
 
                           <Collapse
                             isOpen={

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Button,
   Col,
@@ -12,8 +12,12 @@ import {
   Row,
 } from "reactstrap";
 import { createCategory } from "../../Helper/QuizHelper";
+import myContext from "../../context/ContextCore";
 
-const AddCategory = ({ modal, backdrop, setModal }) => {
+const AddCategory = ({ modal, backdrop, setModal, setToken }) => {
+  const setModalFunc = setModal;
+  const toggle = () => setModalFunc(!modal);
+
   // Define state to manage form input values
   const [category, setCategory] = useState("");
 
@@ -30,14 +34,16 @@ const AddCategory = ({ modal, backdrop, setModal }) => {
   //  a function to handle form submission
   const handleSubmit = (event) => {
     event.preventDefault(); // Prevent the default form submission behavior
+    toggle();
     // Perform any validation or data processing here
     console.log("Category submitted:", category);
     //push the new category to firebase db
-    createCategory(category);
+    createCategory(category).then(() => {
+      setToken((prev) => prev + 1);
 
-    //now trigger the rerender and change modal backdrop to false
-    incrementCount();
-    toggle();
+      //now trigger the rerender and change modal backdrop to false
+      incrementCount();
+    });
 
     // Reset the form input after submission if needed
     setCategory("");
@@ -47,9 +53,6 @@ const AddCategory = ({ modal, backdrop, setModal }) => {
   const handleInputChange = (event) => {
     setCategory(event.target.value); // Update the category state with the input value
   };
-
-  const setModalFunc = setModal;
-  const toggle = () => setModalFunc(!modal);
 
   return (
     <div>
