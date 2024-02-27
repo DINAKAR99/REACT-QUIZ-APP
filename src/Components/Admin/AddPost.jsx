@@ -2,7 +2,7 @@ import { Button, Card, CardBody, Container, Input } from "reactstrap";
 // import { loadAllCategories } from "../services/category-services";
 
 import { useEffect, useState } from "react";
-// import JoditEditor from "jodit-react";
+
 // import { useRef } from "react";
 // import { toast } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";

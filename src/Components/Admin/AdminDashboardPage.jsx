@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CustomNavbar from "../CustomNavbar";
 import { Col, Container, Row } from "reactstrap";
 import Sidebar from "./Sidebar";
 
 import AddQuiz from "./AddQuiz";
 import PieActiveArc from "../../Design/PieActiveArc";
+import { getAllCategories, getQCount } from "../Helper/QuizHelper";
 
 const AdminDashboardPage = () => {
   // ------------------------
@@ -14,15 +15,52 @@ const AdminDashboardPage = () => {
   const handleSidebarButtonClick = (component_name) => {
     setSelectedForm(component_name);
   };
+  // states
   // ------------------------
+  const [pack, setPack] = useState([]);
 
   // ---------------------------
   // variables
   const data = [
-    { id: 0, value: 10, label: "java" },
-    { id: 1, value: 20, label: "jsp" },
-    { id: 2, value: 70, label: "react" },
+    { value: 10, label: "java" },
+    { value: 20, label: "jsp" },
+    { value: 70, label: "react" },
+    { value: 30, label: "reacst" },
+    { value: 36, label: "reacst" },
   ];
+  const fetch = async () => {
+    let dataArray = [];
+    const categories = await getAllCategories();
+
+    const promises = categories.map((category) =>
+      getQCount(category).then((Response) => {
+        return Response.data;
+      })
+    );
+
+    const results = await Promise.all(promises);
+
+    for (const key in results) {
+      let object = {
+        value: Object.values(results[key])[0],
+        label: categories[key],
+      };
+      dataArray.push(object);
+
+      console.log(Object.values(results[key])[0]);
+    }
+
+    console.log(dataArray);
+
+    return dataArray;
+  };
+  //FILL THE DATA WITH DATA FROM FIREBASE
+  useEffect(() => {
+    fetch().then((data) => {
+      setPack(data);
+    });
+  }, []);
+
   // ---------------------------
   return (
     <div>
@@ -44,15 +82,15 @@ const AdminDashboardPage = () => {
                     <Col md={6}>
                       <div className="border   rounded p-3 shadow-lg ">
                         <b>Technologies</b>
-                        <PieActiveArc />
+                        <PieActiveArc data={pack} />
                       </div>
                     </Col>
                     <Col md={6}>
                       <div className="border   rounded p-3 shadow-lg ">
                         <b>Performance Per Category</b>
                         <PieActiveArc
+                          data={pack}
                           colors={["#B47B84", "#7E6363", "#E1C78F"]}
-                          data={data}
                         />
                       </div>
                     </Col>

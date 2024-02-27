@@ -13,7 +13,7 @@ const Mod = ({ modal2, backdrop, setModal, categoriesPacket, section }) => {
         backdrop={backdrop}
         section={section}
       >
-        <ModalHeader toggle={toggle}>Modal title</ModalHeader>
+        <ModalHeader toggle={toggle}> </ModalHeader>
         <ModalBody>
           <AddQuiz toggle={toggle} categoryPacket={categoriesPacket} />
         </ModalBody>

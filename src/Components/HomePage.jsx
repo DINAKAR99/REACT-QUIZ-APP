@@ -1,11 +1,14 @@
 import React from "react";
 import CustomNavbar from "./CustomNavbar";
+import Quiz from "./Engine/Quiz";
 
 const HomePage = () => {
   return (
     <>
       <CustomNavbar />
-      <h1>HomePage</h1>
+      <h2 className="text-center  ">
+        <b>QUIZ MASTER HOME PAGE</b>
+      </h2>
     </>
   );
 };

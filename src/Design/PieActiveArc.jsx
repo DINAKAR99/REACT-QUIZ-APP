@@ -3,11 +3,17 @@ import { PieChart } from "@mui/x-charts/PieChart";
 
 export default function PieActiveArc({ colors, data }) {
   const dataa = data || [
-    { id: 0, value: 10, label: "java" },
-    { id: 1, value: 15, label: "springboot" },
-    { id: 2, value: 20, label: "react" },
+    { value: 10, label: "java" },
+    { value: 15, label: "springboot" },
+    { value: 20, label: "react" },
+    { value: 10, label: "reaqct" },
+    { value: 10, label: "reaSqct" },
+    { value: 10, label: "reaSqcSQt" },
+    { value: 10, label: "reaSqct" },
   ];
-  const chartColors = colors || ["#387ADF", "skyblue", "#FFBE98"];
+
+  console.log(data);
+  const chartColors = colors || ["#387ADF", "skyblue", "#FFBE98", "grey"];
   return (
     <div>
       <PieChart

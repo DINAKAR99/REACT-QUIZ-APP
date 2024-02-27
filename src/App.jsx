@@ -13,6 +13,7 @@ import HomePage from "./Components/HomePage";
 import SupportPage from "./Components/SupportPage";
 import UserDashboardPage from "./Components/UserDashboardPage";
 import { Toaster } from "react-hot-toast";
+import TakeQuiz from "./Components/Engine/TakeQuiz";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -28,6 +29,7 @@ function App() {
           <Route path="/contact" element={<SupportPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/modal" element={<Mod />} />
+          <Route path="/takeQuiz" element={<TakeQuiz />} />
           <Route path="/admin" element={<AdminRoute />}>
             <Route path="dashboard" element={<AdminDashboardPage />} />
             <Route path="quiz" element={<QuizDashboard />} />

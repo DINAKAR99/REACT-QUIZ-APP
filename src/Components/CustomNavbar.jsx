@@ -65,6 +65,11 @@ const CustomNavbar = () => {
                 SERVICES
               </NavLink>
             </NavItem>
+            <NavItem>
+              <NavLink tag={ReactLink} to="/takeQuiz">
+                QUIZ
+              </NavLink>
+            </NavItem>
 
             <UncontrolledDropdown nav inNavbar>
               <DropdownToggle nav caret>

@@ -127,11 +127,11 @@ const AllQuiz = ({ token }) => {
   //delete function
   const deleteHandler = (category, questionId, event) => {
     console.log(event.target);
-    // deleteQuestion(category, questionId).then(() => {
-    //   toast.success("Question deleted!");
-    //   setRefreshToken((prev) => prev + 1);
-    // sampleFunction(event);
-    // });
+    deleteQuestion(category, questionId).then(() => {
+      toast.success("Question deleted!");
+      setRefreshToken((prev) => prev + 1);
+      // sampleFunction(event);
+    });
   };
 
   // Function to toggle collapse options
@@ -248,41 +248,45 @@ const AllQuiz = ({ token }) => {
                   <ol type={1}>
                     {retrievedQuestions[quizCategory].map(
                       (QuestionPacket, index) => (
-                        <div key={index}>
-                          <li key={index}>
+                        <div key={index} className="mt-3">
+                          <li key={index} className="mb-2">
                             {Object.values(QuestionPacket)[0].question}
                           </li>
-                          <AwesomeButton
-                            className="me-2"
-                            type="facebook"
-                            onPress={() => toggleCollapse(quizCategory, index)}
-                            size="sm"
-                          >
-                            options
-                          </AwesomeButton>
-                          <AwesomeButton
-                            className="me-2"
-                            type="github"
-                            onPress={() =>
-                              edittoggle(Object.values(QuestionPacket)[0])
-                            }
-                          >
-                            Edit
-                          </AwesomeButton>
-                          <AwesomeButton
-                            className="me-2  "
-                            size="sm"
-                            type="danger"
-                            onPress={() =>
-                              deleteHandler(
-                                quizCategory,
-                                Object.values(QuestionPacket)[0].questionId,
-                                event
-                              )
-                            }
-                          >
-                            Delete
-                          </AwesomeButton>
+                          <div className="mb-3">
+                            <AwesomeButton
+                              className="me-2"
+                              type="facebook"
+                              onPress={() =>
+                                toggleCollapse(quizCategory, index)
+                              }
+                              size="sm"
+                            >
+                              options
+                            </AwesomeButton>
+                            <AwesomeButton
+                              className="me-2"
+                              type="github"
+                              onPress={() =>
+                                edittoggle(Object.values(QuestionPacket)[0])
+                              }
+                            >
+                              Edit
+                            </AwesomeButton>
+                            <AwesomeButton
+                              className="me-2  "
+                              size="sm"
+                              type="danger"
+                              onPress={() =>
+                                deleteHandler(
+                                  quizCategory,
+                                  Object.values(QuestionPacket)[0].questionId,
+                                  event
+                                )
+                              }
+                            >
+                              Delete
+                            </AwesomeButton>
+                          </div>
 
                           {/* {
                             <>
@@ -349,6 +353,8 @@ const AllQuiz = ({ token }) => {
                                   );
                                 })}
                             </ol>
+
+                            <hr />
                           </Collapse>
                         </div>
                       )
