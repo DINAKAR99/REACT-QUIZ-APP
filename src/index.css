@@ -50,3 +50,19 @@ body {
   --button-anchor-color-light: #4c3016;
   --button-anchor-color-hover: #f1bfa0;
 }
+
+.border-gradient {
+  /* border: 5px solid !important; */
+  background: linear-gradient(to right, #155b8d, #2f72ba, #31a2b9, #6897de);
+  /* Define gradient colors */
+  border: solid;
+  /* border-image: linear-gradient(to top, red, blue) 1 / 5px !important; */
+  -webkit-background-clip: text;
+  /* Clip the gradient to the text */
+  -webkit-text-fill-color: transparent;
+}
+
+.motionspan {
+  /* color: linear-gradient(to right, #ff7e5f, #feb47b, #ffdb78, #ffaf7b); */
+  color: #87d7d0;
+}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import logo from "./pictures/BRAINBITS5.gif";
 import { NavLink as ReactLink, useNavigate } from "react-router-dom";
 import {
   Collapse,
@@ -43,9 +44,17 @@ const CustomNavbar = () => {
 
   return (
     <div>
-      <Navbar color="dark" dark expand="md" fixed=" " className="px-5">
+      <Navbar
+        color="dark"
+        dark
+        expand="md"
+        fixed=" "
+        className="p-0 bg-black   "
+      >
         <NavbarBrand tag={ReactLink} to="/">
-          QUIZ-MASTER
+          {/* QUIZ-MASTER */}
+
+          <img src={logo} height={75} alt="" />
         </NavbarBrand>
         <NavbarToggler onClick={() => setIsOpen(!isOpen)} />
         <Collapse isOpen={isOpen} navbar>
@@ -61,8 +70,8 @@ const CustomNavbar = () => {
               </NavLink>
             </NavItem>
             <NavItem>
-              <NavLink tag={ReactLink} to="/contact">
-                SERVICES
+              <NavLink tag={ReactLink} to="/admin/dashboard">
+                ADMIN
               </NavLink>
             </NavItem>
             <NavItem>

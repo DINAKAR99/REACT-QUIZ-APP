@@ -1,8 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { AwesomeButton } from "react-awesome-button";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
-import { Button, Col, Container, Input, Row } from "reactstrap";
+import { Button, Col, Container, Row } from "reactstrap";
 import { getAllQuestionsPerCategory } from "../Helper/QuizHelper";
+import QuizCompletionPage from "./QuizCompletionPage";
+import { Prev } from "react-bootstrap/esm/PageItem";
+import { MoonLoader } from "react-spinners";
 
 const Quiz = () => {
   const quizData = [
@@ -20,16 +23,11 @@ const Quiz = () => {
     },
     // Add more questions here
   ];
-
-  const options = [
-    `Describe how polymorphism is achieved thr g and method overloading.`,
-    `Describe how poly ethod overl ading.`,
-    `Describe how  erriding and method overloa g.`,
-    `Describe how polymorphism is achieved through overload `,
-  ];
+  const [quizSubmitted, setQuizSubmitted] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [marks, setMarks] = useState(0);
   const [fecthedQuestions, setFetchedQuestions] = useState([]);
-  const [selectedOption, setSelectedOption] = useState(null);
+  // const [selectedOption, setSelectedOption] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState(() => {
     const storedOptions = localStorage.getItem("selectedOptions");
@@ -58,57 +56,82 @@ const Quiz = () => {
       setLoading(false);
     });
   }, []);
-  const handleOptionClick = (option) => {
+  const handleOptionClick = (option, correctAnswer) => {
     const questionId = currentQuestionIndex; // Assuming question index serves as question ID
-
+    // check if option and correctAnswer
+    const isCorrect = option === correctAnswer;
     const existingResponseIndex = userResponses.findIndex(
       (each) => each.questionId == questionId
     );
 
     if (existingResponseIndex !== -1) {
       const updatedResponses = [...userResponses];
+      if (isCorrect && !updatedResponses[existingResponseIndex].isCorrect) {
+        setMarks((Prev) => Prev + 1);
+      } else if (
+        !isCorrect &&
+        updatedResponses[existingResponseIndex].isCorrect
+      ) {
+        // Decrement marks if the response changes from correct to wrong
+        setMarks((prevMarks) => prevMarks - 1);
+      }
 
       updatedResponses[existingResponseIndex] = {
         ...updatedResponses[existingResponseIndex],
         selectedOption: option,
+        isCorrect: isCorrect,
       };
 
       setUserResponses(updatedResponses);
-    } else {
-      // Create a new user response object
+    }
+
+    // Create a new user response object
+    else {
       const newUserResponse = {
         questionId: currentQuestionIndex, // Assuming question index serves as question ID
         category: "YourCategory", // Replace 'YourCategory' with the actual category
         selectedOption: option,
+        isCorrect: isCorrect,
       };
+
+      if (isCorrect) {
+        setMarks((prev) => prev + 1);
+      }
+
       // Update user responses state by adding the new response
       setUserResponses([...userResponses, newUserResponse]);
     }
 
-    setSelectedOptions({ ...selectedOptions, [currentQuestionIndex]: option });
-    setSelectedOption(option);
+    setSelectedOptions({
+      ...selectedOptions,
+      [currentQuestionIndex]: option,
+    });
   };
   // Inside your Quiz <component>       </component>
-  const handleComplete = useCallback(() => {
+  const handleComplete = () => {
     console.log("Countdown timer completed!");
-    // Perform any other actions you want here
-    return { shouldRepeat: true, delay: 1 };
-  }, []);
+    handleSubmit();
+    // Perform any other actions you want <here></here>
+    // return { shouldRepeat: true, delay: 1 };
+  };
 
   const handleNextQuestion = () => {
     if (currentQuestionIndex < fecthedQuestions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setSelectedOption(null); // Reset selected option for the next question
+      // setSelectedOption(null); // Reset selected option for the next question
     }
   };
   const handleSubmit = () => {
     console.log(userResponses);
+    console.log(marks);
+
+    setQuizSubmitted(true);
   };
 
   const handlePreviousQuestion = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
-      setSelectedOption(null); // Reset selected option for the previous question
+      // setSelectedOption(null); // Reset selected option for the previous question
     }
   };
 
@@ -135,82 +158,114 @@ const Quiz = () => {
   return (
     <Container fluid>
       <Row className="d-flex justify-content-center mt-5 ">
-        <Col md={6} style={{ minHeight: "600px" }}>
-          <div>{loading ? <h1>loading...</h1> : <h1>loaded...</h1>}</div>
-          <div className="border rounded p-4 shadow-lg ">
-            <header className="d-flex  ">
-              <b>
-                Question {currentQuestionIndex + 1}/{fecthedQuestions.length}
-              </b>
-
-              <h4 className="ms-auto">
-                <div className="timer-wrapper   ">
-                  <CountdownCircleTimer
-                    size={40}
-                    isPlaying
-                    strokeWidth={4}
-                    duration={5}
-                    colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
-                    colorsTime={[10, 6, 3, 0]}
-                    onComplete={handleComplete}
-                  >
-                    {renderTime}
-                  </CountdownCircleTimer>
-                </div>
-              </h4>
-            </header>
-
-            <hr />
-
-            <main>
-              <>
-                <h5 className="pb-2">
-                  <b>{fecthedQuestions[currentQuestionIndex]?.question}</b>
-                </h5>
-                {fecthedQuestions[currentQuestionIndex] &&
-                  Object.values(
-                    fecthedQuestions[currentQuestionIndex].options
-                  ).map((option, index) => (
-                    <div key={index} className="mb-2">
-                      <Button
-                        size="sm"
-                        className="mb-2 "
-                        color={
-                          selectedOptions[currentQuestionIndex] === option
-                            ? "primary"
-                            : "secondary"
-                        }
-                        onClick={() => handleOptionClick(option)}
-                        block
-                      >
-                        {option}
-                      </Button>
-                    </div>
-                  ))}
-              </>
-            </main>
-            <hr />
-            <footer>
-              <div className="mt-3 ">
-                <AwesomeButton type="github" onPress={handlePreviousQuestion}>
-                  Back
-                </AwesomeButton>
-                <AwesomeButton
-                  type="facebook"
-                  onPress={handleNextQuestion}
-                  className="ms-2"
-                >
-                  Next
-                </AwesomeButton>
-                <AwesomeButton
-                  type="instagram"
-                  onPress={handleSubmit}
-                  className="ms-2"
-                >
-                  Submit
-                </AwesomeButton>
+        <Col md={6} style={{ minHeight: "400px" }}>
+          <div>
+            {loading ? (
+              <div
+                className="border rounded-3     shadow-lg   text-center  d-flex justify-content-center align-items-center "
+                style={{ minHeight: "400px" }}
+              >
+                <MoonLoader color="#000000" />
               </div>
-            </footer>
+            ) : quizSubmitted ? (
+              <div className=" shadow-lg ">
+                <QuizCompletionPage
+                  marks={marks && marks}
+                  question_count={fecthedQuestions?.length}
+                />
+              </div>
+            ) : (
+              <div className="  p-4 shadow-lg ">
+                <header className="d-flex  ">
+                  <b>
+                    Question {currentQuestionIndex + 1}/
+                    {fecthedQuestions.length}
+                  </b>
+
+                  <h4 className="ms-auto">
+                    <div className="timer-wrapper   ">
+                      <CountdownCircleTimer
+                        size={40}
+                        isPlaying
+                        strokeWidth={4}
+                        duration={500}
+                        colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
+                        colorsTime={[10, 6, 3, 0]}
+                        onComplete={handleComplete}
+                      >
+                        {renderTime}
+                      </CountdownCircleTimer>
+                    </div>
+                  </h4>
+                </header>
+
+                <hr />
+
+                <main>
+                  <>
+                    <h5 className="pb-2">
+                      <b>{fecthedQuestions[currentQuestionIndex]?.question}</b>
+                    </h5>
+                    {fecthedQuestions[currentQuestionIndex] &&
+                      Object.values(
+                        fecthedQuestions[currentQuestionIndex].options
+                      ).map((option, index) => (
+                        <div key={index} className="mb-2">
+                          <Button
+                            size="sm"
+                            className="mb-2 "
+                            color={
+                              selectedOptions[currentQuestionIndex] === option
+                                ? "primary"
+                                : "secondary"
+                            }
+                            onClick={() =>
+                              handleOptionClick(
+                                option,
+                                fecthedQuestions[currentQuestionIndex]
+                                  .correctAnswer
+                              )
+                            }
+                            disabled={
+                              selectedOptions[currentQuestionIndex] === option
+                                ? true
+                                : false
+                            }
+                            block
+                          >
+                            {option}
+                          </Button>
+                        </div>
+                      ))}
+                  </>
+                </main>
+                <hr />
+                <footer>
+                  <div className="mt-3 ">
+                    <AwesomeButton
+                      type="github"
+                      onPress={handlePreviousQuestion}
+                    >
+                      Back
+                    </AwesomeButton>
+                    <AwesomeButton
+                      type="facebook"
+                      onPress={handleNextQuestion}
+                      className="ms-2"
+                    >
+                      Next
+                    </AwesomeButton>
+                    <AwesomeButton
+                      type="instagram"
+                      onPress={handleSubmit}
+                      className="ms-2"
+                    >
+                      Submit
+                    </AwesomeButton>
+                  </div>
+                </footer>
+              </div>
+            )}
           </div>
         </Col>
       </Row>
