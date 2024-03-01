@@ -6,8 +6,10 @@ import { getAllQuestionsPerCategory } from "../Helper/QuizHelper";
 import QuizCompletionPage from "./QuizCompletionPage";
 import { Prev } from "react-bootstrap/esm/PageItem";
 import { MoonLoader } from "react-spinners";
+import { Radio } from "@mui/material";
+import Countdown from "react-countdown";
 
-const Quiz = () => {
+const Quiz = ({ categoryName }) => {
   const quizData = [
     {
       question:
@@ -44,7 +46,7 @@ const Quiz = () => {
   }, [selectedOptions]);
 
   useEffect(() => {
-    getAllQuestionsPerCategory("java").then((resultSet) => {
+    getAllQuestionsPerCategory(categoryName).then((resultSet) => {
       let rawArray = [];
       console.log(resultSet.slice(1, -1));
       rawArray = resultSet.slice(1, -1);
@@ -135,30 +137,25 @@ const Quiz = () => {
     }
   };
 
-  const renderTime = ({ remainingTime }) => {
-    if (remainingTime === 0) {
+  const renderer = ({ hours, minutes, seconds, completed }) => {
+    if (completed) {
+      handleSubmit();
+      // Render a completed state
+      // return <Completionist />;
+    } else {
+      // Render a countdown
       return (
-        <div className="timer" style={{ fontSize: "16px" }}>
-          late...
-        </div>
+        <h5>
+          Time Remaining : {hours}:{minutes}:{seconds}
+        </h5>
       );
     }
-
-    return (
-      <div className="timer">
-        <div className="text"></div>
-        <div style={{ fontSize: "16px" }} className="value">
-          {remainingTime}
-        </div>
-        <div className="text"></div>
-      </div>
-    );
   };
 
   return (
     <Container fluid>
       <Row className="d-flex justify-content-center mt-5 ">
-        <Col md={6} style={{ minHeight: "400px" }}>
+        <Col md={12} style={{ minHeight: "400px" }}>
           <div>
             {loading ? (
               <div
@@ -183,19 +180,7 @@ const Quiz = () => {
                   </b>
 
                   <h4 className="ms-auto">
-                    <div className="timer-wrapper   ">
-                      <CountdownCircleTimer
-                        size={40}
-                        isPlaying
-                        strokeWidth={4}
-                        duration={500}
-                        colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
-                        colorsTime={[10, 6, 3, 0]}
-                        onComplete={handleComplete}
-                      >
-                        {renderTime}
-                      </CountdownCircleTimer>
-                    </div>
+                    <Countdown date={Date.now() + 200000} renderer={renderer} />
                   </h4>
                 </header>
 
@@ -211,7 +196,21 @@ const Quiz = () => {
                         fecthedQuestions[currentQuestionIndex].options
                       ).map((option, index) => (
                         <div key={index} className="mb-2">
-                          <Button
+                          <Radio
+                            className={`${fecthedQuestions[currentQuestionIndex].questionId}${categoryName} `}
+                            checked={
+                              selectedOptions[currentQuestionIndex] === option
+                            }
+                            onChange={() =>
+                              handleOptionClick(
+                                option,
+                                fecthedQuestions[currentQuestionIndex]
+                                  .correctAnswer
+                              )
+                            }
+                          ></Radio>
+                          {option}
+                          {/* <Button
                             size="sm"
                             className="mb-2 "
                             color={
@@ -234,14 +233,14 @@ const Quiz = () => {
                             block
                           >
                             {option}
-                          </Button>
+                          </Button> */}
                         </div>
                       ))}
                   </>
                 </main>
                 <hr />
                 <footer>
-                  <div className="mt-3 ">
+                  <div className="mt-3 d-flex  ">
                     <AwesomeButton
                       type="github"
                       onPress={handlePreviousQuestion}
@@ -251,14 +250,14 @@ const Quiz = () => {
                     <AwesomeButton
                       type="facebook"
                       onPress={handleNextQuestion}
-                      className="ms-2"
+                      className="ms-2 me-auto "
                     >
                       Next
                     </AwesomeButton>
                     <AwesomeButton
                       type="instagram"
                       onPress={handleSubmit}
-                      className="ms-2"
+                      className="    "
                     >
                       Submit
                     </AwesomeButton>

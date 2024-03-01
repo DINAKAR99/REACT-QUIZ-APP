@@ -5,10 +5,7 @@ import { Nav, NavItem, NavLink } from "reactstrap";
 
 const Sidebar = ({ handleButtonClick }) => {
   return (
-    <div
-      className="sidebar    border-3        "
-      style={{ height: "100vh", backgroundColor: "#212529" }}
-    >
+    <div className="sidebar    border-3   bg-black" style={{ height: "100vh" }}>
       <Nav vertical navbar fill className="text-white  ">
         <NavItem>
           <NavLink

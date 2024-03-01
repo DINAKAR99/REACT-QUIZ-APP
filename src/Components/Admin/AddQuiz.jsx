@@ -127,7 +127,7 @@ const AddQuiz = ({ toggle, categoryPacket, section }) => {
     <Container>
       <div>
         <div className="wrapper    justify-content-center align-items-center">
-          {JSON.stringify(questionData)}
+          {/* {JSON.stringify(questionData)} */}
           <h3>CREATE QUESTION</h3>
           <form onSubmit={handleSubmit}>
             <div className="my-3">

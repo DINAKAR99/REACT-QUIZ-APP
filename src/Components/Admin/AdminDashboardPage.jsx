@@ -69,13 +69,13 @@ const AdminDashboardPage = () => {
       <div className="admin-dashboard">
         <Container fluid>
           <Row>
-            <Col sm="3" md="2" className="sidebar p-0  ">
+            <Col sm="3" md="2" className="sidebar p-0  fadeleft ">
               <Sidebar handleButtonClick={handleSidebarButtonClick} />
             </Col>
             <Col sm="9" md="10" className="main-content">
               <h1 className="text-center">DASHBOARD</h1>
               {/* Conditionally render the appropriate form */}
-              {selectedForm === "createQuestion" && <AddQuiz />}
+
               {selectedForm === "default" && (
                 <Container>
                   <Row>

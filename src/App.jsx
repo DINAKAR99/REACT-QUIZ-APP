@@ -16,6 +16,7 @@ import HomePage from "./Components/HomePage";
 import SupportPage from "./Components/SupportPage";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import UserDashboard from "./Components/User/UserDashboard";
+import UserRoute from "./Components/User/UserRoute";
 
 const Lazyy = React.lazy(() => import("./Components/HomePage"));
 function App() {
@@ -36,17 +37,19 @@ function App() {
           />
 
           <Route path="/code" element={<CodeEditor />} />
-          <Route path="/user-board" element={<UserDashboard />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="/contact" element={<SupportPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/modal" element={<Mod />} />
-          <Route path="/takeQuiz" element={<TakeQuiz />} />
+
+          <Route path="/user" element={<UserRoute />}>
+            <Route path="userDashboard" element={<UserDashboard />} />
+            <Route path="takeQuiz" element={<TakeQuiz />} />
+          </Route>
           <Route path="/admin" element={<AdminRoute />}>
             <Route path="dashboard" element={<AdminDashboardPage />} />
             <Route path="quiz" element={<QuizDashboard />} />
           </Route>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/contact" element={<SupportPage />} />
+          <Route path="/about" element={<AboutPage />} />
         </Routes>
       </BrowserRouter>
     </>

@@ -193,7 +193,7 @@ const AllQuiz = ({ token }) => {
             fetchedCategory.map((each, index) => {
               return (
                 <>
-                  <div className="border border-grey        rounded p-3 mb-2 shadow-lg  bg-white   ">
+                  <div className=" fader border border-grey        rounded p-3 mb-2 shadow-lg  bg-white   ">
                     <h5>
                       {index + 1}.{each}
                     </h5>
@@ -236,7 +236,7 @@ const AllQuiz = ({ token }) => {
             <b>&nbsp; QUESTIONS</b>
           </h3>
           <div
-            className="border border-grey  shadow-lg bg-white  rounded p-3 mb-2       p-3 mb-2 overflow-y-scroll    "
+            className=" fader border border-grey  shadow-lg bg-white  rounded p-3 mb-2       p-3 mb-2 overflow-y-scroll    "
             style={{ maxHeight: "405px" }}
           >
             {quizCategory && (
@@ -287,35 +287,6 @@ const AllQuiz = ({ token }) => {
                               Delete
                             </AwesomeButton>
                           </div>
-
-                          {/* {
-                            <>
-                              {" "}
-                              <button
-                                class={buttonClassName}
-                                // onClick={() => sampleFunction()}
-                                onClick={() =>
-                                  deleteHandler(
-                                    quizCategory,
-                                    Object.values(QuestionPacket)[0].questionId,
-                                    event
-                                  )
-                                }
-                              >
-                                <div class="trash">
-                                  <div class="top">
-                                    <div class="paper"></div>
-                                  </div>
-                                  <div class="box"></div>
-                                  <div class="check">
-                                    <svg viewBox="0 0 8 6">
-                                      <polyline points="1 3.4 2.71428571 5 7 1"></polyline>
-                                    </svg>
-                                  </div>
-                                </div>
-                              </button>
-                            </>
-                          } */}
 
                           <Collapse
                             isOpen={

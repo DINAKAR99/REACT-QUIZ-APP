@@ -10,7 +10,7 @@ const HomePage = () => {
 
   const text = " Unravel Your Mind ".split(" ");
 
-  const text2 = " Welcome to BrainyBits              ".split(" ");
+  const text2 = " Welcome to BrainyBits ".split(" ");
   const text3 =
     "   Where curiosity meets challenge, and every question   unlocks a world of knowledge!".split(
       " "
@@ -78,7 +78,7 @@ const HomePage = () => {
                 </motion.span>
               ))}
             </h1>
-            <Link to="/user-board">
+            <Link to="/login">
               <Button
                 size="lg"
                 className="border-gradient rounded-pill ms-5 px-5     "

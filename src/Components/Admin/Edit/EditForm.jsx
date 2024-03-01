@@ -97,7 +97,7 @@ const EditForm = ({ packet, toggle }) => {
     <Container>
       <div>
         <div className="wrapper    justify-content-center align-items-center">
-          {JSON.stringify(questionPacket)}
+          {/* {JSON.stringify(questionPacket)} */}
           <h3>CREATE QUESTION</h3>
           <form onSubmit={handleEdit}>
             <div className="my-3">

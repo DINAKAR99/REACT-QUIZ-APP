@@ -89,7 +89,7 @@ export const deleteQuestion = (categoryTitle, questionId) => {
 //get all questions
 
 export const getAllQuestionsPerCategory = (categoryTitle) => {
-  // console.log(categoryTitle);
+  console.log(categoryTitle);
   const createUrl = `${public_url}/questions/${categoryTitle}.json`;
 
   return axios.get(createUrl).then((Response) => {

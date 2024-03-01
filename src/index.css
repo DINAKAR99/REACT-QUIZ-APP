@@ -3,7 +3,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 
 body {
-  font-family: "Montserrat", sans-serif !important;
+  /* font-family: "Montserrat", sans-serif !important; */
+  font-family: Helvetica, Arial, sans-serif;
 }
 
 /* styles.css */
@@ -53,7 +54,7 @@ body {
 
 .border-gradient {
   /* border: 5px solid !important; */
-  background: linear-gradient(to right, #155b8d, #2f72ba, #31a2b9, #6897de);
+  background: linear-gradient(to right, #000000, #ffffff, #49d9fa, #00060e);
   /* Define gradient colors */
   border: solid;
   /* border-image: linear-gradient(to top, red, blue) 1 / 5px !important; */
@@ -65,4 +66,86 @@ body {
 .motionspan {
   /* color: linear-gradient(to right, #ff7e5f, #feb47b, #ffdb78, #ffaf7b); */
   color: #87d7d0;
+}
+
+.background-primary {
+  background: rgb(2, 0, 36);
+  background: black;
+}
+img {
+  /* width: 60%; */
+  /* border-radius: 30%; */
+}
+.sign-in-container {
+  /* background: rgb(255, 255, 255); */
+}
+.signinBack {
+  background-image: url("./Components/pictures/rain.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.form-control::placeholder {
+  color: rgba(255, 255, 255, 0.687) !important;
+}
+.info {
+  /* backdrop-filter: blur(px); */
+}
+
+.fadeRight {
+  color: #49d9fa;
+  animation: fadeinRigh 1s ease-in-out;
+}
+
+.loginpageContainer {
+  background: rgb(0, 0, 0);
+}
+.white-shadow {
+  animation: fadeinRigh 1s ease-in-out;
+  animation: whitefader 1.1s ease-in-out;
+  box-shadow: 0 0 13px 10px rgba(255, 255, 255, 0.345);
+}
+.fadeleft {
+  animation: fadeleft 0.8s ease-in-out;
+}
+
+.fader {
+  animation: fader 1.2s ease-in-out;
+}
+
+@keyframes fader {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes fadeleft {
+  0% {
+    opacity: 0;
+    transform: translateX(-300px);
+  }
+
+  100% {
+  }
+}
+@keyframes fadeinRigh {
+  0% {
+    opacity: 0;
+    transform: translateX(300px);
+  }
+
+  100% {
+  }
+}
+
+@keyframes whitefader {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    box-shadow: 0 0 13px 10px rgba(255, 255, 255, 0.345);
+  }
 }

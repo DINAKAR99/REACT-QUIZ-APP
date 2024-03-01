@@ -31,7 +31,12 @@ const QuizDashboard = () => {
   return (
     <div>
       <CustomNavbar />
-
+      <AddCategory
+        modal={modal3}
+        backdrop={backdrop}
+        setModal={setModal3}
+        setToken={setToken}
+      />
       <div className="admin-dashboard">
         <Container fluid>
           <Row>
@@ -73,16 +78,7 @@ const QuizDashboard = () => {
             <Col sm="9" md="10" className="main-content">
               {/* Conditionally render the appropriate form */}
 
-              <AddCategory
-                modal={modal3}
-                backdrop={backdrop}
-                setModal={setModal3}
-                setToken={setToken}
-              />
-
-              {selectedForm === "allquiz" && <AllQuiz token={token} />}
-
-              {/* Add more conditions for other forms */}
+              <AllQuiz token={token} />
             </Col>
           </Row>
         </Container>

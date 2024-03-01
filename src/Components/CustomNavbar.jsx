@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import logo from "./pictures/BRAINBITS5.gif";
+import logo from "./pictures/StaticBit.png";
 import { NavLink as ReactLink, useNavigate } from "react-router-dom";
 import {
   Collapse,
@@ -60,28 +60,27 @@ const CustomNavbar = () => {
         <Collapse isOpen={isOpen} navbar>
           <Nav className="me-auto" navbar>
             <NavItem>
-              <NavLink tag={ReactLink} to="/">
+              <NavLink tag={ReactLink} to="/" className="text-white ">
                 HOME
               </NavLink>
             </NavItem>
             <NavItem>
-              <NavLink tag={ReactLink} to="/about">
+              <NavLink tag={ReactLink} className="text-white " to="/about">
                 ABOUT
               </NavLink>
             </NavItem>
             <NavItem>
-              <NavLink tag={ReactLink} to="/admin/dashboard">
+              <NavLink
+                tag={ReactLink}
+                className="text-white "
+                to="/admin/dashboard"
+              >
                 ADMIN
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink tag={ReactLink} to="/takeQuiz">
-                QUIZ
               </NavLink>
             </NavItem>
 
             <UncontrolledDropdown nav inNavbar>
-              <DropdownToggle nav caret>
+              <DropdownToggle nav caret className="text-white ">
                 MORE
               </DropdownToggle>
               <DropdownMenu>
