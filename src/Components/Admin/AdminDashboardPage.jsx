@@ -19,15 +19,6 @@ const AdminDashboardPage = () => {
   // ------------------------
   const [pack, setPack] = useState([]);
 
-  // ---------------------------
-  // variables
-  const data = [
-    { value: 10, label: "java" },
-    { value: 20, label: "jsp" },
-    { value: 70, label: "react" },
-    { value: 30, label: "reacst" },
-    { value: 36, label: "reacst" },
-  ];
   const fetch = async () => {
     let dataArray = [];
     const categories = await getAllCategories();
@@ -73,7 +64,7 @@ const AdminDashboardPage = () => {
               <Sidebar handleButtonClick={handleSidebarButtonClick} />
             </Col>
             <Col sm="9" md="10" className="main-content">
-              <h1 className="text-center">DASHBOARD</h1>
+              <h1 className="text-center">ADMIN DASHBOARD</h1>
               {/* Conditionally render the appropriate form */}
 
               {selectedForm === "default" && (

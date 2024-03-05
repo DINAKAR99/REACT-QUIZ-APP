@@ -42,8 +42,12 @@ const QuizDashboard = () => {
           <Row>
             <Col sm="3" md="2" className="sidebar text-white p-0  ">
               <div
-                className="sidebar border-3 "
-                style={{ height: "100vh", backgroundColor: "#212529" }}
+                className="sidebar  position-fixed  border-3 bg-black  "
+                style={{
+                  height: "100vh",
+                  width: "30vh",
+                  backgroundColor: "#212529",
+                }}
               >
                 <Nav vertical navbar fill>
                   <NavItem>

@@ -18,7 +18,7 @@ const LoginPage = () => {
     <>
       <CustomNavbar />
       <div className=" container-fluid   d-flex justify-content-center w-100 h-100 loginpageContainer p-5  ">
-        <div className=" fadeRight d-flex white-shadow">
+        <div className="  d-flex white-shadow">
           <div className="form-container   col-md-6 text-white  border-end   p-3 sign-in-container ">
             <h1 className="text-center">Sign in</h1>
             <div className="social-container text-center p-2">
@@ -102,7 +102,7 @@ const LoginPage = () => {
                         className="btn btn-outline-light background-primary rounded-pill  m-3 mt-4  px-3   "
                         type="submit"
                       >
-                        Sign Up
+                        Sign In
                       </button>
                     </div>
                   </Form>
@@ -120,7 +120,7 @@ const LoginPage = () => {
                   href="/signup"
                   className="btn btn-outline-light rounded-pill"
                 >
-                  register here!
+                  Register
                 </a>
               </div>
             </div>

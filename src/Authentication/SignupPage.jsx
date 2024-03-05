@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 
-import { Input, Button, Label, Container, Row, Col } from "reactstrap";
-import quiz from "../Components/pictures/BRAINBYTES.gif";
-import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "Yup";
-import CustomNavbar from "../Components/CustomNavbar";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import { Link } from "react-router-dom";
+import { Label } from "reactstrap";
+import CustomNavbar from "../Components/CustomNavbar";
 
 const SignupPage = () => {
   const initialValues = {

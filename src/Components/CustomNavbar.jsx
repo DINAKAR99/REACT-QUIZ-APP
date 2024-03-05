@@ -13,6 +13,11 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
 } from "reactstrap";
 // import { doLogout, getCurrentUserDetail, isloggedIn } from "../auth";
 // import { userContext } from "../context/userContext";
@@ -20,8 +25,10 @@ const CustomNavbar = () => {
   // const userContextData = useContext(userContext);
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const [login, setLogin] = useState(false);
+  const [login, setLogin] = useState(true);
   const [user, setUser] = useState(undefined);
+  const [modal, setModal] = useState(false);
+
   useEffect(() => {
     // setLogin(isloggedIn());
     // setUser(getCurrentUserDetail());
@@ -37,20 +44,50 @@ const CustomNavbar = () => {
       navigate("/");
     });
   };
+
   // return function Example(args) {
   //   const [isOpen, setIsOpen] = useState(false);
 
-  const toggle = () => setIsOpen(!isOpen);
+  const toggler = () => setModal(!modal);
+  const toggel = () => setIsOpen(!isOpen);
 
   return (
-    <div>
-      <Navbar
-        color="dark"
-        dark
-        expand="md"
-        fixed=" "
-        className="p-0 bg-black   "
+    <div style={{ marginBottom: 85 }}>
+      <Modal
+        className="text-white"
+        isOpen={modal}
+        toggle={toggler}
+        style={{
+          position: "absolute",
+          right: 30,
+          top: 60,
+        }}
       >
+        <ModalHeader toggle={toggler} className="google-card   ">
+          karengula@din.com{" "}
+        </ModalHeader>
+        <ModalBody className="text-center  google-card  ">
+          <i
+            className="fa-solid fa-circle-user   "
+            style={{ fontSize: 60 }}
+          ></i>
+          <h3 className="text-uppercase  "> Dinakar </h3>
+          <Button className="rounded-4 px-3  bg-dark   ">
+            {" "}
+            Manage your Account
+          </Button>
+        </ModalBody>
+        <ModalFooter
+          className="   d-flex justify-content-center border-0   "
+          style={{ backgroundColor: "#343434" }}
+        >
+          <Button className="px-4 bg-dark  rounded-4   ">
+            <i className="fa-solid fa-arrow-right-from-bracket"></i> Sign out
+          </Button>
+        </ModalFooter>
+      </Modal>
+
+      <Navbar dark expand="md" fixed=" " className="p-0 bg-black fixed-top ">
         <NavbarBrand tag={ReactLink} to="/">
           {/* QUIZ-MASTER */}
 
@@ -69,13 +106,14 @@ const CustomNavbar = () => {
                 ABOUT
               </NavLink>
             </NavItem>
+
             <NavItem>
               <NavLink
                 tag={ReactLink}
                 className="text-white "
-                to="/admin/dashboard"
+                to="/user/userDashboard"
               >
-                ADMIN
+                DASHBOARD
               </NavLink>
             </NavItem>
 
@@ -87,11 +125,9 @@ const CustomNavbar = () => {
                 <DropdownItem tag={ReactLink} to="/contact">
                   Contact Us
                 </DropdownItem>
-                <DropdownItem>Facebook</DropdownItem>
-                <DropdownItem divider />
-
-                <DropdownItem>Instagram</DropdownItem>
-                <DropdownItem>Linkedin</DropdownItem>
+                <DropdownItem tag={ReactLink} to="/admin/dashboard">
+                  Admin
+                </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
           </Nav>
@@ -104,14 +140,15 @@ const CustomNavbar = () => {
                   </NavLink>
                 </NavItem>
 
-                <NavItem>
-                  <NavLink tag={ReactLink} to="/user/dashboard">
-                    {user.email}
+                <NavItem onClick={toggler}>
+                  <NavLink tag={ReactLink}>
+                    {/* {user.name} */}{" "}
+                    <i className="fa-solid fa-circle-user fa-xl "></i>
                   </NavLink>
                 </NavItem>
-                <NavItem>
+                {/* <NavItem>
                   <NavLink onClick={logout}>Logout</NavLink>
-                </NavItem>
+                </NavItem> */}
               </>
             )}
             {!login && (

@@ -1,13 +1,17 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { AwesomeButton } from "react-awesome-button";
-import { CountdownCircleTimer } from "react-countdown-circle-timer";
-import { Button, Col, Container, Row } from "reactstrap";
+import { Radio } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import Countdown from "react-countdown";
+import { MoonLoader } from "react-spinners";
+import {
+  Button,
+  Container,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+} from "reactstrap";
 import { getAllQuestionsPerCategory } from "../Helper/QuizHelper";
 import QuizCompletionPage from "./QuizCompletionPage";
-import { Prev } from "react-bootstrap/esm/PageItem";
-import { MoonLoader } from "react-spinners";
-import { Radio } from "@mui/material";
-import Countdown from "react-countdown";
 
 const Quiz = ({ categoryName }) => {
   const quizData = [
@@ -25,25 +29,42 @@ const Quiz = ({ categoryName }) => {
     },
     // Add more questions here
   ];
+
+  // Inside your Quiz component
+
   const [quizSubmitted, setQuizSubmitted] = useState(false);
   const [loading, setLoading] = useState(true);
   const [marks, setMarks] = useState(0);
   const [fecthedQuestions, setFetchedQuestions] = useState([]);
   // const [selectedOption, setSelectedOption] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+
   const [selectedOptions, setSelectedOptions] = useState(() => {
-    const storedOptions = localStorage.getItem("selectedOptions");
+    const storedOptions = sessionStorage.getItem("selectedOptions");
     return storedOptions ? JSON.parse(storedOptions) : {};
   });
 
+  const [countdownEndTime, setCountdownEndTime] = useState(
+    JSON.parse(sessionStorage.getItem("countdownEndTime")) ||
+      Date.now() + 300000
+  );
+
+  const [modal, setModal] = useState(false);
+
+  const toggle = () => setModal(!modal);
+
   const [userResponses, setUserResponses] = useState([]);
-  const currentQuestion = quizData[currentQuestionIndex];
 
   useEffect(() => {
-    localStorage.setItem("selectedOptions", JSON.stringify(selectedOptions));
+    sessionStorage.setItem("selectedOptions", JSON.stringify(selectedOptions));
+    console.log(countdownEndTime);
+    sessionStorage.setItem(
+      "countdownEndTime",
+      JSON.stringify(countdownEndTime)
+    );
 
     console.log(selectedOptions);
-  }, [selectedOptions]);
+  }, [selectedOptions, countdownEndTime]);
 
   useEffect(() => {
     getAllQuestionsPerCategory(categoryName).then((resultSet) => {
@@ -117,6 +138,11 @@ const Quiz = ({ categoryName }) => {
     // return { shouldRepeat: true, delay: 1 };
   };
 
+  const handleButtonPallete = (index) => {
+    console.log(JSON.parse(sessionStorage.getItem("countdownEndTime")));
+    setCurrentQuestionIndex(index);
+  };
+
   const handleNextQuestion = () => {
     if (currentQuestionIndex < fecthedQuestions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -126,6 +152,8 @@ const Quiz = ({ categoryName }) => {
   const handleSubmit = () => {
     console.log(userResponses);
     console.log(marks);
+
+    sessionStorage.removeItem("countdownEndTime");
 
     setQuizSubmitted(true);
   };
@@ -146,128 +174,150 @@ const Quiz = ({ categoryName }) => {
       // Render a countdown
       return (
         <h5>
-          Time Remaining : {hours}:{minutes}:{seconds}
+          Time Remaining :{" "}
+          {hours ? (hours < 9 ? `0${hours}:` : `${hours}:`) : ""}
+          {minutes < 9 ? `0${minutes}` : minutes}:
+          {seconds < 9 ? `0${seconds}` : seconds}
         </h5>
       );
     }
   };
 
   return (
-    <Container fluid>
-      <Row className="d-flex justify-content-center mt-5 ">
-        <Col md={12} style={{ minHeight: "400px" }}>
-          <div>
-            {loading ? (
-              <div
-                className="border rounded-3     shadow-lg   text-center  d-flex justify-content-center align-items-center "
-                style={{ minHeight: "400px" }}
+    <Container fluid className="d-flex p-0">
+      <div
+        style={{ minHeight: "400px", width: 220 }}
+        className="right    border-3 border-top-0    border border-dark    "
+      >
+        <h5 className="text-center  ">Question Pallete</h5>
+        <hr />
+        <div className="d-flex flex-wrap gap-3 ps-2 ">
+          {/* <Row> */}
+          {/* <div className="questions border p-4  "> */}
+          {fecthedQuestions?.map((q, index) => {
+            return (
+              // <Col md={3}>
+              <Button
+                key={index}
+                onClick={() => handleButtonPallete(index)}
+                active={true}
+                color={index === currentQuestionIndex ? "primary" : "secondary"}
+                className="mt-2  "
               >
-                <MoonLoader color="#000000" />
-              </div>
-            ) : quizSubmitted ? (
-              <div className=" shadow-lg ">
-                <QuizCompletionPage
-                  marks={marks && marks}
-                  question_count={fecthedQuestions?.length}
-                />
-              </div>
-            ) : (
-              <div className="  p-4 shadow-lg ">
-                <header className="d-flex  ">
-                  <b>
-                    Question {currentQuestionIndex + 1}/
-                    {fecthedQuestions.length}
-                  </b>
+                {index + 1}
+              </Button>
+              // </Col>
+            );
+          })}
+        </div>
+      </div>
+      <div style={{ minHeight: "400px", flex: 1 }}>
+        <div>
+          {loading ? (
+            <div
+              className="border rounded-3     shadow-lg   text-center  d-flex justify-content-center align-items-center "
+              style={{ minHeight: "400px" }}
+            >
+              <MoonLoader color="#000000" />
+            </div>
+          ) : quizSubmitted ? (
+            <div className=" shadow-lg ">
+              <QuizCompletionPage
+                marks={marks && marks}
+                question_count={fecthedQuestions?.length}
+              />
+            </div>
+          ) : (
+            <div className="  p-4 shadow-lg ">
+              <header className="d-flex  ">
+                <b>
+                  Question {currentQuestionIndex + 1}/{fecthedQuestions.length}
+                </b>
 
-                  <h4 className="ms-auto">
-                    <Countdown date={Date.now() + 200000} renderer={renderer} />
-                  </h4>
-                </header>
+                <h4 className="ms-auto">
+                  <Countdown date={countdownEndTime} renderer={renderer} />
+                </h4>
+              </header>
 
-                <hr />
+              <hr />
 
-                <main>
-                  <>
-                    <h5 className="pb-2">
-                      <b>{fecthedQuestions[currentQuestionIndex]?.question}</b>
-                    </h5>
-                    {fecthedQuestions[currentQuestionIndex] &&
-                      Object.values(
-                        fecthedQuestions[currentQuestionIndex].options
-                      ).map((option, index) => (
-                        <div key={index} className="mb-2">
-                          <Radio
-                            className={`${fecthedQuestions[currentQuestionIndex].questionId}${categoryName} `}
-                            checked={
-                              selectedOptions[currentQuestionIndex] === option
-                            }
-                            onChange={() =>
-                              handleOptionClick(
-                                option,
-                                fecthedQuestions[currentQuestionIndex]
-                                  .correctAnswer
-                              )
-                            }
-                          ></Radio>
-                          {option}
-                          {/* <Button
-                            size="sm"
-                            className="mb-2 "
-                            color={
-                              selectedOptions[currentQuestionIndex] === option
-                                ? "primary"
-                                : "secondary"
-                            }
-                            onClick={() =>
-                              handleOptionClick(
-                                option,
-                                fecthedQuestions[currentQuestionIndex]
-                                  .correctAnswer
-                              )
-                            }
-                            disabled={
-                              selectedOptions[currentQuestionIndex] === option
-                                ? true
-                                : false
-                            }
-                            block
-                          >
-                            {option}
-                          </Button> */}
-                        </div>
-                      ))}
-                  </>
-                </main>
-                <hr />
-                <footer>
-                  <div className="mt-3 d-flex  ">
-                    <AwesomeButton
-                      type="github"
-                      onPress={handlePreviousQuestion}
-                    >
-                      Back
-                    </AwesomeButton>
-                    <AwesomeButton
-                      type="facebook"
-                      onPress={handleNextQuestion}
+              <main>
+                <>
+                  <h5 className="pb-2">
+                    <b>{fecthedQuestions[currentQuestionIndex]?.question}</b>
+                  </h5>
+                  {fecthedQuestions[currentQuestionIndex] &&
+                    Object.values(
+                      fecthedQuestions[currentQuestionIndex].options
+                    ).map((option, index) => (
+                      <div key={index} className="mb-2">
+                        <Radio
+                          className={`${fecthedQuestions[currentQuestionIndex].questionId}${categoryName} `}
+                          checked={
+                            selectedOptions[currentQuestionIndex] === option
+                          }
+                          onChange={() =>
+                            handleOptionClick(
+                              option,
+                              fecthedQuestions[currentQuestionIndex]
+                                .correctAnswer
+                            )
+                          }
+                        ></Radio>
+                        {option}
+                      </div>
+                    ))}
+                </>
+              </main>
+              <hr />
+              <footer>
+                <div className="mt-3 d-flex  ">
+                  <Button onClick={handlePreviousQuestion}>Back</Button>
+                  {currentQuestionIndex + 1 < fecthedQuestions.length ? (
+                    <Button
                       className="ms-2 me-auto "
+                      onClick={handleNextQuestion}
                     >
                       Next
-                    </AwesomeButton>
-                    <AwesomeButton
-                      type="instagram"
-                      onPress={handleSubmit}
-                      className="    "
+                    </Button>
+                  ) : (
+                    ""
+                  )}
+                </div>
+                <hr />
+                <div className=" d-flex   ">
+                  <Button className="bg-dark ms-auto " onClick={toggle}>
+                    Submit
+                  </Button>
+                </div>
+
+                <Modal isOpen={modal} toggle={toggle} size="sm" centered>
+                  <ModalHeader toggle={toggle}> </ModalHeader>
+                  <ModalBody className="text-center  ">
+                    Are you sure you want to submit ?
+                  </ModalBody>
+                  <ModalFooter className="d-flex  justify-content-center border-0   ">
+                    <Button
+                      color="primary"
+                      onClick={handleSubmit}
+                      className="px-4 "
                     >
-                      Submit
-                    </AwesomeButton>
-                  </div>
-                </footer>
-              </div>
-            )}
-          </div>
-        </Col>
-      </Row>
+                      yes
+                    </Button>{" "}
+                    <Button
+                      color="secondary"
+                      className="px-4  "
+                      onClick={toggle}
+                    >
+                      No
+                    </Button>
+                  </ModalFooter>
+                </Modal>
+              </footer>
+            </div>
+          )}
+        </div>
+      </div>
     </Container>
   );
 };

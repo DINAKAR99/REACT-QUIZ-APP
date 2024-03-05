@@ -236,7 +236,7 @@ const AllQuiz = ({ token }) => {
             <b>&nbsp; QUESTIONS</b>
           </h3>
           <div
-            className=" fader border border-grey  shadow-lg bg-white  rounded p-3 mb-2       p-3 mb-2 overflow-y-scroll    "
+            className=" faderborder border-grey  shadow-lg bg-white  rounded p-3 mb-2       p-3 mb-2 overflow-y-scroll    "
             style={{ maxHeight: "405px" }}
           >
             {quizCategory && (
@@ -315,7 +315,6 @@ const AllQuiz = ({ token }) => {
                                         }
                                         readOnly
                                       />
-
                                       {
                                         Object.values(QuestionPacket)[0]
                                           .options[optionKey]

@@ -98,7 +98,7 @@ const EditForm = ({ packet, toggle }) => {
       <div>
         <div className="wrapper    justify-content-center align-items-center">
           {/* {JSON.stringify(questionPacket)} */}
-          <h3>CREATE QUESTION</h3>
+          <h5>EDIT QUESTION</h5>
           <form onSubmit={handleEdit}>
             <div className="my-3">
               <label htmlFor="content">

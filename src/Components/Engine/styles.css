@@ -1,0 +1,13 @@
+.parent {
+  display: flex;
+}
+
+.fixed-width {
+  width: 200px; /* Set the fixed width for this div */
+  background-color: lightblue; /* Example background color */
+}
+
+.flexible-width {
+  flex: 1; /* Allow the div to take up remaining space */
+  background-color: lightgreen; /* Example background color */
+}

@@ -3,7 +3,7 @@
 import React from "react";
 import { Nav, NavItem, NavLink } from "reactstrap";
 
-const Sidebar = ({ handleButtonClick }) => {
+const UserSidebar = ({ handleButtonClick }) => {
   return (
     <div
       className="sidebar border-3 position-fixed           bg-black"
@@ -42,4 +42,4 @@ const Sidebar = ({ handleButtonClick }) => {
   );
 };
 
-export default Sidebar;
+export default UserSidebar;

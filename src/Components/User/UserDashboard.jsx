@@ -1,24 +1,18 @@
-import { motion } from "framer-motion";
 import React, { useState } from "react";
 import { AwesomeButton } from "react-awesome-button";
-import { Button, Col, Container, Row } from "reactstrap";
-import CustomNavbar from "../CustomNavbar";
-import { Link, useNavigate } from "react-router-dom";
-import { Nav, NavItem, NavLink } from "reactstrap";
+import { useNavigate } from "react-router-dom";
+import { Col, Container, Row } from "reactstrap";
 import Sidebar from "../Admin/Sidebar";
+import CustomNavbar from "../CustomNavbar";
 import { getAllCategories } from "../Helper/QuizHelper";
+import UserSidebar from "../Admin/Users/UserSidebar";
+import { Fab } from "@mui/material";
 
 const UserDashboard = () => {
   const text = "WELCOME TO USER DASHBOARD ".split(",");
   const [showWelcomeMessage, setShowWelcomeMessage] = useState(true);
   const [showCategorySelection, setShowCategorySelection] = useState(false);
   const categories = ["react", "java", "spring", "firebase"];
-
-  // Function to handle category selection click
-  const handleCategorySelection = () => {
-    setShowWelcomeMessage(false);
-    setTimeout(() => setShowCategorySelection(true), 200); // Delay the display to allow the fade-in effect
-  };
 
   const [fetchedCategory, setFetchedCategory] = useState([]);
 
@@ -41,12 +35,12 @@ const UserDashboard = () => {
       <CustomNavbar />
       <Container fluid>
         <Row>
-          <Col sm="3" md="2" className="sidebar p-0 fadeleft  ">
-            <Sidebar />
-          </Col>
+          {/* <Col sm="3" md="2" className="sidebar p-0 fadeleft  ">
+            <UserSidebar />
+          </Col> */}
           <Col>
             <Container>
-              <Row>
+              <Row className="sidebar">
                 <Col md={6}>
                   <div>
                     <h3 className="mt-3 ">
@@ -57,7 +51,7 @@ const UserDashboard = () => {
                     fetchedCategory.map((each, index) => {
                       return (
                         <>
-                          <div className=" fader border border-grey rounded p-3  mb-2 shadow-lg  bg-white   ">
+                          <div className="fader border border-grey rounded p-3  mb-2 shadow-lg  bg-white   ">
                             <h5>
                               {index + 1}.{each}
                             </h5>
@@ -69,6 +63,9 @@ const UserDashboard = () => {
                             >
                               Take Quiz
                             </AwesomeButton>
+                            {/* <Fab size="large" className="  rounded-0    "> */}
+                            {/* ss */}
+                            {/* </Fab> */}
                           </div>
                         </>
                       );
@@ -79,6 +76,38 @@ const UserDashboard = () => {
                     <h3 className="mt-3 ">
                       <b>&nbsp; COMPLETED QUIZ</b>
                     </h3>
+                    <>
+                      <div className=" fader border border-grey rounded p-3  mb-2 shadow-lg  bg-white   ">
+                        <h5>1.Hibernate</h5>
+                        <h6>
+                          <b>Result</b> : Pending &nbsp;
+                          <i
+                            class="fa-regular fa-hourglass-half"
+                            // style={{ color: "navy" }}
+                          ></i>
+                        </h6>
+                      </div>
+                      <div className=" fader border border-grey rounded p-3  mb-2 shadow-lg  bg-white   ">
+                        <h5>2.python</h5>
+                        <h6>
+                          <b>Result</b> : passed &nbsp;
+                          <i
+                            class="fa-solid fa-check"
+                            style={{ color: "green" }}
+                          ></i>
+                        </h6>
+                      </div>
+                      <div className=" fader border border-grey rounded p-3  mb-2 shadow-lg  bg-white   ">
+                        <h5>2.Microservices</h5>
+                        <h6>
+                          <b>Result</b> : failed &nbsp;
+                          <i
+                            class="fa-solid fa-xmark"
+                            style={{ color: "red" }}
+                          ></i>
+                        </h6>
+                      </div>
+                    </>
                   </div>
                 </Col>
               </Row>
