@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Outlet, Navigate } from "react-router-dom";
-const authorized = true;
+
 const AdminRoute = () => {
+  let authorized = true;
+  useEffect(() => {
+    if (localStorage.getItem("admin")) {
+      authorized = true;
+    }
+  });
+
   return authorized ? <Outlet /> : <Navigate to={"/login"}></Navigate>;
 };
 export default AdminRoute;

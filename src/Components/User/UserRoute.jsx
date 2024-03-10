@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Outlet, Navigate } from "react-router-dom";
-const authorized = true;
+
 const UserRoute = () => {
+  let authorized = true;
+  useEffect(() => {
+    if (localStorage.getItem("user")) {
+      authorized = true;
+    }
+  });
   return authorized ? <Outlet /> : <Navigate to={"/login"} />;
 };
 

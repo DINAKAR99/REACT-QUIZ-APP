@@ -6,21 +6,8 @@ const SupportPage = () => {
   let [isFullScreen, setFullScreen] = useState(false);
   return (
     <div>
-      <div>
-        <CustomNavbar />
-        <button onClick={(e) => setFullScreen(true)}>Go Fullscreen</button>
-        <FullScreen
-          isFullScreen={isFullScreen}
-          onChange={(isFull) => {
-            setFullScreen(isFull);
-          }}
-        >
-          {" "}
-          <CustomNavbar />
-          <div>Fullscreen</div>
-          <h1>dwdqwdwed WEdwedwed</h1>
-        </FullScreen>
-      </div>
+      <CustomNavbar />
+      support page
     </div>
   );
 };

@@ -88,7 +88,7 @@ const Quiz = ({ categoryName }) => {
       localStorage.removeItem(`${categoryName}-test`);
       setTimeout(() => {
         window.location.href = "/user/userDashboard";
-      }, 900);
+      }, 600);
     } else {
       localStorage.setItem(`${categoryName}-test`, "visited");
     }
@@ -248,7 +248,10 @@ const Quiz = ({ categoryName }) => {
             </div>
           ) : (
             <div className="  p-4 shadow-lg h-100   ">
-              <header className="d-flex  ">
+              <div>
+                <i>Note: Do not refresh the page while taking quiz</i>
+              </div>
+              <header className="d-flex mt-5  ">
                 <b>
                   Question {currentQuestionIndex + 1}/{fecthedQuestions.length}
                 </b>
