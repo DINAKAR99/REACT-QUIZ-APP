@@ -1,6 +1,7 @@
 import { Radio } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Countdown from "react-countdown";
+
 import { MoonLoader } from "react-spinners";
 import {
   Button,
@@ -12,6 +13,7 @@ import {
 } from "reactstrap";
 import { getAllQuestionsPerCategory } from "../Helper/QuizHelper";
 import QuizCompletionPage from "./QuizCompletionPage";
+import toast from "react-hot-toast";
 
 const Quiz = ({ categoryName }) => {
   const quizData = [
@@ -44,27 +46,23 @@ const Quiz = ({ categoryName }) => {
     return storedOptions ? JSON.parse(storedOptions) : {};
   });
 
-  const [countdownEndTime, setCountdownEndTime] = useState(
-    JSON.parse(sessionStorage.getItem("countdownEndTime")) ||
-      Date.now() + 300000
-  );
+  const [countdownEndTime, setCountdownEndTime] = useState(Date.now() + 300000);
 
   const [modal, setModal] = useState(false);
 
   const toggle = () => setModal(!modal);
 
   const [userResponses, setUserResponses] = useState([]);
+  const [shouldRedirect, setShouldRedirect] = useState(false);
 
   useEffect(() => {
     sessionStorage.setItem("selectedOptions", JSON.stringify(selectedOptions));
     console.log(countdownEndTime);
-    sessionStorage.setItem(
-      "countdownEndTime",
-      JSON.stringify(countdownEndTime)
-    );
 
     console.log(selectedOptions);
-  }, [selectedOptions, countdownEndTime]);
+  }, [selectedOptions]);
+
+  const [reloadCount, setReloadCount] = useState(0); // Initialize to 1
 
   useEffect(() => {
     getAllQuestionsPerCategory(categoryName).then((resultSet) => {
@@ -77,8 +75,25 @@ const Quiz = ({ categoryName }) => {
 
       console.log(rawArray);
       setLoading(false);
+      //setting time
+      sessionStorage.setItem(
+        "countdownEndTime",
+        JSON.stringify(countdownEndTime)
+      );
     });
+
+    if (localStorage.getItem(`${categoryName}-test`)) {
+      console.log("yeah visited");
+      toast.error("redirecting...");
+      localStorage.removeItem(`${categoryName}-test`);
+      setTimeout(() => {
+        window.location.href = "/user/userDashboard";
+      }, 900);
+    } else {
+      localStorage.setItem(`${categoryName}-test`, "visited");
+    }
   }, []);
+
   const handleOptionClick = (option, correctAnswer) => {
     const questionId = currentQuestionIndex; // Assuming question index serves as question ID
     // check if option and correctAnswer
@@ -152,7 +167,7 @@ const Quiz = ({ categoryName }) => {
   const handleSubmit = () => {
     console.log(userResponses);
     console.log(marks);
-
+    localStorage.setItem(`${categoryName}`, true);
     sessionStorage.removeItem("countdownEndTime");
 
     setQuizSubmitted(true);
@@ -183,13 +198,17 @@ const Quiz = ({ categoryName }) => {
     }
   };
 
+  // return;
+
   return (
-    <Container fluid className="d-flex p-0">
+    <Container fluid className="d-flex p-0   ">
       <div
-        style={{ minHeight: "400px", width: 220 }}
-        className="right    border-3 border-top-0    border border-dark    "
+        // inert={disabled ? "" : undefined}
+        style={{ width: 220 }}
+        className="right border-3 border-top-0 border-bottom-0    border border-dark    "
       >
         <h5 className="text-center  ">Question Pallete</h5>
+
         <hr />
         <div className="d-flex flex-wrap gap-3 ps-2 ">
           {/* <Row> */}
@@ -211,8 +230,8 @@ const Quiz = ({ categoryName }) => {
           })}
         </div>
       </div>
-      <div style={{ minHeight: "400px", flex: 1 }}>
-        <div>
+      <div style={{ height: "100vh", width: "100vw" }}>
+        <div className="h-100  ">
           {loading ? (
             <div
               className="border rounded-3     shadow-lg   text-center  d-flex justify-content-center align-items-center "
@@ -228,7 +247,7 @@ const Quiz = ({ categoryName }) => {
               />
             </div>
           ) : (
-            <div className="  p-4 shadow-lg ">
+            <div className="  p-4 shadow-lg h-100   ">
               <header className="d-flex  ">
                 <b>
                   Question {currentQuestionIndex + 1}/{fecthedQuestions.length}
@@ -270,7 +289,7 @@ const Quiz = ({ categoryName }) => {
                 </>
               </main>
               <hr />
-              <footer>
+              <footer style={{}}>
                 <div className="mt-3 d-flex  ">
                   <Button onClick={handlePreviousQuestion}>Back</Button>
                   {currentQuestionIndex + 1 < fecthedQuestions.length ? (
@@ -283,12 +302,6 @@ const Quiz = ({ categoryName }) => {
                   ) : (
                     ""
                   )}
-                </div>
-                <hr />
-                <div className=" d-flex   ">
-                  <Button className="bg-dark ms-auto " onClick={toggle}>
-                    Submit
-                  </Button>
                 </div>
 
                 <Modal isOpen={modal} toggle={toggle} size="sm" centered>
@@ -314,6 +327,22 @@ const Quiz = ({ categoryName }) => {
                   </ModalFooter>
                 </Modal>
               </footer>
+
+              <hr />
+              <div className=" position-absolute  bottom-0 end-0  ">
+                <div className=" p-4  ">
+                  <Button className="bg-dark  ms-auto  " onClick={toggle}>
+                    Submit
+                  </Button>
+                </div>
+              </div>
+              <div className=" position-absolute  bottom-0 start-0  ">
+                <div className=" p-4  ">
+                  <Button className="bg-dark  ms-auto  " onClick={toggle}>
+                    Submit
+                  </Button>
+                </div>
+              </div>
             </div>
           )}
         </div>

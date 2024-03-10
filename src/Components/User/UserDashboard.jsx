@@ -43,9 +43,9 @@ const UserDashboard = () => {
               <Row className="sidebar">
                 <Col md={6}>
                   <div>
-                    <h3 className="mt-3 ">
-                      <b>&nbsp; AVAILABLE QUIZ</b>
-                    </h3>
+                    <b>&nbsp; AVAILABLE QUIZ</b>
+
+                    <h3 className="mt-3 "></h3>
                   </div>
                   {fetchedCategory &&
                     fetchedCategory.map((each, index) => {
