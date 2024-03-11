@@ -82,7 +82,12 @@ const Quiz = ({ categoryName }) => {
       );
     });
 
-    if (localStorage.getItem(`${categoryName}-test`)) {
+    if (localStorage.getItem(`${categoryName}`)) {
+      toast.error("quiz already completed ...");
+      setTimeout(() => {
+        window.location.href = "/user/userDashboard";
+      }, 600);
+    } else if (localStorage.getItem(`${categoryName}-test`)) {
       console.log("yeah visited");
       toast.error("redirecting...");
       localStorage.removeItem(`${categoryName}-test`);
@@ -201,9 +206,8 @@ const Quiz = ({ categoryName }) => {
   // return;
 
   return (
-    <Container fluid className="d-flex p-0   ">
+    <Container fluid className="d-flex p-0 " style={{ userSelect: "none" }}>
       <div
-        // inert={disabled ? "" : undefined}
         style={{ width: 220 }}
         className="right border-3 border-top-0 border-bottom-0    border border-dark    "
       >
@@ -211,11 +215,8 @@ const Quiz = ({ categoryName }) => {
 
         <hr />
         <div className="d-flex flex-wrap gap-3 ps-2 ">
-          {/* <Row> */}
-          {/* <div className="questions border p-4  "> */}
           {fecthedQuestions?.map((q, index) => {
             return (
-              // <Col md={3}>
               <Button
                 key={index}
                 onClick={() => handleButtonPallete(index)}
@@ -225,7 +226,6 @@ const Quiz = ({ categoryName }) => {
               >
                 {index + 1}
               </Button>
-              // </Col>
             );
           })}
         </div>
@@ -333,13 +333,6 @@ const Quiz = ({ categoryName }) => {
 
               <hr />
               <div className=" position-absolute  bottom-0 end-0  ">
-                <div className=" p-4  ">
-                  <Button className="bg-dark  ms-auto  " onClick={toggle}>
-                    Submit
-                  </Button>
-                </div>
-              </div>
-              <div className=" position-absolute  bottom-0 start-0  ">
                 <div className=" p-4  ">
                   <Button className="bg-dark  ms-auto  " onClick={toggle}>
                     Submit

@@ -14,6 +14,14 @@ const LoginPage = () => {
     email: yup.string().required("Email is required!"),
     password: yup.string().required("Password is required!!"),
   });
+
+  const submitForm = (values) => {
+    console.log("submitted");
+    console.log(values);
+
+    //hit api and get response from backend
+  };
+
   return (
     <>
       <CustomNavbar />
@@ -40,10 +48,7 @@ const LoginPage = () => {
             <Formik
               initialValues={initialValues}
               validationSchema={validate}
-              onSubmit={(values) => {
-                console.log("submitted");
-                console.log(values);
-              }}
+              onSubmit={(val) => submitForm(val)}
             >
               {(formik) => (
                 <div>

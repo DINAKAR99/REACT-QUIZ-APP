@@ -39,8 +39,6 @@ function App() {
             }
           />
 
-          <Route path="/code" element={<CodeEditor />} />
-
           <Route path="/user" element={<UserRoute />}>
             <Route path="userDashboard" element={<UserDashboard />} />
             <Route path="takeQuiz" element={<TakeQuiz />} />
