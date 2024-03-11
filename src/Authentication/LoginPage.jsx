@@ -4,6 +4,7 @@ import * as yup from "Yup";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { Label } from "reactstrap";
 import CustomNavbar from "../Components/CustomNavbar";
+import toast from "react-hot-toast";
 
 const LoginPage = () => {
   const initialValues = {
@@ -20,14 +21,18 @@ const LoginPage = () => {
     console.log(values);
 
     //hit api and get response from backend
+
+    // if got  response navigate to dashboard
+    //else toast incorrect name or password
+    toast.error("incorrect name or password", { duration: 1000 });
   };
 
   return (
-    <>
+    <div className="bg-black vh-100   ">
       <CustomNavbar />
-      <div className=" container-fluid   d-flex justify-content-center w-100 h-100 loginpageContainer p-5  ">
-        <div className="  d-flex white-shadow">
-          <div className="form-container   col-md-6 text-white  border-end   p-3 sign-in-container ">
+      <div className=" container-fluid   d-flex justify-content-center    py-5  loginpageContainer   ">
+        <div className="  d-flex white-shadow    ">
+          <div className="form-container col-md-6 text-white  border-end   p-3 sign-in-container ">
             <h1 className="text-center">Sign in</h1>
             <div className="social-container text-center p-2">
               <a href="#" className="social mx-2 p-2     ">
@@ -40,7 +45,7 @@ const LoginPage = () => {
                 <i className="fa fa-linkedin" />
               </a>
             </div>
-            <div className="d-flex justify-content-center   ">
+            <div className="d-flex justify-content-center ">
               <span className="form-text text-white   ">
                 or use your account
               </span>
@@ -132,7 +137,7 @@ const LoginPage = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

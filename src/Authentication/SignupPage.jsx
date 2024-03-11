@@ -28,14 +28,15 @@ const SignupPage = () => {
       .required("Confirm password is reqired!"),
   });
   return (
-    <div className="bg-black  ">
+    <div className="bg-black vh-100 ">
       <CustomNavbar />
+
       <div
-        className="container-fluid mx-3   d-flex justify-content-center   p-5    
+        className="container-fluid  bg-black d-flex justify-content-center m-0  p-5    
        "
       >
-        <div className="signinBack d-flex  align-items-center justify-content-center   col-md-4 white-shadow  ">
-          <div className="info h-100   bg-transparent   text-white text-center p-5 pb-0  ">
+        <div className="signinBack d-flex  align-items-center justify-content-center col-md-4 white-shadow  ">
+          <div className="info   bg-transparent   text-white text-center p-5 pb-0  ">
             <h1 className="p-5 mt-5">Resume your journey!!</h1>
             <p></p>
 
@@ -219,11 +220,6 @@ const SignupPage = () => {
           </Formik>
         </div>
       </div>
-      {/* <Container>
-        <Row>
-          <Col></Col>
-        </Row>
-      </Container> */}
     </div>
   );
 };
