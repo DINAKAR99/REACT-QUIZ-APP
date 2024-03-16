@@ -2,24 +2,16 @@ import React, { useState } from "react";
 import { AwesomeButton } from "react-awesome-button";
 import { useNavigate } from "react-router-dom";
 import { Col, Container, Row } from "reactstrap";
-import Sidebar from "../Admin/Sidebar";
 import CustomNavbar from "../CustomNavbar";
-import { getAllCategories } from "../Helper/QuizHelper";
-import UserSidebar from "../Admin/Users/UserSidebar";
-import { Fab } from "@mui/material";
+import { getAllCategories, getUserCompletedQuiz } from "../Helper/QuizHelper";
 
 const UserDashboard = () => {
-  const text = "WELCOME TO USER DASHBOARD ".split(",");
-  const [showWelcomeMessage, setShowWelcomeMessage] = useState(true);
-  const [showCategorySelection, setShowCategorySelection] = useState(false);
-  const categories = ["react", "java", "spring", "firebase"];
-
-  const [fetchedCategory, setFetchedCategory] = useState([]);
-
   const navigate = useNavigate();
+  const [fetchedCategory, setFetchedCategory] = useState([]);
+  const [availableQuiz, setAvailableQuiz] = useState([]);
+  const [completedQuiz, setCompletedQuiz] = useState([]);
 
   const takequiz = (each) => {
-    console.log("suddkj");
     navigate("/user/takequiz", {
       state: { categoryName: each },
     });
@@ -29,6 +21,22 @@ const UserDashboard = () => {
     getAllCategories().then((categoryArray) => {
       setFetchedCategory(categoryArray);
     });
+
+    const userid = 1; //dummy user
+
+    Promise.all([getAllCategories(), getUserCompletedQuiz(userid)]).then(
+      (resultsArray) => {
+        let availableCat = resultsArray[0];
+        const completedQuiz = resultsArray[1];
+
+        availableCat = availableCat.filter(
+          (each) => !completedQuiz.includes(each)
+        );
+
+        //now set available quiz wit all categories and set completed quiz  wit completedquiz
+        //----------------------------------------------------------------
+      }
+    );
   });
   return (
     <>

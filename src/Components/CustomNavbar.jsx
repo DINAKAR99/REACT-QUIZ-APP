@@ -19,37 +19,34 @@ import {
   ModalFooter,
   Button,
 } from "reactstrap";
-// import { doLogout, getCurrentUserDetail, isloggedIn } from "../auth";
-// import { userContext } from "../context/userContext";
+
 const CustomNavbar = () => {
   // const userContextData = useContext(userContext);
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const [login, setLogin] = useState(true);
+  const [login, setLogin] = useState(false);
   const [user, setUser] = useState(undefined);
   const [modal, setModal] = useState(false);
 
   useEffect(() => {
-    // setLogin(isloggedIn());
-    // setUser(getCurrentUserDetail());
+    if (sessionStorage.getItem("userDetails")) {
+      setUser(() => JSON.parse(sessionStorage.getItem("userDetails")).user);
+      console.log(JSON.parse(sessionStorage.getItem("userDetails")).user);
+      setLogin(true);
+    }
   }, [login]);
   const logout = () => {
-    doLogout(() => {
-      //loggged out
-      setLogin(false);
-      userContextData.setUser({
-        data: null,
-        login: false,
-      });
-      navigate("/");
-    });
+    //loggged out
+    setLogin(false);
+    sessionStorage.removeItem("userDetails");
+
+    navigate("/");
   };
 
   // return function Example(args) {
   //   const [isOpen, setIsOpen] = useState(false);
 
   const toggler = () => setModal(!modal);
-  const toggel = () => setIsOpen(!isOpen);
 
   return (
     <div style={{ marginBottom: 85 }}>
@@ -64,15 +61,20 @@ const CustomNavbar = () => {
         }}
       >
         <ModalHeader toggle={toggler} className="google-card   ">
-          karengula@din.com{" "}
+          {user?.email}
         </ModalHeader>
-        <ModalBody className="text-center  google-card  ">
+        <ModalBody className="text-center google-card ">
           <i
             className="fa-solid fa-circle-user   "
             style={{ fontSize: 60 }}
           ></i>
-          <h3 className="text-uppercase  "> Dinakar </h3>
-          <Button className="rounded-4 px-3  bg-dark   ">
+          <h3 className="text-uppercase  "> {user?.userName} </h3>
+          <Button
+            className="rounded-4 px-3  bg-dark   "
+            onClick={() => {
+              navigate("/user/manageAccount");
+            }}
+          >
             {" "}
             Manage your Account
           </Button>
@@ -81,7 +83,7 @@ const CustomNavbar = () => {
           className="   d-flex justify-content-center border-0   "
           style={{ backgroundColor: "#343434" }}
         >
-          <Button className="px-4 bg-dark  rounded-4   ">
+          <Button className="px-4 bg-dark  rounded-4" onClick={logout}>
             <i className="fa-solid fa-arrow-right-from-bracket"></i> Sign out
           </Button>
         </ModalFooter>
@@ -134,16 +136,12 @@ const CustomNavbar = () => {
           <Nav navbar>
             {login && (
               <>
-                <NavItem>
-                  <NavLink tag={ReactLink} to="#">
-                    Profile
-                  </NavLink>
-                </NavItem>
-
                 <NavItem onClick={toggler}>
                   <NavLink tag={ReactLink}>
-                    {/* {user.name} */}{" "}
-                    <i className="fa-solid fa-circle-user fa-xl "></i>
+                    <span className="text-uppercase text-white   ">
+                      {user?.userName} &nbsp;
+                    </span>
+                    <i className="fa-solid fa-circle-user fa-xl     "></i>
                   </NavLink>
                 </NavItem>
                 {/* <NavItem>

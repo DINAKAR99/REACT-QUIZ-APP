@@ -1,8 +1,22 @@
 import axios from "axios";
 
-const public_url =
+const firebaseURL =
   "https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/";
+const public_url = "http://localhost:8080";
 //get question count
+
+export const userRegister = (user) => {
+  console.log("in user register");
+  const createUrl = `${public_url}/auth/register`;
+
+  return axios.post(createUrl, user);
+};
+export const userLogin = (user) => {
+  console.log("in user login");
+  const createUrl = `${public_url}/auth/login`;
+
+  return axios.post(createUrl, user);
+};
 
 /////
 export const getQCount = (categoryTitle) => {
@@ -51,6 +65,16 @@ export const deleteCategory = (categoryTitle) => {
 
 //fecth categories
 export const getAllCategories = () => {
+  const createUrl = `${public_url}/questions.json`;
+
+  return axios.get(createUrl).then((Response) => {
+    console.log(Object.keys(Response.data));
+    return Object.keys(Response.data);
+  });
+};
+
+export const getUserCompletedQuiz = (userid) => {
+  console.log("user completed quiz fetcher");
   const createUrl = `${public_url}/questions.json`;
 
   return axios.get(createUrl).then((Response) => {

@@ -82,7 +82,7 @@ const QuizDashboard = () => {
             <Col sm="9" md="10" className="main-content">
               {/* Conditionally render the appropriate form */}
 
-              <AllQuiz token={token} />
+              <AllQuiz iz token={token} />
             </Col>
           </Row>
         </Container>

@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import * as yup from "Yup";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { Label } from "reactstrap";
 import CustomNavbar from "../Components/CustomNavbar";
 import toast from "react-hot-toast";
-
+import { userLogin } from "../Components/Helper/QuizHelper";
+import { useNavigate } from "react-router-dom";
+import { GoogleLogin, googleLogout, useGoogleLogin } from "@react-oauth/google";
+import axios from "axios";
 const LoginPage = () => {
+  const client_id =
+    "574785353635-351autdab21u6g6tvi3v3153vuk1dtlp.apps.googleusercontent.com";
+  const naviagte = useNavigate();
   const initialValues = {
     email: "",
     password: "",
@@ -15,16 +21,62 @@ const LoginPage = () => {
     email: yup.string().required("Email is required!"),
     password: yup.string().required("Password is required!!"),
   });
-
+  const [user, setUser] = useState([]);
+  const [profile, setProfile] = useState(null);
+  useEffect(() => {
+    if (user) {
+      axios
+        .get(
+          `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.access_token}`,
+              Accept: "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          setProfile(res.data);
+          console.log(res);
+          console.log(profile);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [user]);
+  const login = useGoogleLogin({
+    onSuccess: (codeResponse) => {
+      setUser(codeResponse);
+      toast.success("login successful");
+      setTimeout(() => {
+        naviagte("/user/userDashboard");
+      }, 1000);
+    },
+    onError: (error) => console.log("Login Failed:", error),
+  });
+  // log out function to log the user out of google and set the profile array to null
+  const logOut = () => {
+    googleLogout();
+    setProfile(null);
+  };
   const submitForm = (values) => {
     console.log("submitted");
     console.log(values);
 
     //hit api and get response from backend
-
-    // if got  response navigate to dashboard
-    //else toast incorrect name or password
-    toast.error("incorrect name or password", { duration: 1000 });
+    userLogin(values)
+      .then((response) => {
+        // if got  response navigate to dashboard
+        console.log(response.data);
+        sessionStorage.setItem("userDetails", JSON.stringify(response.data));
+        toast.success("login successful");
+        setTimeout(() => {
+          naviagte("/user/userDashboard");
+        }, 1000);
+      })
+      .catch(() => {
+        //else toast incorrect name or password
+        toast.error("incorrect name or password", { duration: 1000 });
+      });
   };
 
   return (
@@ -38,7 +90,11 @@ const LoginPage = () => {
               <a href="#" className="social mx-2 p-2     ">
                 <i className="fa fa-facebook-f text-white  " />
               </a>
-              <a href="#" className="social mx-2 p-2   text-white">
+              <a
+                href="#"
+                className="social mx-2 p-2   text-white"
+                onClick={login}
+              >
                 <i class="fa-brands fa-google"></i>
               </a>
               <a href="#" className="social mx-2 p-2   text-white">

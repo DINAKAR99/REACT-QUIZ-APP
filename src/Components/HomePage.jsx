@@ -81,7 +81,7 @@ const HomePage = () => {
             <Link to="/login">
               <Button
                 size="lg"
-                className="border-gradient rounded-pill ms-5 px-5     "
+                className="border-gradient rounded-pill ms-5 px-5"
               >
                 Get Started
               </Button>
@@ -90,7 +90,10 @@ const HomePage = () => {
         </div>
       </div>
 
-      <footer className="bg-dark       text-white-50  ">BRAINYBITS</footer>
+      <footer className="bg-dark text-white-50 ">
+        <div>BRAINYBITS</div>
+        <hr /> <div>BRAINYBITS</div>
+      </footer>
     </>
   );
 };

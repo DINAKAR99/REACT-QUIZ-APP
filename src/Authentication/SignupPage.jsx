@@ -1,21 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 
 import * as yup from "Yup";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { Link } from "react-router-dom";
-import { Label } from "reactstrap";
+import { Link, useNavigate } from "react-router-dom";
+import { InputGroup, InputGroupText, Label } from "reactstrap";
 import CustomNavbar from "../Components/CustomNavbar";
+import { userRegister } from "../Components/Helper/QuizHelper";
+import toast from "react-hot-toast";
 
 const SignupPage = () => {
+  // const [showpassword, setShowpassword] = useState(false);
+
+  const navigate = useNavigate();
   const initialValues = {
-    name: "",
+    userName: "",
     email: "",
     empId: "",
     password: "",
     conPassword: "",
   };
   const validate = yup.object({
-    name: yup.string().required("Name is required"),
+    userName: yup.string().required("Name is required"),
     email: yup.string().email("Email is invalid").required("Email is required"),
     empId: yup.string().required("Employee id is required"),
     password: yup
@@ -27,6 +32,35 @@ const SignupPage = () => {
       .oneOf([yup.ref("password"), null], "Password must match!")
       .required("Confirm password is reqired!"),
   });
+
+  const submitHandler = (values) => {
+    console.log("submitted");
+    console.log(values);
+
+    let senderPacket = values;
+    delete senderPacket.conPassword;
+
+    console.log(senderPacket);
+
+    userRegister(senderPacket)
+      .then((response) => {
+        toast.success("signup successful");
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
+      })
+      .catch((err) => {
+        toast.error("signup unsuccessful");
+        setTimeout(() => {
+          // window.location.reload();
+        }, 1000);
+      });
+  };
+
+  const passwordToggler = () => {
+    setShowpassword((showpassword) => !showpassword);
+  };
+
   return (
     <div className="bg-black vh-100 ">
       <CustomNavbar />
@@ -68,10 +102,7 @@ const SignupPage = () => {
           <Formik
             initialValues={initialValues}
             validationSchema={validate}
-            onSubmit={(values) => {
-              console.log("submitted");
-              console.log(values);
-            }}
+            onSubmit={submitHandler}
           >
             {(formik) => (
               <div>
@@ -86,12 +117,12 @@ const SignupPage = () => {
                     <Field
                       type="text"
                       label="Name"
-                      name="name"
+                      name="userName"
                       style={{ fontSize: "13px" }}
                       placeholder="Enter your name"
-                      className={`form-control rounded-0    bg-transparent  border-0 border-bottom border-white    ${
-                        formik.touched.name &&
-                        formik.errors.name &&
+                      className={`form-control rounded-0 text-white   bg-transparent  border-0 border-bottom border-white    ${
+                        formik.touched.userName &&
+                        formik.errors.userName &&
                         "is-invalid"
                       }`}
                       id="name"
@@ -113,7 +144,7 @@ const SignupPage = () => {
                       label="Email"
                       style={{ fontSize: "13px" }}
                       placeholder="example@gmail.com"
-                      className={`form-control rounded-0 bg-transparent border-0 border-bottom border-white ${
+                      className={`form-control rounded-0 text-white bg-transparent border-0 border-bottom border-white ${
                         formik.touched.email &&
                         formik.errors.email &&
                         "is-invalid"
@@ -137,7 +168,7 @@ const SignupPage = () => {
                       label="Employee Id"
                       style={{ fontSize: "13px" }}
                       placeholder="Enter Your Id"
-                      className={`form-control rounded-0  bg-transparent  border-0 border-bottom border-white ${
+                      className={`form-control rounded-0 text-white bg-transparent  border-0 border-bottom border-white ${
                         formik.touched.empId &&
                         formik.errors.empId &&
                         "is-invalid"
@@ -158,19 +189,21 @@ const SignupPage = () => {
                     >
                       Password
                     </Label>
+
                     <Field
                       type="password"
                       name="password"
                       style={{ fontSize: "13px" }}
                       label="Password"
                       placeholder="qwert@123"
-                      className={`form-control rounded-0 bg-transparent border-0 border-bottom border-white ${
+                      className={`form-control rounded-0 bg-transparent border-0 text-white  border-bottom border-white ${
                         formik.touched.password &&
                         formik.errors.password &&
                         "is-invalid"
                       }`}
                       id="password"
                     />
+
                     <ErrorMessage
                       component="div"
                       name="password"
@@ -181,19 +214,36 @@ const SignupPage = () => {
                     <label htmlFor="confirmPassword" className="text-white ">
                       Confirm Password
                     </label>
+
+                    {/* <InputGroup> */}
                     <input
                       id="confirmPassword"
                       style={{ fontSize: "13px" }}
-                      className={`form-control shadow-none bg-transparent rounded-0 border-0 border-bottom border-white mt-1 ${
+                      className={`form-control shadow-none  text-white  bg-transparent rounded-0 border-0 border-bottom border-white mt-1 ${
                         formik.touched.conPassword &&
                         formik.errors.conPassword &&
                         "is-invalid"
                       }`}
+                      // type={showpassword ? "text" : "password"}
                       type="password"
                       name="conPassword"
                       placeholder="confirm password..."
+                      value={formik.values.conPassword} // Ensure the value is controlled
+                      onChange={formik.handleChange} // Handle change event
                       {...formik.getFieldProps("conPassword")}
                     />
+                    {/* <InputGroupText className="bg-black border-0 rounded-0 border-bottom  "> */}
+                    {/* <i
+                      class={
+                        showpassword
+                          ? " fa-solid fa-eye-slash text-white "
+                          : "fa-regular fa-eye text-white "
+                      }
+                      onClick={passwordToggler}
+                    ></i> */}
+                    {/* </InputGroupText> */}
+                    {/* </InputGroup> */}
+
                     <ErrorMessage
                       component="div"
                       name="conPassword"
