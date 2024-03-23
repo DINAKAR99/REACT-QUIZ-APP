@@ -39,7 +39,6 @@ const CustomNavbar = () => {
     //loggged out
     setLogin(false);
     sessionStorage.removeItem("userDetails");
-
     navigate("/");
   };
 
@@ -68,19 +67,18 @@ const CustomNavbar = () => {
             className="fa-solid fa-circle-user   "
             style={{ fontSize: 60 }}
           ></i>
-          <h3 className="text-uppercase  "> {user?.userName} </h3>
+          <h3 className="text-uppercase"> {user?.userName} </h3>
           <Button
             className="rounded-4 px-3  bg-dark   "
             onClick={() => {
               navigate("/user/manageAccount");
             }}
           >
-            {" "}
             Manage your Account
           </Button>
         </ModalBody>
         <ModalFooter
-          className="   d-flex justify-content-center border-0   "
+          className="d-flex justify-content-center border-0"
           style={{ backgroundColor: "#343434" }}
         >
           <Button className="px-4 bg-dark  rounded-4" onClick={logout}>
