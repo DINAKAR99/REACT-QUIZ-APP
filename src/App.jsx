@@ -20,6 +20,7 @@ import UserRoute from "./Components/User/UserRoute";
 import AllUsers from "./Components/Admin/Users/AllUsers";
 import UserInfoPage from "./Components/Admin/Users/UserInfoPage";
 import UserQuiz from "./Components/Admin/Users/UserQuiz";
+import ManageAccount from "./Components/Admin/Users/ManageAccount";
 
 const Lazyy = React.lazy(() => import("./Components/HomePage"));
 function App() {
@@ -42,6 +43,7 @@ function App() {
           <Route path="/user" element={<UserRoute />}>
             <Route path="userDashboard" element={<UserDashboard />} />
             <Route path="takeQuiz" element={<TakeQuiz />} />
+            <Route path="manageAccount" element={<ManageAccount />} />
           </Route>
           <Route path="/admin" element={<AdminRoute />}>
             <Route path="dashboard" element={<AdminDashboardPage />} />

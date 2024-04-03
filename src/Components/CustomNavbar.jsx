@@ -19,6 +19,7 @@ import {
   ModalFooter,
   Button,
 } from "reactstrap";
+import toast from "react-hot-toast";
 // import { doLogout, getCurrentUserDetail, isloggedIn } from "../auth";
 // import { userContext } from "../context/userContext";
 const CustomNavbar = () => {
@@ -34,22 +35,24 @@ const CustomNavbar = () => {
     // setUser(getCurrentUserDetail());
   }, [login]);
   const logout = () => {
-    doLogout(() => {
-      //loggged out
-      setLogin(false);
-      userContextData.setUser({
-        data: null,
-        login: false,
-      });
-      navigate("/");
-    });
+    // doLogout(() => {
+    //   //loggged out
+    //   setLogin(false);
+    //   userContextData.setUser({
+    //     data: null,
+    //     login: false,
+    //   });
+    //   navigate("/");
+    // });
+    toggler();
+    toast.success("Logged out");
+    navigate("/");
   };
 
   // return function Example(args) {
   //   const [isOpen, setIsOpen] = useState(false);
 
   const toggler = () => setModal(!modal);
-  const toggel = () => setIsOpen(!isOpen);
 
   return (
     <div style={{ marginBottom: 85 }}>
@@ -72,7 +75,10 @@ const CustomNavbar = () => {
             style={{ fontSize: 60 }}
           ></i>
           <h3 className="text-uppercase  "> Dinakar </h3>
-          <Button className="rounded-4 px-3  bg-dark   ">
+          <Button
+            className="rounded-4 px-3  bg-dark   "
+            onClick={() => (window.location.href = "/user/manageAccount")}
+          >
             {" "}
             Manage your Account
           </Button>
@@ -81,8 +87,9 @@ const CustomNavbar = () => {
           className="   d-flex justify-content-center border-0   "
           style={{ backgroundColor: "#343434" }}
         >
-          <Button className="px-4 bg-dark  rounded-4   ">
-            <i className="fa-solid fa-arrow-right-from-bracket"></i> Sign out
+          <Button className="px-4 bg-dark  rounded-4 " onClick={logout}>
+            <i className="fa-solid fa-arrow-right-from-bracket"></i>
+            Sign out
           </Button>
         </ModalFooter>
       </Modal>
