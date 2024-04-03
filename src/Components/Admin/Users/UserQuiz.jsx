@@ -1,14 +1,9 @@
 import React, { useState } from "react";
-import CustomNavbar from "../../CustomNavbar";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Button, Col, Container, Row } from "reactstrap";
+import CustomNavbar from "../../CustomNavbar";
+import { getAllQuestionsPerCategory } from "../../Helper/QuizHelper";
 import Sidebar from "../Sidebar";
-import {
-  getAllCategories,
-  getAllQuestionsPerCategory,
-} from "../../Helper/QuizHelper";
-import { AwesomeButton } from "react-awesome-button";
-import { Prev } from "react-bootstrap/esm/PageItem";
 
 const UserQuiz = () => {
   const location = useLocation();

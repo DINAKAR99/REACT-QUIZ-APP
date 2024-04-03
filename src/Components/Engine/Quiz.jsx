@@ -82,20 +82,20 @@ const Quiz = ({ categoryName }) => {
       );
     });
 
-    if (localStorage.getItem(`${categoryName}`)) {
+    if (sessionStorage.getItem(`${categoryName}`)) {
       toast.error("quiz already completed ...");
       setTimeout(() => {
         window.location.href = "/user/userDashboard";
       }, 600);
-    } else if (localStorage.getItem(`${categoryName}-test`)) {
+    } else if (sessionStorage.getItem(`${categoryName}-test`)) {
       console.log("yeah visited");
       toast.error("redirecting...");
-      localStorage.removeItem(`${categoryName}-test`);
+      sessionStorage.removeItem(`${categoryName}-test`);
       setTimeout(() => {
         window.location.href = "/user/userDashboard";
       }, 600);
     } else {
-      localStorage.setItem(`${categoryName}-test`, "visited");
+      sessionStorage.setItem(`${categoryName}-test`, "visited");
     }
   }, []);
 
@@ -172,7 +172,7 @@ const Quiz = ({ categoryName }) => {
   const handleSubmit = () => {
     console.log(userResponses);
     console.log(marks);
-    localStorage.setItem(`${categoryName}`, true);
+    sessionStorage.setItem(`${categoryName}`, true);
     sessionStorage.removeItem("countdownEndTime");
 
     setQuizSubmitted(true);

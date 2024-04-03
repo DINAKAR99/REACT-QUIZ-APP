@@ -4,7 +4,7 @@ import { Outlet, Navigate } from "react-router-dom";
 const UserRoute = () => {
   let authorized = true;
   useEffect(() => {
-    if (localStorage.getItem("user")) {
+    if (sessionStorage.getItem("user")) {
       authorized = true;
     }
   });
