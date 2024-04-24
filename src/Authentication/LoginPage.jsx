@@ -1,10 +1,13 @@
 import React from "react";
 
 import * as yup from "Yup";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { ErrorMessage, Field, Form, Formik } from "formik";
+import toast from "react-hot-toast";
 import { Label } from "reactstrap";
 import CustomNavbar from "../Components/CustomNavbar";
-import toast from "react-hot-toast";
+import { auth } from "./../firebase";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
   const initialValues = {
@@ -16,15 +19,29 @@ const LoginPage = () => {
     password: yup.string().required("Password is required!!"),
   });
 
+  const navigate = useNavigate();
   const submitForm = (values) => {
-    console.log("submitted");
-    console.log(values);
+    // e.preventDefault();
+    signInWithEmailAndPassword(auth, values.email, values.password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        toast.success("Login successful");
+        setTimeout(() => {
+          navigate("/user/userDashboard");
+        }, 1000);
+        console.log(user);
 
-    //hit api and get response from backend
-
-    // if got  response navigate to dashboard
-    //else toast incorrect name or password
-    toast.error("incorrect name or password", { duration: 1000 });
+        sessionStorage.setItem("usermail", user.email);
+        const emailWithDash = user.email.replace(/\./g, "-");
+        sessionStorage.setItem("modedmail", emailWithDash);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        toast.error(errorMessage);
+        // toast.error("incorrect name or password", { duration: 1000 });
+      });
   };
 
   return (

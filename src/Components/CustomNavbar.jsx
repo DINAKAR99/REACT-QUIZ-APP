@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { signOut } from "firebase/auth";
 import logo from "./pictures/StaticBit.png";
 import { NavLink as ReactLink, useNavigate } from "react-router-dom";
 import {
@@ -20,37 +21,42 @@ import {
   Button,
 } from "reactstrap";
 import toast from "react-hot-toast";
+import { auth } from "../firebase";
 // import { doLogout, getCurrentUserDetail, isloggedIn } from "../auth";
 // import { userContext } from "../context/userContext";
 const CustomNavbar = () => {
   // const userContextData = useContext(userContext);
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const [login, setLogin] = useState(true);
-  const [user, setUser] = useState(undefined);
+  const [login, setLogin] = useState(false);
+  const [user, setUser] = useState({});
+  const [usermail, setUsermail] = useState("");
   const [modal, setModal] = useState(false);
 
   useEffect(() => {
-    // setLogin(isloggedIn());
-    // setUser(getCurrentUserDetail());
-  }, [login]);
-  const logout = () => {
-    // doLogout(() => {
-    //   //loggged out
-    //   setLogin(false);
-    //   userContextData.setUser({
-    //     data: null,
-    //     login: false,
-    //   });
-    //   navigate("/");
-    // });
-    toggler();
-    toast.success("Logged out");
-    navigate("/");
-  };
+    if (sessionStorage.getItem("usermail")) {
+      setLogin(true);
+      setUsermail(sessionStorage.getItem("usermail"));
+    }
+  });
 
-  // return function Example(args) {
-  //   const [isOpen, setIsOpen] = useState(false);
+  const logout = () => {
+    signOut(auth)
+      .then(() => {
+        // Sign-out successful.
+        sessionStorage.removeItem("usermail");
+        toast.success("Signed out successfully");
+
+        navigate("/");
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 1000);
+        console.log("Signed out successfully");
+      })
+      .catch((error) => {
+        toast.error(error);
+      });
+  };
 
   const toggler = () => setModal(!modal);
 
@@ -67,7 +73,7 @@ const CustomNavbar = () => {
         }}
       >
         <ModalHeader toggle={toggler} className="google-card   ">
-          karengula@din.com{" "}
+          {usermail}
         </ModalHeader>
         <ModalBody className="text-center  google-card  ">
           <i
@@ -79,7 +85,6 @@ const CustomNavbar = () => {
             className="rounded-4 px-3  bg-dark   "
             onClick={() => (window.location.href = "/user/manageAccount")}
           >
-            {" "}
             Manage your Account
           </Button>
         </ModalBody>
@@ -108,42 +113,41 @@ const CustomNavbar = () => {
                 HOME
               </NavLink>
             </NavItem>
-            <NavItem>
-              <NavLink tag={ReactLink} className="text-white " to="/about">
-                ABOUT
-              </NavLink>
-            </NavItem>
 
-            <NavItem>
-              <NavLink
-                tag={ReactLink}
-                className="text-white "
-                to="/user/userDashboard"
-              >
-                DASHBOARD
-              </NavLink>
-            </NavItem>
+            {login && (
+              <>
+                <NavItem>
+                  <NavLink
+                    tag={ReactLink}
+                    className="text-white "
+                    to="/user/userDashboard"
+                  >
+                    DASHBOARD
+                  </NavLink>
+                </NavItem>
 
-            <UncontrolledDropdown nav inNavbar>
-              <DropdownToggle nav caret className="text-white ">
-                MORE
-              </DropdownToggle>
-              <DropdownMenu>
-                <DropdownItem tag={ReactLink} to="/contact">
-                  Contact Us
-                </DropdownItem>
-                <DropdownItem tag={ReactLink} to="/admin/dashboard">
-                  Admin
-                </DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown>
+                <UncontrolledDropdown nav inNavbar>
+                  <DropdownToggle nav caret className="text-white ">
+                    MORE
+                  </DropdownToggle>
+                  <DropdownMenu>
+                    <DropdownItem tag={ReactLink} to="/contact">
+                      Contact Us
+                    </DropdownItem>
+                    <DropdownItem tag={ReactLink} to="/admin/dashboard">
+                      Admin
+                    </DropdownItem>
+                  </DropdownMenu>
+                </UncontrolledDropdown>
+              </>
+            )}
           </Nav>
           <Nav navbar>
             {login && (
               <>
                 <NavItem>
                   <NavLink tag={ReactLink} to="#">
-                    Profile
+                    {usermail}
                   </NavLink>
                 </NavItem>
 

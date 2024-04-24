@@ -1,13 +1,11 @@
-import React, { useState } from "react";
+import { motion } from "framer-motion";
+import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "reactstrap";
 import HomeNavbar from "./HomeNavbar";
 import logo from "./pictures/BRAINBYTES.gif";
-import { motion } from "framer-motion";
 
 const HomePage = () => {
-  const [active, setActive] = useState(1);
-
   const text = " Unravel Your Mind ".split(" ");
 
   const text2 = " Welcome to BrainyBits ".split(" ");

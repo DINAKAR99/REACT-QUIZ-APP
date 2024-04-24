@@ -1,12 +1,19 @@
 import React from "react";
+import { auth } from "../firebase";
 
 import * as yup from "Yup";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Label } from "reactstrap";
 import CustomNavbar from "../Components/CustomNavbar";
-
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import toast from "react-hot-toast";
+import axios from "axios";
 const SignupPage = () => {
+  const navigate = useNavigate();
   const initialValues = {
     name: "",
     email: "",
@@ -27,6 +34,33 @@ const SignupPage = () => {
       .oneOf([yup.ref("password"), null], "Password must match!")
       .required("Confirm password is reqired!"),
   });
+
+  const handleSignup = (values) => {
+    // console.log(values);
+    createUserWithEmailAndPassword(auth, values.email, values.password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        toast.success("Account created successfully");
+        console.log(user);
+        navigate("/login");
+        // now pus a new val into users node
+        let username = values.email.split("@")[0];
+        axios
+          .put(
+            `https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/users/${username}.json`,
+            { username }
+          )
+          .then(console.log("dwudwd"));
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        toast.error(errorMessage);
+        console.log(errorCode, errorMessage);
+        // ..
+      });
+  };
   return (
     <div className="bg-black vh-100 ">
       <CustomNavbar />
@@ -68,10 +102,7 @@ const SignupPage = () => {
           <Formik
             initialValues={initialValues}
             validationSchema={validate}
-            onSubmit={(values) => {
-              console.log("submitted");
-              console.log(values);
-            }}
+            onSubmit={handleSignup}
           >
             {(formik) => (
               <div>

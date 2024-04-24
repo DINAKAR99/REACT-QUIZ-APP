@@ -1,42 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { AwesomeButton } from "react-awesome-button";
 
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { Col, Container, Row } from "reactstrap";
 import CustomNavbar from "../../CustomNavbar";
 import Sidebar from "../Sidebar";
-import { useNavigate } from "react-router-dom";
-import { each } from "jquery";
 
 const AllUsers = () => {
-  const employees = [
-    {
-      name: "John Doe",
-      email: "john.doe@example.com",
-      empId: "EMP001",
-    },
-    {
-      name: "Jane Smith",
-      email: "jane.smith@example.com",
-      empId: "EMP002",
-    },
-    {
-      name: "Alice Johnson",
-      email: "alice.johnson@example.com",
-      empId: "EMP003",
-    },
-    {
-      name: "Robert Brown",
-      email: "robert.brown@example.com",
-      empId: "EMP004",
-    },
-    {
-      name: "Emily Davis",
-      email: "emily.davis@example.com",
-      empId: "EMP005",
-    },
-  ];
-
+  const [users, setUsers] = useState([]);
+  useEffect(() => {
+    axios
+      .get(
+        "https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/users.json"
+      )
+      .then((res) => {
+        let userArr = [];
+        console.log(res.data);
+        const keys = Object.keys(res.data);
+        keys.forEach((key) => {
+          userArr.push({
+            name: key,
+            email: `${key}@gmail.com`,
+            empId: "EMP002",
+          });
+          console.log(key);
+          console.log(userArr);
+          setUsers((e) => userArr);
+        });
+      });
+  }, []);
   const nav = useNavigate();
 
   const getUserInfo = (each) => {
@@ -67,8 +61,8 @@ const AllUsers = () => {
                       <b>&nbsp; Registered Users</b>
                     </h3>
                   </div>
-                  {employees &&
-                    employees.map((each, index) => {
+                  {users &&
+                    users.map((each, index) => {
                       return (
                         <>
                           <div className=" fader border border-grey rounded p-3  mb-2 shadow-lg  bg-white   ">

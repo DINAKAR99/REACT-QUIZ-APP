@@ -37,7 +37,8 @@ const UserInfoPage = () => {
               <Row>
                 <header>
                   <h2 className="text-center  ">
-                    User Name : {user.name} | Employee id : {user.empId}
+                    User Name : {user.name} | Email : {user.email} <br />
+                    <hr /> Employee id : {user.empId}
                   </h2>
                 </header>
                 <Col md={6}>

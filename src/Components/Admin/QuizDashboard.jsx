@@ -1,11 +1,9 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Col, Container, Nav, NavItem, NavLink, Row } from "reactstrap";
 import CustomNavbar from "../CustomNavbar";
-import { Col, Container, Row } from "reactstrap";
-import { Nav, NavItem, NavLink } from "reactstrap";
 
 import AllQuiz from "./AllQuiz";
 import AddCategory from "./modals/AddCategory";
-import myContext from "../context/ContextCore";
 
 const QuizDashboard = () => {
   //clicked component state management
@@ -74,6 +72,14 @@ const QuizDashboard = () => {
                       onClick={() => createCategory()}
                     >
                       Add New Category
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink
+                      className=" border-bottom border-white border-opacity-50 custom  "
+                      href="/admin/unlockQuiz"
+                    >
+                      unlock quiz
                     </NavLink>
                   </NavItem>
                 </Nav>
