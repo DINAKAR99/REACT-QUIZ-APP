@@ -2,17 +2,14 @@ import React, { useEffect, useState } from "react";
 
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Col, Container, Row } from "reactstrap";
 
+import { Col, Container, Nav, NavItem, NavLink, Row } from "reactstrap";
 import CustomNavbar from "../CustomNavbar";
-import Sidebar from "./Sidebar";
-import { AwesomeButton } from "react-awesome-button";
-
 const UnlockQuiz = () => {
   const [categories, setCategories] = useState([]);
   const [currentcat, setCurrentcat] = useState([]);
   const [users, setUsers] = useState([]);
-  const [eligibleUsers, setEligibleUsers] = useState(["xcd"]);
+  const [eligibleUsers, setEligibleUsers] = useState([""]);
 
   $(document).ready(function () {
     $("#selectAll").click(function () {
@@ -127,21 +124,60 @@ const UnlockQuiz = () => {
       <CustomNavbar />
       <Container fluid>
         <Row>
-          <Col
-            sm="3"
-            md="2"
-            className="sidebar p-0 fadeleft  "
-            style={{ height: "100vh" }}
-          >
-            <Sidebar />
+          <Col sm="3" md="2" className="sidebar text-white p-0  ">
+            <div
+              className="sidebar  position-fixed  border-3 bg-black  "
+              style={{
+                height: "100vh",
+                width: "30vh",
+                backgroundColor: "#212529",
+              }}
+            >
+              <Nav vertical navbar fill>
+                <NavItem>
+                  <NavLink
+                    className=" border-top   border-bottom border-opacity-50      border-white custom  "
+                    href="#"
+                    onClick={() => handleSidebarButtonClick("allquiz")}
+                  >
+                    All quiz
+                  </NavLink>
+                </NavItem>
+
+                <NavItem>
+                  <NavLink
+                    className=" border-bottom border-white border-opacity-50 custom  "
+                    href="/admin/dashboard"
+                  >
+                    Admin Dashboard
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink
+                    className=" border-bottom border-white border-opacity-50 custom  "
+                    onClick={() => createCategory()}
+                  >
+                    Add New Category
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink
+                    className=" border-bottom border-white border-opacity-50 custom  "
+                    href="/admin/unlockQuiz"
+                  >
+                    unlock quiz
+                  </NavLink>
+                </NavItem>
+              </Nav>
+            </div>
           </Col>
           <Col>
             <Container>
               <Row>
-                <Col md={6}>
+                <Col md={6} className="p-2  ">
                   <form onSubmit={handleSubmit}>
-                    <div className="border border-3 vh-100  m-3  ">
-                      <h3 className="mt-3 ">
+                    <div className="border border-3  border-black   m-3 rounded p-4 bg-info-subtle        ">
+                      <h3 className="mt-3 text-center  ">
                         <b>&nbsp; Unlock Quiz </b>
                       </h3>
                       <select
@@ -150,7 +186,7 @@ const UnlockQuiz = () => {
                           setCurrentcat(e.target.value);
                           fecthUnlockedUsers(e.target.value);
                         }}
-                        className="form-select"
+                        className="form-select w-50 mx-auto "
                         id="cat"
                         required
                       >
@@ -170,7 +206,7 @@ const UnlockQuiz = () => {
                           name="all"
                           value="all"
                           id="selectAll"
-                          className="form-check-input mb-3 me-2  "
+                          className="form-check-input mb-3 me-2 border border-1   border-black     "
                         />
                         Select All
                         {users &&
@@ -186,7 +222,7 @@ const UnlockQuiz = () => {
                                     name="all"
                                     value={each.name}
                                     id={`user-${index}`}
-                                    className="form-check-input user me-2"
+                                    className="form-check-input user me-2 border border-1   border-black "
                                     checked={
                                       eligibleUsers?.includes(each.name)
                                         ? true
@@ -215,38 +251,60 @@ const UnlockQuiz = () => {
                       </div>
 
                       <div>
-                        <button type="submit">save</button>
+                        <button
+                          type="submit"
+                          className="btn  btn-secondary ms-3 "
+                          style={{ backgroundColor: "#538cc6" }}
+                        >
+                          save
+                        </button>
                       </div>
                     </div>
                   </form>
                 </Col>
-                <Col md={6}>
-                  <div className="border border-3 vh-100  m-3  ">
-                    <h3 className="mt-3 ">
-                      <b>&nbsp; -- --</b>{" "}
-                      {users &&
-                        users.map((each, index) => {
-                          return (
-                            <>
-                              <div className=" fader border border-grey rounded p-3  mb-2 shadow-lg  bg-white   ">
-                                <h5>
-                                  {index + 1}. {each.name}
-                                </h5>
 
-                                <AwesomeButton
-                                  onPress={() => getUserInfo(each)}
-                                  className="me-2 "
-                                  type="linkedin"
-                                >
-                                  More...
-                                </AwesomeButton>
-                              </div>
-                            </>
-                          );
-                        })}
-                    </h3>
-                  </div>
-                </Col>
+                {currentcat.length > 0 && (
+                  <Col md={6} className="p-2  ">
+                    <div className="border border-3  border-black m-3    rounded-2 rounded    m-3  ">
+                      <h6 className="    ">
+                        <h5 className="text-center w-100 mx-auto mt-3     ">
+                          User Quiz Lock Status
+                        </h5>
+                        <table className="table-bordered border border-3  table-striped   table ">
+                          <thead>
+                            <tr>
+                              <th style={{ width: "10%" }}>index</th>
+                              <th style={{ minWidth: "45%" }}>unlocked for </th>
+                              <th style={{ minWidth: "45%" }}>locked for </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {users &&
+                              users.map((each, index) => {
+                                return (
+                                  <tr>
+                                    {eligibleUsers?.includes(each.name) ? (
+                                      <>
+                                        <td>{index}</td>
+                                        <td>{each.name}</td>
+                                        <td></td>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <td>{index}</td>
+                                        <td></td>
+                                        <td>{each.name}</td>
+                                      </>
+                                    )}
+                                  </tr>
+                                );
+                              })}
+                          </tbody>
+                        </table>
+                      </h6>
+                    </div>
+                  </Col>
+                )}
               </Row>
             </Container>
           </Col>

@@ -1,20 +1,18 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { AwesomeButton } from "react-awesome-button";
 import { useNavigate } from "react-router-dom";
 import { Col, Container, Row } from "reactstrap";
-import Sidebar from "../Admin/Sidebar";
 import CustomNavbar from "../CustomNavbar";
 import { getAllCategories } from "../Helper/QuizHelper";
-import UserSidebar from "../Admin/Users/UserSidebar";
-import { Fab } from "@mui/material";
 
 const UserDashboard = () => {
   const text = "WELCOME TO USER DASHBOARD ".split(",");
-  const [showWelcomeMessage, setShowWelcomeMessage] = useState(true);
-  const [showCategorySelection, setShowCategorySelection] = useState(false);
+
   const categories = ["react", "java", "spring", "firebase"];
 
   const [fetchedCategory, setFetchedCategory] = useState([]);
+  const [categoryStatus, setCategoryStatus] = useState([]);
 
   const navigate = useNavigate();
 
@@ -26,10 +24,33 @@ const UserDashboard = () => {
   };
 
   useState(() => {
+    const user = sessionStorage.getItem("usermail").split("@")[0];
     getAllCategories().then((categoryArray) => {
-      setFetchedCategory(categoryArray);
+      setFetchedCategory((e) => categoryArray);
+      const promises = categoryArray.map((category) =>
+        axios.get(
+          `https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/questions/${category}/unlocked.json`
+        )
+      );
+
+      Promise.all(promises).then((responses) => {
+        const categoryStatus = {};
+        responses.forEach((response, index) => {
+          console.log(response.data);
+          const usernameExists = response.data
+            ? response.data.includes(user)
+            : false;
+
+          categoryStatus[categoryArray[index]] = usernameExists;
+        });
+
+        setCategoryStatus((e) => categoryStatus);
+      });
     });
-  });
+  }, []);
+  const view = () => {
+    console.log(categoryStatus);
+  };
   return (
     <>
       <CustomNavbar />
@@ -42,34 +63,61 @@ const UserDashboard = () => {
             <Container>
               <Row className="sidebar">
                 <Col md={6}>
-                  <div>
-                    <b>&nbsp; AVAILABLE QUIZ</b>
+                  <div className="unlocked ">
+                    <b>
+                      &nbsp; <h4>UNLOCKED QUIZ</h4>
+                    </b>
 
-                    <h3 className="mt-3 "></h3>
+                    {fetchedCategory &&
+                      fetchedCategory.map((each, index) => {
+                        if (categoryStatus[each]) {
+                          return (
+                            <>
+                              <div className="fader border border-grey rounded p-3  mb-2 shadow-lg  bg-white   ">
+                                <h5>
+                                  {index + 1}.{each}
+                                </h5>
+
+                                <AwesomeButton
+                                  onPress={() => takequiz(each)}
+                                  className="me-2 "
+                                  type="linkedin"
+                                >
+                                  Take Quiz
+                                </AwesomeButton>
+                                {/* <Fab size="large" className="  rounded-0    "> */}
+                                {/* ss */}
+                                {/* </Fab> */}
+                              </div>
+                            </>
+                          );
+                        }
+                        return null;
+                      })}
                   </div>
-                  {fetchedCategory &&
-                    fetchedCategory.map((each, index) => {
-                      return (
-                        <>
-                          <div className="fader border border-grey rounded p-3  mb-2 shadow-lg  bg-white   ">
-                            <h5>
-                              {index + 1}.{each}
-                            </h5>
-
-                            <AwesomeButton
-                              onPress={() => takequiz(each)}
-                              className="me-2 "
-                              type="linkedin"
-                            >
-                              Take Quiz
-                            </AwesomeButton>
-                            {/* <Fab size="large" className="  rounded-0    "> */}
-                            {/* ss */}
-                            {/* </Fab> */}
-                          </div>
-                        </>
-                      );
-                    })}
+                  <div className="locked">
+                    <b>
+                      &nbsp; <h4>LOCKED QUIZ</h4>
+                    </b>
+                    <h3 className="mt-5 "></h3>
+                    {fetchedCategory &&
+                      fetchedCategory.map((each, index) => {
+                        if (!categoryStatus[each]) {
+                          return (
+                            <>
+                              <div className="fader border border-grey rounded p-3  mb-2 shadow-lg  bg-white   ">
+                                <h5>
+                                  {index + 1}.{each}
+                                  &nbsp;
+                                  <i className="fa-solid fa-lock text-black-50     "></i>
+                                </h5>
+                              </div>
+                            </>
+                          );
+                        }
+                        return null;
+                      })}
+                  </div>
                 </Col>
                 <Col md={6}>
                   <div>
@@ -82,7 +130,7 @@ const UserDashboard = () => {
                         <h6>
                           <b>Result</b> : Pending &nbsp;
                           <i
-                            class="fa-regular fa-hourglass-half"
+                            className="fa-regular fa-hourglass-half"
                             // style={{ color: "navy" }}
                           ></i>
                         </h6>
@@ -92,7 +140,7 @@ const UserDashboard = () => {
                         <h6>
                           <b>Result</b> : passed &nbsp;
                           <i
-                            class="fa-solid fa-check"
+                            className="fa-solid fa-check"
                             style={{ color: "green" }}
                           ></i>
                         </h6>
@@ -102,7 +150,7 @@ const UserDashboard = () => {
                         <h6>
                           <b>Result</b> : failed &nbsp;
                           <i
-                            class="fa-solid fa-xmark"
+                            className="fa-solid fa-xmark"
                             style={{ color: "red" }}
                           ></i>
                         </h6>

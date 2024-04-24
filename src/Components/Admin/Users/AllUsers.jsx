@@ -37,7 +37,6 @@ const AllUsers = () => {
     console.log(each);
     nav("/admin/userInfo", { state: { user: each } });
   };
-  console.log(employees);
 
   return (
     <div>
