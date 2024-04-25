@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { signOut } from "firebase/auth";
 import logo from "./pictures/StaticBit.png";
+import aron from "./pictures/aron.jpg";
+
 import { NavLink as ReactLink, useNavigate } from "react-router-dom";
 import {
   Collapse,
@@ -76,10 +78,19 @@ const CustomNavbar = () => {
           {usermail}
         </ModalHeader>
         <ModalBody className="text-center  google-card  ">
-          <i
-            className="fa-solid fa-circle-user   "
-            style={{ fontSize: 60 }}
-          ></i>
+          <img
+            src={aron}
+            alt=""
+            height={60}
+            width={60}
+            style={{
+              border: "1px solid white",
+
+              borderRadius: "50%",
+              boxShadow: "0px 0px 4px white",
+              objectFit: "cover",
+            }}
+          ></img>
           <h3 className="text-uppercase  "> Dinakar </h3>
           <Button
             className="rounded-4 px-3  bg-dark   "
@@ -146,15 +157,26 @@ const CustomNavbar = () => {
             {login && (
               <>
                 <NavItem>
-                  <NavLink tag={ReactLink} to="#">
+                  <NavLink tag={ReactLink} to="#" className="mt-2  ">
                     {usermail}
                   </NavLink>
                 </NavItem>
 
                 <NavItem onClick={toggler}>
                   <NavLink tag={ReactLink}>
-                    {/* {user.name} */}{" "}
-                    <i className="fa-solid fa-circle-user fa-xl "></i>
+                    <img
+                      src={aron}
+                      alt=""
+                      height={40}
+                      width={40}
+                      style={{
+                        border: "2px solid grey",
+
+                        borderRadius: "50%",
+
+                        objectFit: "cover",
+                      }}
+                    ></img>
                   </NavLink>
                 </NavItem>
                 {/* <NavItem>
