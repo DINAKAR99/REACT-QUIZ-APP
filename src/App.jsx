@@ -4,12 +4,14 @@ import "react-awesome-button/dist/styles.css";
 import { Toaster } from "react-hot-toast";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { SyncLoader } from "react-spinners";
 import LoginPage from "./Authentication/LoginPage";
 import SignupPage from "./Authentication/SignupPage";
 import AboutPage from "./Components/AboutPage";
 import AdminDashboardPage from "./Components/Admin/AdminDashboardPage";
 import AdminRoute from "./Components/Admin/AdminRoute";
 import QuizDashboard from "./Components/Admin/QuizDashboard";
+import UnlockQuiz from "./Components/Admin/UnlockQuiz";
 import AllUsers from "./Components/Admin/Users/AllUsers";
 import ManageAccount from "./Components/Admin/Users/ManageAccount";
 import UserInfoPage from "./Components/Admin/Users/UserInfoPage";
@@ -19,15 +21,7 @@ import HomePage from "./Components/HomePage";
 import SupportPage from "./Components/SupportPage";
 import UserDashboard from "./Components/User/UserDashboard";
 import UserRoute from "./Components/User/UserRoute";
-import {
-  HashLoader,
-  PacmanLoader,
-  PropagateLoader,
-  RingLoader,
-  ScaleLoader,
-  SyncLoader,
-} from "react-spinners";
-import UnlockQuiz from "./Components/Admin/UnlockQuiz";
+import Evaluation from "./Components/Admin/Evaluation";
 
 const Lazyy = React.lazy(() => import("./Components/HomePage"));
 function App() {
@@ -60,6 +54,7 @@ function App() {
                 <Route path="dashboard" element={<AdminDashboardPage />} />
                 <Route path="quiz" element={<QuizDashboard />} />
                 <Route path="allusers" element={<AllUsers />} />
+                <Route path="evaluate" element={<Evaluation />} />
                 <Route path="unlockquiz" element={<UnlockQuiz />} />
                 <Route path="userInfo" element={<UserInfoPage />} />
                 <Route path="userquiz" element={<UserQuiz />} />

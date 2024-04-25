@@ -1,20 +1,10 @@
 import React from "react";
 
 const QuizCompletionPage = ({ marks, question_count }) => {
-  function convertFractionToScaleOf5(marks, questionCount) {
-    // Ensure marks and questionCount are numbers
-    marks = parseFloat(marks);
-    questionCount = parseFloat(questionCount);
-
-    // Calculate the ratio of marks to questionCount
-    const ratio = marks / questionCount;
-
-    // Map the ratio to the scale of 5
-    const scaleValue = Math.ceil(ratio * 5);
-
-    // Ensure scaleValue is within the range of 1 to 5
-    return Math.min(Math.max(scaleValue, 1), 5);
-  }
+  const calcPercentage = () => {
+    const percentage = (marks / question_count) * 100;
+    return percentage.toFixed(2);
+  };
   return (
     <div
       className="border  border-2 border-start-0 border-top-0   border-black    d-flex  justify-content-center    "
@@ -27,10 +17,13 @@ const QuizCompletionPage = ({ marks, question_count }) => {
           value={convertFractionToScaleOf5(marks, question_count)}
           readOnly
         /> */}
+        <h3>THANK YOU FOR TAKING THE QUIZ </h3>
         <h2>QUIZ SUBMITTED SUCCESFULLY </h2>
-        <h3>you have attempted :</h3>
+        <h3>you got correct :</h3>
         <h3>
           {marks}/{question_count}
+          <br />
+          {calcPercentage()}%
         </h3>
       </div>
     </div>

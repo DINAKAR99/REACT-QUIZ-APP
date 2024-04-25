@@ -108,7 +108,7 @@ const EditForm = ({ packet, toggle }) => {
                 type="textarea"
                 id="content"
                 placeholder="Enter Question"
-                className="rounded-0"
+                className="rounded rounded-2 "
                 aria-rowcount={4}
                 name="question"
                 value={questionPacket.question}
@@ -124,7 +124,7 @@ const EditForm = ({ packet, toggle }) => {
                 type="select"
                 id="category"
                 placeholder="Enter here"
-                className="rounded-0"
+                className="rounded rounded-2 "
                 name="categoryId"
                 onChange={categoryChanged}
                 value={questionPacket.category.categoryId}
@@ -153,7 +153,7 @@ const EditForm = ({ packet, toggle }) => {
                 id="content"
                 placeholder="Enter here"
                 value={questionPacket.options.A}
-                className="rounded-0"
+                className="rounded rounded-2 "
                 style={{ height: "30px" }}
                 name="A"
                 onChange={optionChanged}
@@ -167,7 +167,7 @@ const EditForm = ({ packet, toggle }) => {
                 type="text"
                 id="content"
                 placeholder="Enter here"
-                className="rounded-0"
+                className="rounded rounded-2 "
                 value={questionPacket.options.B}
                 style={{ height: "30px" }}
                 name="B"
@@ -182,7 +182,7 @@ const EditForm = ({ packet, toggle }) => {
                 type="text"
                 id="content"
                 placeholder="Enter here"
-                className="rounded-0"
+                className="rounded rounded-2 "
                 value={questionPacket.options.C}
                 style={{ height: "30px" }}
                 name="C"
@@ -199,7 +199,7 @@ const EditForm = ({ packet, toggle }) => {
                 id="content"
                 placeholder="Enter here"
                 value={questionPacket.options.D}
-                className="rounded-0"
+                className="rounded rounded-2 "
                 style={{ height: "30px" }}
                 name="D"
                 onChange={optionChanged}

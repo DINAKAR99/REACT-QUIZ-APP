@@ -14,6 +14,7 @@ import {
 import { getAllQuestionsPerCategory } from "../Helper/QuizHelper";
 import QuizCompletionPage from "./QuizCompletionPage";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 const Quiz = ({ categoryName }) => {
   const quizData = [
@@ -37,6 +38,7 @@ const Quiz = ({ categoryName }) => {
   const [quizSubmitted, setQuizSubmitted] = useState(false);
   const [loading, setLoading] = useState(true);
   const [marks, setMarks] = useState(0);
+  const [user, setUser] = useState("");
   const [fecthedQuestions, setFetchedQuestions] = useState([]);
   // const [selectedOption, setSelectedOption] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -53,7 +55,6 @@ const Quiz = ({ categoryName }) => {
   const toggle = () => setModal(!modal);
 
   const [userResponses, setUserResponses] = useState([]);
-  const [shouldRedirect, setShouldRedirect] = useState(false);
 
   useEffect(() => {
     sessionStorage.setItem("selectedOptions", JSON.stringify(selectedOptions));
@@ -62,13 +63,11 @@ const Quiz = ({ categoryName }) => {
     console.log(selectedOptions);
   }, [selectedOptions]);
 
-  const [reloadCount, setReloadCount] = useState(0); // Initialize to 1
-
   useEffect(() => {
     getAllQuestionsPerCategory(categoryName).then((resultSet) => {
       let rawArray = [];
-      console.log(resultSet.slice(1, -1));
-      rawArray = resultSet.slice(1, -1);
+      console.log(resultSet.slice(1, -3));
+      rawArray = resultSet.slice(1, -3);
       rawArray = rawArray.map((each) => Object.values(each)[0]);
 
       setFetchedQuestions(rawArray);
@@ -83,23 +82,27 @@ const Quiz = ({ categoryName }) => {
     });
 
     if (sessionStorage.getItem(`${categoryName}`)) {
-      toast.error("quiz already completed ...");
+      toast.error("quiz already attempted");
       setTimeout(() => {
         window.location.href = "/user/userDashboard";
       }, 600);
-    } else if (sessionStorage.getItem(`${categoryName}-test`)) {
-      console.log("yeah visited");
-      toast.error("redirecting...");
-      sessionStorage.removeItem(`${categoryName}-test`);
+    } else if (sessionStorage.getItem(`${categoryName}-quiz`)) {
+      toast.error("quiz already attempted");
+      // sessionStorage.removeItem(`${categoryName}-test`);
       setTimeout(() => {
         window.location.href = "/user/userDashboard";
       }, 600);
     } else {
-      sessionStorage.setItem(`${categoryName}-test`, "visited");
+      // sessionStorage.setItem(`${categoryName}-quiz`, "attempted");
     }
   }, []);
 
-  const handleOptionClick = (option, correctAnswer) => {
+  useEffect(() => {
+    const user = sessionStorage.getItem("usermail").split("@")[0];
+    setUser(user);
+  });
+  const handleOptionClick = (option, correctAnswer, realquestionId) => {
+    console.log("real question id", realquestionId);
     const questionId = currentQuestionIndex; // Assuming question index serves as question ID
     // check if option and correctAnswer
     const isCorrect = option === correctAnswer;
@@ -123,6 +126,7 @@ const Quiz = ({ categoryName }) => {
         ...updatedResponses[existingResponseIndex],
         selectedOption: option,
         isCorrect: isCorrect,
+        realquestionId: realquestionId,
       };
 
       setUserResponses(updatedResponses);
@@ -132,7 +136,7 @@ const Quiz = ({ categoryName }) => {
     else {
       const newUserResponse = {
         questionId: currentQuestionIndex, // Assuming question index serves as question ID
-        category: "YourCategory", // Replace 'YourCategory' with the actual category
+        category: categoryName, // Replace 'YourCategory' with the actual category
         selectedOption: option,
         isCorrect: isCorrect,
       };
@@ -150,19 +154,15 @@ const Quiz = ({ categoryName }) => {
       [currentQuestionIndex]: option,
     });
   };
-  // Inside your Quiz <component>       </component>
-  const handleComplete = () => {
-    console.log("Countdown timer completed!");
-    handleSubmit();
-    // Perform any other actions you want <here></here>
-    // return { shouldRepeat: true, delay: 1 };
-  };
 
   const handleButtonPallete = (index) => {
     console.log(JSON.parse(sessionStorage.getItem("countdownEndTime")));
     setCurrentQuestionIndex(index);
   };
-
+  const calcPercentage = () => {
+    const percentage = (marks / fecthedQuestions?.length) * 100;
+    return percentage.toFixed(2);
+  };
   const handleNextQuestion = () => {
     if (currentQuestionIndex < fecthedQuestions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -170,12 +170,45 @@ const Quiz = ({ categoryName }) => {
     }
   };
   const handleSubmit = () => {
+    // sessionStorage.removeItem("selectedOptions");
     console.log(userResponses);
+    console.log("correct attempted questions", marks);
+    console.log("total attempted questions", fecthedQuestions?.length);
+    console.log("percentage secured", calcPercentage());
+
     console.log(marks);
-    sessionStorage.setItem(`${categoryName}`, true);
+
     sessionStorage.removeItem("countdownEndTime");
 
     setQuizSubmitted(true);
+
+    //api call to hit the marks sheet endpoint of particular category
+    axios.put(
+      `https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/exam/${categoryName}/attempted/${user}/answersheet.json`,
+      userResponses
+    );
+
+    axios.put(
+      `https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/exam/${categoryName}/attempted/${user}//evalution.json`,
+      {
+        status: "pending",
+        quizResult: "pending",
+      }
+    );
+    //api call to hit the user specific node and add to attempted node
+    axios.put(
+      `https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/users/${user}/attempted/${categoryName}.json`,
+      { attempted: true, Resultstatus: "pending at examiner" }
+    );
+    //api call to hit the user score  endpoint of particular category conatins percentage , attempted correct and total number of exam
+    axios.put(
+      `https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/questions/${categoryName}/attempted/${user}/score.json`,
+      {
+        percentage: calcPercentage(),
+        attemptedCorrect: marks,
+        totalQuestions: fecthedQuestions?.length,
+      }
+    );
   };
 
   const handlePreviousQuestion = () => {
@@ -269,7 +302,7 @@ const Quiz = ({ categoryName }) => {
                     <b>{fecthedQuestions[currentQuestionIndex]?.question}</b>
                   </h5>
                   {fecthedQuestions[currentQuestionIndex] &&
-                    Object.values(
+                    Object?.values(
                       fecthedQuestions[currentQuestionIndex].options
                     ).map((option, index) => (
                       <div key={index} className="mb-2">
@@ -282,11 +315,13 @@ const Quiz = ({ categoryName }) => {
                             handleOptionClick(
                               option,
                               fecthedQuestions[currentQuestionIndex]
-                                .correctAnswer
+                                .correctAnswer,
+                              fecthedQuestions[currentQuestionIndex].questionId
                             )
                           }
                         ></Radio>
                         {option}
+                        {fecthedQuestions[currentQuestionIndex].questionId}
                       </div>
                     ))}
                 </>

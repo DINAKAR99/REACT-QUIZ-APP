@@ -6,6 +6,7 @@ import Sidebar from "./Sidebar";
 import AddQuiz from "./AddQuiz";
 import PieActiveArc from "../../Design/PieActiveArc";
 import { getAllCategories, getQCount } from "../Helper/QuizHelper";
+import axios from "axios";
 
 const AdminDashboardPage = () => {
   // ------------------------
@@ -18,6 +19,7 @@ const AdminDashboardPage = () => {
   // states
   // ------------------------
   const [pack, setPack] = useState([]);
+  const [pack2, setPack2] = useState([]);
 
   const fetch = async () => {
     let dataArray = [];
@@ -45,9 +47,38 @@ const AdminDashboardPage = () => {
 
     return dataArray;
   };
+  const fetch2 = () => {
+    let attemptedArray = [];
+    axios
+      .get(
+        `https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/questions.json`
+      )
+      .then((response) => {
+        console.log(response.data);
+        const meta = response.data;
+        Object.keys(response.data).forEach((key) => {
+          console.log(
+            meta[key].attempted ? Object.keys(meta[key].attempted).length : 0
+          );
+
+          let each_obj = {
+            label: key,
+            value: meta[key].attempted
+              ? Object.keys(meta[key].attempted).length
+              : 0,
+          };
+          attemptedArray.push(each_obj);
+        });
+      });
+
+    setPack2((e) => attemptedArray);
+    console.log(attemptedArray);
+  };
   //FILL THE DATA WITH DATA FROM FIREBASE
   useEffect(() => {
+    fetch2();
     fetch().then((data) => {
+      console.log(data);
       setPack(data);
     });
   }, []);
@@ -72,17 +103,14 @@ const AdminDashboardPage = () => {
                   <Row>
                     <Col md={6}>
                       <div className="border   rounded p-3 shadow-lg ">
-                        <b>Technologies</b>
+                        <b>Questions per Technology</b>
                         <PieActiveArc data={pack} />
                       </div>
                     </Col>
                     <Col md={6}>
                       <div className="border   rounded p-3 shadow-lg ">
-                        <b>Performance Per Category</b>
-                        <PieActiveArc
-                          data={pack}
-                          colors={["#B47B84", "#7E6363", "#E1C78F"]}
-                        />
+                        <b> Category wise attempts</b>
+                        <PieActiveArc data={pack2} />
                       </div>
                     </Col>
                   </Row>

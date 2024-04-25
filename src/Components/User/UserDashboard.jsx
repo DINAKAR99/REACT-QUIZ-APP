@@ -13,6 +13,8 @@ const UserDashboard = () => {
 
   const [fetchedCategory, setFetchedCategory] = useState([]);
   const [categoryStatus, setCategoryStatus] = useState([]);
+  const [attemptedCategories, setAttemptedQuizCategories] = useState([]);
+  const [attemptedQuizMetaData, setAttemptedQuizMetaData] = useState([]);
 
   const navigate = useNavigate();
 
@@ -25,6 +27,16 @@ const UserDashboard = () => {
 
   useState(() => {
     const user = sessionStorage.getItem("usermail").split("@")[0];
+
+    const attemptedQuizCategories = axios
+      .get(
+        `https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/users/${user}/attempted.json`
+      )
+      .then((response) => {
+        console.log(Object.keys(response.data));
+        setAttemptedQuizCategories((e) => Object.keys(response.data));
+        setAttemptedQuizMetaData((e) => response.data);
+      });
     getAllCategories().then((categoryArray) => {
       setFetchedCategory((e) => categoryArray);
       const promises = categoryArray.map((category) =>
@@ -64,98 +76,102 @@ const UserDashboard = () => {
               <Row className="sidebar">
                 <Col md={6}>
                   <div className="unlocked ">
-                    <b>
-                      &nbsp; <h4>UNLOCKED QUIZ</h4>
-                    </b>
-
+                    &nbsp;
+                    <h4>
+                      <b>ALL QUIZ</b>
+                    </h4>
                     {fetchedCategory &&
                       fetchedCategory.map((each, index) => {
                         if (categoryStatus[each]) {
                           return (
                             <>
-                              <div className="fader border border-grey rounded p-3  mb-2 shadow-lg  bg-white   ">
+                              <div
+                                key={index}
+                                className="fader border border-grey rounded p-3  mb-2 shadow-lg  bg-white   "
+                              >
                                 <h5>
                                   {index + 1}.{each}
                                 </h5>
 
-                                <AwesomeButton
-                                  onPress={() => takequiz(each)}
-                                  className="me-2 "
-                                  type="linkedin"
-                                >
-                                  Take Quiz
-                                </AwesomeButton>
-                                {/* <Fab size="large" className="  rounded-0    "> */}
-                                {/* ss */}
-                                {/* </Fab> */}
+                                {attemptedCategories.includes(each) ? (
+                                  <button
+                                    className="btn "
+                                    style={{ backgroundColor: "lightblue" }}
+                                  >
+                                    <b>attempted</b>
+                                    &nbsp;
+                                    <i className="fa-solid fa-circle-check"></i>
+                                  </button>
+                                ) : (
+                                  <AwesomeButton
+                                    onPress={() => takequiz(each)}
+                                    className="me-2 "
+                                    type="linkedin"
+                                  >
+                                    Take Quiz{" "}
+                                  </AwesomeButton>
+                                )}
                               </div>
                             </>
                           );
                         }
-                        return null;
-                      })}
-                  </div>
-                  <div className="locked">
-                    <b>
-                      &nbsp; <h4>LOCKED QUIZ</h4>
-                    </b>
-                    <h3 className="mt-5 "></h3>
-                    {fetchedCategory &&
-                      fetchedCategory.map((each, index) => {
-                        if (!categoryStatus[each]) {
-                          return (
-                            <>
-                              <div className="fader border border-grey rounded p-3  mb-2 shadow-lg  bg-white   ">
-                                <h5>
-                                  {index + 1}.{each}
-                                  &nbsp;
-                                  <i className="fa-solid fa-lock text-black-50     "></i>
-                                </h5>
-                              </div>
-                            </>
-                          );
-                        }
-                        return null;
+                        return (
+                          <>
+                            <div
+                              key={index}
+                              className="fader border border-grey rounded p-3  mb-2 shadow-lg  bg-white   "
+                            >
+                              <h5>
+                                {index + 1}.{each}
+                                &nbsp;
+                                <i className="fa-solid fa-lock text-black-50 fa-xs    "></i>
+                              </h5>
+                            </div>
+                          </>
+                        );
                       })}
                   </div>
                 </Col>
                 <Col md={6}>
                   <div>
-                    <h3 className="mt-3 ">
-                      <b>&nbsp; COMPLETED QUIZ</b>
-                    </h3>
-                    <>
-                      <div className=" fader border border-grey rounded p-3  mb-2 shadow-lg  bg-white   ">
-                        <h5>1.Hibernate</h5>
-                        <h6>
-                          <b>Result</b> : Pending &nbsp;
-                          <i
-                            className="fa-regular fa-hourglass-half"
-                            // style={{ color: "navy" }}
-                          ></i>
-                        </h6>
+                    <h4 className="mt-3 ">
+                      <b>&nbsp; ATTEMPTED QUIZ</b>
+                    </h4>
+                    {attemptedCategories.length > 0 ? (
+                      <div>
+                        {attemptedCategories.map((each, index) => {
+                          return (
+                            <div className=" fader border border-grey rounded p-3  mb-2 shadow-lg  bg-white   ">
+                              <h5>
+                                {index + 1}.{each}
+                              </h5>
+                              <h6>
+                                <b>Result</b> -&nbsp;
+                                {attemptedQuizMetaData[each].Resultstatus}
+                                &nbsp;
+                                {attemptedQuizMetaData[each].Resultstatus ===
+                                "pending at examiner" ? (
+                                  <i className="fa-regular fa-hourglass-half"></i>
+                                ) : attemptedQuizMetaData[each].Resultstatus ===
+                                  "passed" ? (
+                                  <i
+                                    className="fa-solid fa-circle-check"
+                                    style={{ color: "green" }}
+                                  ></i>
+                                ) : (
+                                  <i
+                                    className="fa-solid fa-circle-xmark"
+                                    style={{ color: "maroon" }}
+                                  ></i>
+                                )}
+                              </h6>
+                            </div>
+                          );
+                        })}
                       </div>
-                      <div className=" fader border border-grey rounded p-3  mb-2 shadow-lg  bg-white   ">
-                        <h5>2.python</h5>
-                        <h6>
-                          <b>Result</b> : passed &nbsp;
-                          <i
-                            className="fa-solid fa-check"
-                            style={{ color: "green" }}
-                          ></i>
-                        </h6>
-                      </div>
-                      <div className=" fader border border-grey rounded p-3  mb-2 shadow-lg  bg-white   ">
-                        <h5>2.Microservices</h5>
-                        <h6>
-                          <b>Result</b> : failed &nbsp;
-                          <i
-                            className="fa-solid fa-xmark"
-                            style={{ color: "red" }}
-                          ></i>
-                        </h6>
-                      </div>
-                    </>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </Col>
               </Row>

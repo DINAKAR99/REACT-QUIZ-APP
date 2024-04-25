@@ -37,6 +37,14 @@ const Sidebar = ({ handleButtonClick }) => {
             Users
           </NavLink>
         </NavItem>
+        <NavItem>
+          <NavLink
+            className=" border-bottom border-white border-opacity-50   custom "
+            href="evaluate"
+          >
+            Evaluation
+          </NavLink>
+        </NavItem>
       </Nav>
     </div>
   );

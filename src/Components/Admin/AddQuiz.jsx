@@ -138,7 +138,7 @@ const AddQuiz = ({ toggle, categoryPacket, section }) => {
                 type="textarea"
                 id="content"
                 placeholder="Enter Question"
-                className="rounded-0"
+                className="rounded-2 rounded  "
                 aria-rowcount={4}
                 name="question"
                 onChange={fieldChanged}
@@ -153,7 +153,7 @@ const AddQuiz = ({ toggle, categoryPacket, section }) => {
                 type="select"
                 id="category"
                 placeholder="Enter here"
-                className="rounded-0"
+                className="rounded-2 rounded "
                 name="categoryId"
                 onChange={categoryChanged}
                 defaultValue={0}
@@ -182,7 +182,7 @@ const AddQuiz = ({ toggle, categoryPacket, section }) => {
                 id="content"
                 placeholder="Enter here"
                 value={questionData.options.A}
-                className="rounded-0"
+                className="rounded-2 rounded "
                 style={{ height: "30px" }}
                 name="A"
                 onChange={optionChanged}
@@ -196,7 +196,7 @@ const AddQuiz = ({ toggle, categoryPacket, section }) => {
                 type="text"
                 id="content"
                 placeholder="Enter here"
-                className="rounded-0"
+                className="rounded-2 rounded "
                 value={questionData.options.B}
                 style={{ height: "30px" }}
                 name="B"
@@ -211,7 +211,7 @@ const AddQuiz = ({ toggle, categoryPacket, section }) => {
                 type="text"
                 id="content"
                 placeholder="Enter here"
-                className="rounded-0"
+                className="rounded-2 rounded "
                 value={questionData.options.C}
                 style={{ height: "30px" }}
                 name="C"
@@ -228,7 +228,7 @@ const AddQuiz = ({ toggle, categoryPacket, section }) => {
                 id="content"
                 placeholder="Enter here"
                 value={questionData.options.D}
-                className="rounded-0"
+                className="rounded-2 rounded "
                 style={{ height: "30px" }}
                 name="D"
                 onChange={optionChanged}
