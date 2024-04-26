@@ -5,19 +5,42 @@ import { Col, Container, Row } from "reactstrap";
 import Sidebar from "../Sidebar";
 import { getAllCategories } from "../../Helper/QuizHelper";
 import { AwesomeButton } from "react-awesome-button";
+import axios from "axios";
 
 const UserInfoPage = () => {
   const location = useLocation();
   const { user } = location.state;
   console.log(user);
+  document.title = "User Quiz Info";
 
-  const [fetchedCategory, setFetchedCategory] = useState([]);
+  const [usermail, setUsermail] = useState("");
+  const [userName, setUserName] = useState("");
+  const [attemptedQuizCategories, setAttemptedQuizCategories] = useState([]);
 
+  const scoreFetcher = async (category) => {
+    const response = await axios.get(
+      `https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/questions/${category}/attempted/${userName}/score.json`
+    );
+    console.log(response.data.percentage);
+    return response.data.percentage;
+  };
   useState(() => {
-    getAllCategories().then((categoryArray) => {
-      setFetchedCategory(categoryArray);
-    });
+    //fecth user from local storage and set to inital values
+    const usermail = sessionStorage.getItem("usermail");
+    const username = sessionStorage.getItem("usermail").split("@")[0];
+    setUsermail((e) => usermail);
+    setUserName((e) => usermail.split("@")[0]);
+
+    axios
+      .get(
+        `https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/users/${username}/attempted.json`
+      )
+      .then((response) => {
+        console.log(Object.keys(response.data));
+        setAttemptedQuizCategories((e) => Object.keys(response.data));
+      });
   });
+
   const navigate = useNavigate();
   const userQuizDetails = (each) => {
     navigate("/admin/userquiz", {
@@ -37,7 +60,7 @@ const UserInfoPage = () => {
               <Row>
                 <header>
                   <h2 className="text-center  ">
-                    User Name : {user.name} | Email : {user.email} <br />
+                    User Name : {userName} | Email : {usermail} <br />
                     <hr /> Employee id : {user.empId}
                   </h2>
                 </header>
@@ -47,15 +70,15 @@ const UserInfoPage = () => {
                       <b>&nbsp;QUIZ ATTEMPTED</b>
                     </h4>
                   </div>
-                  {fetchedCategory &&
-                    fetchedCategory.map((each, index) => {
+                  {attemptedQuizCategories &&
+                    attemptedQuizCategories.map((each, index) => {
                       return (
                         <>
                           <div className="  border border-grey rounded p-3  mb-2 shadow-lg  bg-white   ">
                             <h5>
                               {index + 1}.{each}
                             </h5>
-                            <h5>scored : 7/10 (70%)</h5>
+
                             <AwesomeButton
                               onPress={() => userQuizDetails(each)}
                               className="me-2 "

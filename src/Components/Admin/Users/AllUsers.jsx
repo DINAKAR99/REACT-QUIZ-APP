@@ -10,6 +10,7 @@ import Sidebar from "../Sidebar";
 
 const AllUsers = () => {
   const [users, setUsers] = useState([]);
+  document.title = " Registered Users";
   useEffect(() => {
     axios
       .get(

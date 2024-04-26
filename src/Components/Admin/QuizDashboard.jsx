@@ -6,6 +6,7 @@ import AllQuiz from "./AllQuiz";
 import AddCategory from "./modals/AddCategory";
 
 const QuizDashboard = () => {
+  document.title = "Quiz Dashboard";
   //clicked component state management
   const [selectedForm, setSelectedForm] = useState("allquiz");
   //modal state

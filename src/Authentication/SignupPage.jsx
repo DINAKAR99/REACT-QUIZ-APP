@@ -34,7 +34,7 @@ const SignupPage = () => {
       .oneOf([yup.ref("password"), null], "Password must match!")
       .required("Confirm password is reqired!"),
   });
-
+  document.title = "Signup";
   const handleSignup = (values) => {
     // console.log(values);
     createUserWithEmailAndPassword(auth, values.email, values.password)
@@ -92,7 +92,7 @@ const SignupPage = () => {
               <i className="fa fa-facebook-f text-white  " />
             </a>
             <a href="#" className="social mx-2 p-2   text-white">
-              <i class="fa-brands fa-google"></i>
+              <i className="fa-brands fa-google"></i>
             </a>
             <a href="#" className="social mx-2 p-2   text-white">
               <i className="fa fa-linkedin" />

@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import { DocumentFullScreen } from "@chiragrupani/fullscreen-react";
 
 const TakeQuiz = () => {
+  document.title = "Quiz Page";
   const location = useLocation();
 
   const categoryName = location.state ? location.state.categoryName : "";

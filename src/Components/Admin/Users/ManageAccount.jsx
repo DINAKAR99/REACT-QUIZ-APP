@@ -20,7 +20,7 @@ const ManageAccount = () => {
       .oneOf([yup.ref("password"), null], "Password must match!")
       .required("Confirm password is reqired!"),
   });
-
+  document.title = "Manage Account";
   const [user, setUser] = useState("");
   useEffect(() => {
     //fecth user from local storage and set to inital values

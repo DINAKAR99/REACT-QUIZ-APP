@@ -76,6 +76,7 @@ const AdminDashboardPage = () => {
   };
   //FILL THE DATA WITH DATA FROM FIREBASE
   useEffect(() => {
+    document.title = "Admin Dashboard";
     fetch2();
     fetch().then((data) => {
       console.log(data);

@@ -11,7 +11,7 @@ const Sidebar = ({ handleButtonClick }) => {
     >
       <Nav vertical navbar fill className="text-white   ">
         <div div className="  text-end custom ">
-          <i class="fa-solid fa-xmark me-3  "></i>
+          <i className="fa-solid fa-xmark me-3  "></i>
         </div>
         <NavItem>
           <NavLink

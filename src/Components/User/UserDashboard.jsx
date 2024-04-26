@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AwesomeButton } from "react-awesome-button";
 import { useNavigate } from "react-router-dom";
 import { Col, Container, Row } from "reactstrap";
@@ -25,7 +25,8 @@ const UserDashboard = () => {
     });
   };
 
-  useState(() => {
+  useEffect(() => {
+    document.title = "User Dashboard";
     const user = sessionStorage.getItem("usermail").split("@")[0];
 
     const attemptedQuizCategories = axios

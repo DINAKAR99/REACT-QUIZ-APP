@@ -18,7 +18,7 @@ const LoginPage = () => {
     email: yup.string().required("Email is required!"),
     password: yup.string().required("Password is required!!"),
   });
-
+  document.title = "Login";
   const navigate = useNavigate();
   const submitForm = (values) => {
     // e.preventDefault();
@@ -56,7 +56,7 @@ const LoginPage = () => {
                 <i className="fa fa-facebook-f text-white  " />
               </a>
               <a href="#" className="social mx-2 p-2   text-white">
-                <i class="fa-brands fa-google"></i>
+                <i className="fa-brands fa-google"></i>
               </a>
               <a href="#" className="social mx-2 p-2   text-white">
                 <i className="fa fa-linkedin" />

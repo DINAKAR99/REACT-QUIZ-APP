@@ -6,6 +6,7 @@ import HomeNavbar from "./HomeNavbar";
 import logo from "./pictures/BRAINBYTES.gif";
 
 const HomePage = () => {
+  document.title = "Brainy Bits";
   const text = " Unravel Your Mind ".split(" ");
 
   const text2 = " Welcome to BrainyBits ".split(" ");

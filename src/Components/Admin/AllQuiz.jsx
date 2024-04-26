@@ -121,6 +121,7 @@ const AllQuiz = ({ token }) => {
 
   // Function to handle button clicks in the sidebar
   const handleShowQuestions = (category_name) => {
+    console.log(retrievedQuestions);
     setQuizCategory(category_name);
   };
 
@@ -147,12 +148,12 @@ const AllQuiz = ({ token }) => {
   };
 
   const sampleFunction = (event) => {
-    // Toggle the state variable to change the class
+    // Toggle the state variable to change the className
     console.log(event.target);
     // Get the target button element
     const button1 = event.target;
 
-    // Toggle the class name for the clicked button
+    // Toggle the className name for the clicked button
     button1.classList.add("delete");
 
     // setIsButtonActive(!isButtonActive);

@@ -6,6 +6,7 @@ import { getAllQuestionsPerCategory } from "../../Helper/QuizHelper";
 import Sidebar from "../Sidebar";
 
 const UserQuiz = () => {
+  document.title = "user quiz";
   const location = useLocation();
   const { categoryName, user } = location.state;
   console.log(categoryName);
@@ -53,7 +54,7 @@ const UserQuiz = () => {
                       className=" ms-0  me-auto mt-1     "
                       onClick={() => setShow((prev) => !prev)}
                     >
-                      <i class="fa-solid fa-bars"></i>
+                      <i className="fa-solid fa-bars"></i>
                     </Button>
                     <h2 className="text-center me-auto   ">
                       User : {user.name} | Empid : {user.empId}
@@ -88,7 +89,7 @@ const UserQuiz = () => {
 
                             <ol type="A">
                               {Object.values(QuestionPacket.options) &&
-                                Object.values(QuestionPacket.options).map(
+                                Object.values(QuestionPacket.options)?.map(
                                   (Eachoption, indexx) => {
                                     return (
                                       <li key={indexx}>
@@ -105,7 +106,7 @@ const UserQuiz = () => {
                                         {QuestionPacket.correctAnswer ===
                                         Eachoption ? (
                                           <i
-                                            class="fa-solid fa-check mx-2 "
+                                            className="fa-solid fa-check mx-2 "
                                             style={{ color: "green" }}
                                           ></i>
                                         ) : (

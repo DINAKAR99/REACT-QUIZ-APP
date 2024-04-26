@@ -11,9 +11,10 @@ import Sidebar from "./Sidebar";
 import toast from "react-hot-toast";
 
 const Evaluation = () => {
+  document.title = "Evaluation";
   const [users, setUsers] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [currentCategory, setCurrentCategory] = useState([]);
+  const [currentCategory, setCurrentCategory] = useState("");
   const [currentUser, setCurrentUser] = useState("");
   const [evaluationData, setEvaluationData] = useState({});
   useEffect(() => {
@@ -127,13 +128,13 @@ const Evaluation = () => {
                       console.log(e.target.value);
                     }}
                   >
-                    <option value="" selected disabled>
+                    <option defaultValue="" selected disabled>
                       --select--
                     </option>
                     {categories &&
                       categories.map((each, index) => {
                         return (
-                          <option key={index} value={each}>
+                          <option key={each} value={each}>
                             {each}
                           </option>
                         );
@@ -171,7 +172,7 @@ const Evaluation = () => {
 
                       <hr />
 
-                      {currentUser != "" ? (
+                      {currentUser != "" && (
                         <div className="text-center  ">
                           <h5>User : {currentUser}</h5>
                           <button className="btn bg-info-subtle        ">
@@ -193,8 +194,6 @@ const Evaluation = () => {
                             </button>
                           </div>
                         </div>
-                      ) : (
-                        ""
                       )}
                     </>
                   ) : (
@@ -208,7 +207,7 @@ const Evaluation = () => {
                   <div>
                     <h3 className="mt-3 ">Evaluation Report</h3>
                   </div>
-                  <table class="table">
+                  <table className="table">
                     <thead>
                       <tr>
                         <th scope="col">#</th>

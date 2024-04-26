@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Col, Container, Nav, NavItem, NavLink, Row } from "reactstrap";
 import CustomNavbar from "../CustomNavbar";
 const UnlockQuiz = () => {
+  document.title = "quiz unlock";
   const [categories, setCategories] = useState([]);
   const [currentcat, setCurrentcat] = useState([]);
   const [users, setUsers] = useState([]);

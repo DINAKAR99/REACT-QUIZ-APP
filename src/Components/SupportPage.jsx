@@ -4,6 +4,7 @@ import { FullScreen } from "@chiragrupani/fullscreen-react";
 
 const SupportPage = () => {
   let [isFullScreen, setFullScreen] = useState(false);
+  document.title = "Support Page";
   return (
     <div>
       <CustomNavbar />
