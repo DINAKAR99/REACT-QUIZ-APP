@@ -22,6 +22,7 @@ import SupportPage from "./Components/SupportPage";
 import UserDashboard from "./Components/User/UserDashboard";
 import UserRoute from "./Components/User/UserRoute";
 import Evaluation from "./Components/Admin/Evaluation";
+import Revoke from "./Components/Admin/Revoke";
 
 const Lazyy = React.lazy(() => import("./Components/HomePage"));
 function App() {
@@ -58,6 +59,7 @@ function App() {
                 <Route path="unlockquiz" element={<UnlockQuiz />} />
                 <Route path="userInfo" element={<UserInfoPage />} />
                 <Route path="userquiz" element={<UserQuiz />} />
+                <Route path="revoke" element={<Revoke />} />
               </Route>
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignupPage />} />

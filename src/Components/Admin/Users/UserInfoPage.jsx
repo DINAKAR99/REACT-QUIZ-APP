@@ -92,11 +92,7 @@ const UserInfoPage = () => {
                     })}
                 </Col>
                 <Col md={6}>
-                  <div>
-                    <h4 className="mt-3 ">
-                      <b>&nbsp; QUIZ REMAINING</b>
-                    </h4>
-                  </div>
+                  <div></div>
                 </Col>
               </Row>
             </Container>

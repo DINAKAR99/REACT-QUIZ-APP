@@ -26,7 +26,7 @@ const Sidebar = ({ handleButtonClick }) => {
             className=" border-top   border-bottom border-opacity-50      border-white  custom "
             href="quiz"
           >
-            Quiz Dashboard
+            Quiz Management
           </NavLink>
         </NavItem>
         <NavItem>
@@ -34,7 +34,7 @@ const Sidebar = ({ handleButtonClick }) => {
             className=" border-bottom border-white border-opacity-50   custom "
             href="allusers"
           >
-            Users
+            Candidates
           </NavLink>
         </NavItem>
         <NavItem>
@@ -43,6 +43,22 @@ const Sidebar = ({ handleButtonClick }) => {
             href="evaluate"
           >
             Evaluation
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink
+            className=" border-bottom border-white border-opacity-50 custom  "
+            href="/admin/unlockQuiz"
+          >
+            Unlock Quiz
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink
+            className=" border-bottom border-white border-opacity-50 custom  "
+            href="/admin/revoke"
+          >
+            Revoke Quiz
           </NavLink>
         </NavItem>
       </Nav>

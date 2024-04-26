@@ -66,8 +66,8 @@ const Quiz = ({ categoryName }) => {
   useEffect(() => {
     getAllQuestionsPerCategory(categoryName).then((resultSet) => {
       let rawArray = [];
-      console.log(resultSet.slice(1, -3));
-      rawArray = resultSet.slice(1, -3);
+      console.log(resultSet);
+      rawArray = resultSet.slice(1);
       rawArray = rawArray.map((each) => Object.values(each)[0]);
 
       setFetchedQuestions(rawArray);

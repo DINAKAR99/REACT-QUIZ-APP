@@ -31,7 +31,7 @@ const CustomNavbar = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [login, setLogin] = useState(false);
-  const [user, setUser] = useState({});
+  const [admin, setAdmin] = useState("");
   const [usermail, setUsermail] = useState("");
   const [modal, setModal] = useState(false);
 
@@ -39,6 +39,10 @@ const CustomNavbar = () => {
     if (sessionStorage.getItem("usermail")) {
       setLogin(true);
       setUsermail(sessionStorage.getItem("usermail"));
+    }
+
+    if (sessionStorage.getItem("admin")) {
+      setAdmin((e) => "admin_loggedin");
     }
   });
 
@@ -49,7 +53,6 @@ const CustomNavbar = () => {
         sessionStorage.removeItem("usermail");
         toast.success("Signed out successfully");
 
-        navigate("/");
         setTimeout(() => {
           window.location.href = "/";
         }, 1000);
@@ -125,7 +128,7 @@ const CustomNavbar = () => {
               </NavLink>
             </NavItem>
 
-            {login && (
+            {login && admin == "" && (
               <>
                 <NavItem>
                   <NavLink

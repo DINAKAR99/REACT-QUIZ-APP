@@ -8,6 +8,7 @@ import { Label } from "reactstrap";
 import CustomNavbar from "../Components/CustomNavbar";
 import { auth } from "./../firebase";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const LoginPage = () => {
   const initialValues = {
@@ -25,16 +26,34 @@ const LoginPage = () => {
     signInWithEmailAndPassword(auth, values.email, values.password)
       .then((userCredential) => {
         // Signed in
+
         const user = userCredential.user;
         toast.success("Login successful");
-        setTimeout(() => {
-          navigate("/user/userDashboard");
-        }, 1000);
+
         console.log(user);
 
         sessionStorage.setItem("usermail", user.email);
+        const username = user.email.split("@")[0];
         const emailWithDash = user.email.replace(/\./g, "-");
         sessionStorage.setItem("modedmail", emailWithDash);
+
+        axios
+          .get(
+            `https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/users/${username}.json`
+          )
+          .then((res) => {
+            setTimeout(() => {
+              if (res.data.secretkey != null) {
+                navigate("/admin/dashboard");
+              } else {
+                navigate("/user/userDashboard");
+              }
+            }, 1000);
+            if (res.data.secretkey != null) {
+              sessionStorage.setItem("admin", true);
+              console.log("the key is :....");
+            }
+          });
       })
       .catch((error) => {
         const errorCode = error.code;

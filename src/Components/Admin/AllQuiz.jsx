@@ -195,6 +195,9 @@ const AllQuiz = ({ token }) => {
       </myContext.Provider>
 
       <Row>
+        <h2 className="text-center fw-bold   ">Quiz Management</h2>
+        <hr />
+
         <Col md={6}>
           <div>
             <h3>

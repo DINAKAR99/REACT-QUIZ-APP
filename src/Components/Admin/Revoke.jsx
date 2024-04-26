@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Col, Container, Nav, NavItem, NavLink, Row } from "reactstrap";
 import CustomNavbar from "../CustomNavbar";
 import toast from "react-hot-toast";
-const UnlockQuiz = () => {
+const Revoke = () => {
   document.title = "quiz unlock";
   const [categories, setCategories] = useState([]);
   const [currentcat, setCurrentcat] = useState([]);
@@ -46,14 +46,10 @@ const UnlockQuiz = () => {
     console.log("selected category ", currentcat);
 
     // load up into db the user eligible for the quiz
-    axios
-      .put(
-        `https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/questions/${currentcat}/unlocked.json`,
-        checkedValues
-      )
-      .then(() => {
-        toast.success("quiz unlock successfull !");
-      });
+    //revoke quiz for user meaning clear the quiz data of particular category for user
+    //make a array for all promise to do promis.all
+    let allPromise = [];
+    checkedValues.forEach((eachUser) => {});
   };
   useEffect(() => {
     axios
@@ -190,7 +186,7 @@ const UnlockQuiz = () => {
                   <form onSubmit={handleSubmit}>
                     <div className="border border-3  border-black   m-3 rounded p-4 bg-info-subtle        ">
                       <h3 className="mt-3 text-center  ">
-                        <b>&nbsp; Unlock Quiz </b>
+                        <b>&nbsp; Revoke Quiz </b>
                       </h3>
                       <select
                         name="categories "
@@ -210,7 +206,7 @@ const UnlockQuiz = () => {
                         ))}
                       </select>
                       <h5 className="mt-4  ms-3    ">
-                        Unlock <b>{currentcat} quiz</b> for below users
+                        Revoke <b>{currentcat} quiz</b> for below users
                       </h5>
                       <div className="p-3  checkers">
                         <input
@@ -326,4 +322,4 @@ const UnlockQuiz = () => {
   );
 };
 
-export default UnlockQuiz;
+export default Revoke;

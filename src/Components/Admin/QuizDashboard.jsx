@@ -51,28 +51,34 @@ const QuizDashboard = () => {
                 <Nav vertical navbar fill>
                   <NavItem>
                     <NavLink
-                      className=" border-top   border-bottom border-opacity-50      border-white custom  "
-                      href="#"
-                      onClick={() => handleSidebarButtonClick("allquiz")}
-                    >
-                      All quiz
-                    </NavLink>
-                  </NavItem>
-
-                  <NavItem>
-                    <NavLink
-                      className=" border-bottom border-white border-opacity-50 custom  "
-                      href="/admin/dashboard"
+                      className=" border-top      border-bottom border-opacity-50      border-white  custom "
+                      href="dashboard"
                     >
                       Admin Dashboard
                     </NavLink>
                   </NavItem>
                   <NavItem>
                     <NavLink
-                      className=" border-bottom border-white border-opacity-50 custom  "
-                      onClick={() => createCategory()}
+                      className=" border-top   border-bottom border-opacity-50      border-white  custom "
+                      href="quiz"
                     >
-                      Add New Category
+                      Quiz Management
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink
+                      className=" border-bottom border-white border-opacity-50   custom "
+                      href="allusers"
+                    >
+                      Candidates
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink
+                      className=" border-bottom border-white border-opacity-50   custom "
+                      href="evaluate"
+                    >
+                      Evaluation
                     </NavLink>
                   </NavItem>
                   <NavItem>
@@ -80,7 +86,16 @@ const QuizDashboard = () => {
                       className=" border-bottom border-white border-opacity-50 custom  "
                       href="/admin/unlockQuiz"
                     >
-                      unlock quiz
+                      Unlock Quiz
+                    </NavLink>
+                  </NavItem>
+
+                  <NavItem>
+                    <NavLink
+                      className=" border-bottom border-white border-opacity-50 custom  "
+                      onClick={() => createCategory()}
+                    >
+                      Add New Category
                     </NavLink>
                   </NavItem>
                 </Nav>
