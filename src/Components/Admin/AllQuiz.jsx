@@ -6,6 +6,7 @@ import { Button, Col, Collapse, Container, Row } from "reactstrap";
 import Mod from "./modals/Mod";
 import EditQuiz from "./Edit/EditQuiz";
 import {
+  decrementQCount,
   deleteCategory,
   deleteQuestion,
   getAllCategories,
@@ -55,12 +56,14 @@ const AllQuiz = ({ token }) => {
       .then((results) => {
         // console.log(results);
         const updatedQuestions = {};
+        console.log(results);
 
         // Iterate over results and update state accordingly
         results.forEach((qArray, index) => {
           const catName = fetchedCategory[index];
-          // console.log(qArray);
-          updatedQuestions[catName] = Object.values(qArray.slice(1, -1));
+          console.log(qArray ? qArray : "dwdw");
+          console.log("wdwd");
+          updatedQuestions[catName] = Object.values(qArray.slice(1));
         });
         setRetrievedQuestions(updatedQuestions);
 
@@ -109,6 +112,10 @@ const AllQuiz = ({ token }) => {
   const deleteCategoryy = (categoryTitle) => {
     deleteCategory(categoryTitle).then(() => {
       setRefreshToken((prev) => prev + 1);
+      toast.success("Category deleted!");
+      setTimeout(() => {
+        window.location.reload();
+      }, 400);
     });
   };
 
@@ -129,7 +136,11 @@ const AllQuiz = ({ token }) => {
   const deleteHandler = (category, questionId, event) => {
     console.log(event.target);
     deleteQuestion(category, questionId).then(() => {
+      decrementQCount(category);
       toast.success("Question deleted!");
+      setTimeout(() => {
+        window.location.reload();
+      }, 400);
       setRefreshToken((prev) => prev + 1);
       // sampleFunction(event);
     });
@@ -199,7 +210,7 @@ const AllQuiz = ({ token }) => {
                       {index + 1}.{each}
                     </h5>
                     <h6>
-                      No Of Questions:{" "}
+                      No Of Questions:
                       {retrievedQuestions && (
                         <>{retrievedQuestions[each]?.length}</>
                       )}
@@ -212,6 +223,15 @@ const AllQuiz = ({ token }) => {
                     >
                       Show Questions
                     </AwesomeButton>
+
+                    {/* <AwesomeButton
+                      onPress={() => handleShowQuestions(each)}
+                      className="me-2 "
+                      type="primary"
+                    >
+                      Show Questions
+                    </AwesomeButton> */}
+
                     <AwesomeButton
                       type="github"
                       className="me-2   "

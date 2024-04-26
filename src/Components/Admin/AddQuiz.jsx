@@ -63,10 +63,14 @@ const AddQuiz = ({ toggle, categoryPacket, section }) => {
       .then((questionCount) => {
         //pushing into firebase db
         toast.promise(
-          createQuestion(questionData.category.categoryTitle, questionCount, {
-            ...questionData,
-            questionId: questionCount,
-          }),
+          createQuestion(
+            questionData.category.categoryTitle,
+            questionCount + 1,
+            {
+              ...questionData,
+              questionId: questionCount + 1,
+            }
+          ),
           {
             loading: "Creating...",
             success: <b>Question Created!</b>,

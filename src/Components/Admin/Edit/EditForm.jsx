@@ -38,9 +38,11 @@ const EditForm = ({ packet, toggle }) => {
       questionPacket.questionId,
       questionPacket
     ).then(() => {
-      setRefreshToken((prev) => prev + 1);
+      toast.success("Question Updated!");
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
     });
-    toast.success("Question Updated!");
     // modalToggle
     toggle();
   };

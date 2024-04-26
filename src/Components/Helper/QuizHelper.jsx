@@ -28,16 +28,33 @@ export const incrementQCount = (categoryTitle) => {
       });
     });
 };
+export const decrementQCount = (categoryTitle) => {
+  const url = `${public_url}/questions/${categoryTitle}/questionCount.json`;
+
+  axios
+    .get(url)
+    .then((response) => {
+      console.log(response.data);
+      // user1 = response.data;
+      return response.data.count;
+      // console.log(user1);
+    })
+    .then((countt) => {
+      axios.put(url, { count: countt - 1 }).then((response) => {
+        console.log(response.data);
+      });
+    });
+};
 
 //create category
 export const createCategory = (categoryTitle) => {
-  const createUrl = `${public_url}/questions/${categoryTitle}/0.json`;
+  const createUrl = `${public_url}/questions/${categoryTitle}/questionList/0.json`;
 
   //for creating question count
   const counturl = `${public_url}/questions/${categoryTitle}/questionCount.json`;
   axios.put(counturl, { count: 0 });
 
-  // creating the 0 obejct
+  // creating the 1st obejct
   return axios
     .post(createUrl, { sample: "sample" })
     .then((Response) => console.log(Response.data));
@@ -63,7 +80,7 @@ export const getAllCategories = () => {
 
 //create question
 export const createQuestion = (categoryTitle, questionId, questionPacket) => {
-  const createUrl = `${public_url}/questions/${categoryTitle}/${questionId}.json`;
+  const createUrl = `${public_url}/questions/${categoryTitle}/questionList/${questionId}.json`;
 
   return axios
     .post(createUrl, questionPacket)
@@ -72,16 +89,19 @@ export const createQuestion = (categoryTitle, questionId, questionPacket) => {
 
 // update question
 export const updateQuestion = (categoryTitle, questionId, questionPacket) => {
-  const createUrl = `${public_url}/questions/${categoryTitle}/${questionId}.json`;
+  const createUrl = `${public_url}/questions/${categoryTitle}/questionList/${questionId}.json`;
   //first we delete the question
-  deleteQuestion(categoryTitle, questionId);
-  console.log("dlete success");
-  return createQuestion(categoryTitle, questionId, questionPacket);
+  return deleteQuestion(categoryTitle, questionId).then(() => {
+    console.log("dlete success");
+    return createQuestion(categoryTitle, questionId, questionPacket);
+  });
 };
 
 // delete question
 export const deleteQuestion = (categoryTitle, questionId) => {
-  const createUrl = `${public_url}/questions/${categoryTitle}/${questionId}.json`;
+  const createUrl = `${public_url}/questions/${categoryTitle}/questionList/${questionId}.json`;
+
+  //update new count
 
   return axios.delete(createUrl);
 };
@@ -90,11 +110,13 @@ export const deleteQuestion = (categoryTitle, questionId) => {
 
 export const getAllQuestionsPerCategory = (categoryTitle) => {
   console.log(categoryTitle);
-  const createUrl = `${public_url}/questions/${categoryTitle}.json`;
+  const createUrl = `${public_url}/questions/${categoryTitle}/questionList.json`;
 
   return axios.get(createUrl).then((Response) => {
-    // console.log(Object.values(Response.data));
-    return Object.values(Response.data);
+    console.log(Object.values(Response.data));
+    return Object.values(Response.data).filter(
+      (QuestionList) => QuestionList !== null
+    );
   });
 };
 
