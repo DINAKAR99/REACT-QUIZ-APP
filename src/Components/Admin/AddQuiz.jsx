@@ -8,9 +8,10 @@ import {
 } from "../Helper/QuizHelper";
 import myContext from "../context/ContextCore";
 
-const AddQuiz = ({ toggle, categoryPacket, section }) => {
+const AddQuiz = ({ toggle, categoryPacket }) => {
   // using context
 
+  // console.log(typer);
   const { setRefreshToken } = useContext(myContext);
 
   const [categories, setCategories] = useState([
@@ -133,6 +134,7 @@ const AddQuiz = ({ toggle, categoryPacket, section }) => {
         <div className="wrapper    justify-content-center align-items-center">
           {/* {JSON.stringify(questionData)} */}
           <h5>NEW QUESTION</h5>
+
           <form onSubmit={handleSubmit}>
             <div className="my-3">
               <label htmlFor="content">
@@ -149,124 +151,126 @@ const AddQuiz = ({ toggle, categoryPacket, section }) => {
               ></Input>
             </div>
 
-            <div className="my-3">
-              <label htmlFor="content">
-                <b>Category</b>
-              </label>
-              <Input
-                type="select"
-                id="category"
-                placeholder="Enter here"
-                className="rounded-2 rounded "
-                name="categoryId"
-                onChange={categoryChanged}
-                defaultValue={0}
-              >
-                <option disabled value={0}>
-                  --Select category--
-                </option>
-                {categories.map((category) => (
-                  <option
-                    value={JSON.stringify(category)}
-                    key={category.categoryId}
-                  >
-                    {category.categoryTitle}
+            <>
+              <div className="my-3">
+                <label htmlFor="content">
+                  <b>Category</b>
+                </label>
+                <Input
+                  type="select"
+                  id="category"
+                  placeholder="Enter here"
+                  className="rounded-2 rounded "
+                  name="categoryId"
+                  onChange={categoryChanged}
+                  defaultValue={0}
+                >
+                  <option disabled value={0}>
+                    --Select category--
                   </option>
-                ))}
-              </Input>
-            </div>
+                  {categories.map((category) => (
+                    <option
+                      value={JSON.stringify(category)}
+                      key={category.categoryId}
+                    >
+                      {category.categoryTitle}
+                    </option>
+                  ))}
+                </Input>
+              </div>
 
-            <div id="option-group"></div>
-            <div className="my-3">
-              <label htmlFor="content">
-                <b>Option A</b>
-              </label>
-              <Input
-                type="text"
-                id="content"
-                placeholder="Enter here"
-                value={questionData.options.A}
-                className="rounded-2 rounded "
-                style={{ height: "30px" }}
-                name="A"
-                onChange={optionChanged}
-              ></Input>
-            </div>
-            <div className="my-3">
-              <label htmlFor="content">
-                <b>Option B</b>
-              </label>
-              <Input
-                type="text"
-                id="content"
-                placeholder="Enter here"
-                className="rounded-2 rounded "
-                value={questionData.options.B}
-                style={{ height: "30px" }}
-                name="B"
-                onChange={optionChanged}
-              ></Input>
-            </div>
-            <div className="my-3">
-              <label htmlFor="content">
-                <b>Option C</b>
-              </label>
-              <Input
-                type="text"
-                id="content"
-                placeholder="Enter here"
-                className="rounded-2 rounded "
-                value={questionData.options.C}
-                style={{ height: "30px" }}
-                name="C"
-                onChange={optionChanged}
-              ></Input>
-            </div>
+              <div id="option-group"></div>
+              <div className="my-3">
+                <label htmlFor="content">
+                  <b>Option A</b>
+                </label>
+                <Input
+                  type="text"
+                  id="content"
+                  placeholder="Enter here"
+                  value={questionData.options.A}
+                  className="rounded-2 rounded "
+                  style={{ height: "30px" }}
+                  name="A"
+                  onChange={optionChanged}
+                ></Input>
+              </div>
+              <div className="my-3">
+                <label htmlFor="content">
+                  <b>Option B</b>
+                </label>
+                <Input
+                  type="text"
+                  id="content"
+                  placeholder="Enter here"
+                  className="rounded-2 rounded "
+                  value={questionData.options.B}
+                  style={{ height: "30px" }}
+                  name="B"
+                  onChange={optionChanged}
+                ></Input>
+              </div>
+              <div className="my-3">
+                <label htmlFor="content">
+                  <b>Option C</b>
+                </label>
+                <Input
+                  type="text"
+                  id="content"
+                  placeholder="Enter here"
+                  className="rounded-2 rounded "
+                  value={questionData.options.C}
+                  style={{ height: "30px" }}
+                  name="C"
+                  onChange={optionChanged}
+                ></Input>
+              </div>
 
-            <div className="my-3">
-              <label htmlFor="content">
-                <b>Option D</b>
-              </label>
-              <Input
-                type="text"
-                id="content"
-                placeholder="Enter here"
-                value={questionData.options.D}
-                className="rounded-2 rounded "
-                style={{ height: "30px" }}
-                name="D"
-                onChange={optionChanged}
-              ></Input>
-            </div>
+              <div className="my-3">
+                <label htmlFor="content">
+                  <b>Option D</b>
+                </label>
+                <Input
+                  type="text"
+                  id="content"
+                  placeholder="Enter here"
+                  value={questionData.options.D}
+                  className="rounded-2 rounded "
+                  style={{ height: "30px" }}
+                  name="D"
+                  onChange={optionChanged}
+                ></Input>
+              </div>
 
-            {/* ///radiobutton */}
-            <div className="my-3" onChange={handleRadioChange}>
-              <h5>Answer</h5>
-              <Input
-                type="radio"
-                name="answer"
-                value={questionData.options.A}
-              ></Input>
-              &nbsp;A &nbsp;
-              <Input
-                type="radio"
-                name="answer"
-                value={questionData.options.B}
-              ></Input>
-              &nbsp;B &nbsp;
-              <Input
-                type="radio"
-                name="answer"
-                value={questionData.options.C}
-              ></Input>
-              &nbsp;C &nbsp;
-              <Input
-                type="radio"
-                name="answer"
-                value={questionData.options.D}
-              ></Input>
-              &nbsp;D &nbsp;
-            </div>
+              {/* ///radiobutton */}
+              <div className="my-3" onChange={handleRadioChange}>
+                <h5>Answer</h5>
+                <Input
+                  type="radio"
+                  name="answer"
+                  value={questionData.options.A}
+                ></Input>
+                &nbsp;A &nbsp;
+                <Input
+                  type="radio"
+                  name="answer"
+                  value={questionData.options.B}
+                ></Input>
+                &nbsp;B &nbsp;
+                <Input
+                  type="radio"
+                  name="answer"
+                  value={questionData.options.C}
+                ></Input>
+                &nbsp;C &nbsp;
+                <Input
+                  type="radio"
+                  name="answer"
+                  value={questionData.options.D}
+                ></Input>
+                &nbsp;D &nbsp;
+              </div>
+            </>
 
             <Container className="text-center">
               <Button type="submit" className="rounded" color="dark">

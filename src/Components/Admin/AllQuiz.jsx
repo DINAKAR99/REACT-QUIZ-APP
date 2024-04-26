@@ -11,14 +11,18 @@ import {
   deleteQuestion,
   getAllCategories,
   getAllQuestionsPerCategory,
+  getAllTypes,
 } from "../Helper/QuizHelper";
 import myContext from "../context/ContextCore";
 import toast from "react-hot-toast";
 import { AwesomeButton, AwesomeButtonProgress } from "react-awesome-button";
+import CodingQuestion from "./modals/CodingQuestion";
 
 const AllQuiz = ({ token }) => {
   const [modal, setModal] = useState(false);
   const [modal2, setModal2] = useState(false);
+  const [codingModal, setCodingModal] = useState(false);
+  const [currentType, setCurrentType] = useState("");
   const [sectionCategory, setSectionCategory] = useState("");
 
   //usecontext
@@ -35,6 +39,7 @@ const AllQuiz = ({ token }) => {
   //clicked component state management
   const [quizCategory, setQuizCategory] = useState("java");
   const [fetchedCategory, setFetchedCategory] = useState([]);
+  const [typeList, setTypeList] = useState([]);
   const [toggleOptions, setToggleOptions] = useState({
     category: "",
     index: "",
@@ -66,6 +71,7 @@ const AllQuiz = ({ token }) => {
           updatedQuestions[catName] = Object.values(qArray.slice(1));
         });
         setRetrievedQuestions(updatedQuestions);
+        console.log(updatedQuestions);
 
         return updatedQuestions;
         // Update the state once with all the retrieved questions
@@ -85,13 +91,23 @@ const AllQuiz = ({ token }) => {
       .then((categoryArray) => {
         setFetchedCategory(categoryArray);
         // questionsLoader(categoryArray);
-        // console.log(categoryArray);
+        console.log(categoryArray);
         return categoryArray;
       })
       .then(() => {
         console.log(fetchedCategory);
         console.log("in second ");
-        // questionsLoader();
+        getAllTypes().then((Response) => {
+          let typeList = [];
+          Object.values(Response.data).forEach((each) => {
+            let eacher;
+            each.type ? (eacher = each.type.type) : (eacher = "none");
+            typeList.push(eacher);
+          });
+
+          console.log(typeList);
+          setTypeList((e) => typeList);
+        });
       });
   }, [refreshToken, token]);
 
@@ -107,6 +123,11 @@ const AllQuiz = ({ token }) => {
     setModal(!modal);
     setSectionCategory((prev) => categoryTitle);
     console.log(retrievedQuestions);
+  };
+  //function to toggle modal
+  const codingToggle = () => {
+    setCodingModal(!codingModal);
+    console.log(codingModal);
   };
 
   const deleteCategoryy = (categoryTitle) => {
@@ -186,6 +207,12 @@ const AllQuiz = ({ token }) => {
           categoriesPacket={fetchedCategory}
           section={sectionCategory}
         />
+
+        <CodingQuestion
+          toggle={codingToggle}
+          check={codingModal}
+          categorypack={fetchedCategory}
+        />
         <EditQuiz
           modal2={modal2}
           backdrop2={backdrop}
@@ -209,8 +236,13 @@ const AllQuiz = ({ token }) => {
               return (
                 <>
                   <div className=" fader border border-grey        rounded p-3 mb-2 shadow-lg  bg-white   ">
-                    <h5>
+                    <h5 className="d-flex  ">
                       {index + 1}.{each}
+                      {
+                        <b className="ms-auto ">
+                          pattern : {typeList ? typeList[index] : "dwe"}
+                        </b>
+                      }
                     </h5>
                     <h6>
                       No Of Questions:
@@ -238,7 +270,19 @@ const AllQuiz = ({ token }) => {
                     <AwesomeButton
                       type="github"
                       className="me-2   "
-                      onPress={() => toggle(each)}
+                      onPress={() => {
+                        setCurrentType((e) =>
+                          typeList ? typeList[index] : "dwe"
+                        );
+
+                        if (typeList[index] === "none") {
+                          console.log("dedw");
+                          toggle(each);
+                        } else {
+                          console.log("wdwdwd");
+                          codingToggle();
+                        }
+                      }}
                     >
                       Add Question
                     </AwesomeButton>
@@ -277,16 +321,19 @@ const AllQuiz = ({ token }) => {
                             {Object.values(QuestionPacket)[0].question}
                           </li>
                           <div className="mb-3">
-                            <AwesomeButton
-                              className="me-2"
-                              type="facebook"
-                              onPress={() =>
-                                toggleCollapse(quizCategory, index)
-                              }
-                              size="sm"
-                            >
-                              options
-                            </AwesomeButton>
+                            {Object.values(QuestionPacket)[0].options && (
+                              <AwesomeButton
+                                className="me-2"
+                                type="facebook"
+                                onPress={() =>
+                                  toggleCollapse(quizCategory, index)
+                                }
+                                size="sm"
+                              >
+                                options
+                              </AwesomeButton>
+                            )}
+
                             <AwesomeButton
                               className="me-2"
                               type="github"

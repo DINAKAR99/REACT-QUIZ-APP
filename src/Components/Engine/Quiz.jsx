@@ -15,6 +15,8 @@ import { getAllQuestionsPerCategory } from "../Helper/QuizHelper";
 import QuizCompletionPage from "./QuizCompletionPage";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 const Quiz = ({ categoryName }) => {
   const quizData = [
@@ -299,10 +301,14 @@ const Quiz = ({ categoryName }) => {
               <main>
                 <>
                   <h5 className="pb-2">
-                    <b>{fecthedQuestions[currentQuestionIndex]?.question}</b>
+                    <b>
+                      {currentQuestionIndex + 1}.&nbsp;
+                      {fecthedQuestions[currentQuestionIndex]?.question}
+                    </b>
                   </h5>
                   {fecthedQuestions[currentQuestionIndex] &&
-                    Object?.values(
+                  fecthedQuestions[currentQuestionIndex].options ? (
+                    Object.values(
                       fecthedQuestions[currentQuestionIndex].options
                     ).map((option, index) => (
                       <div key={index} className="mb-2">
@@ -323,7 +329,28 @@ const Quiz = ({ categoryName }) => {
                         {option}
                         {fecthedQuestions[currentQuestionIndex].questionId}
                       </div>
-                    ))}
+                    ))
+                  ) : (
+                    <h4>
+                      <CKEditor
+                        editor={ClassicEditor}
+                        data="write the answer here "
+                        onReady={(editor) => {
+                          // You can store the "editor" and use when it is needed.
+                          console.log("Editor is ready to use!", editor);
+                        }}
+                        onChange={(event) => {
+                          console.log(event);
+                        }}
+                        onBlur={(event, editor) => {
+                          console.log("Blur.", editor);
+                        }}
+                        onFocus={(event, editor) => {
+                          console.log("Focus.", editor);
+                        }}
+                      />
+                    </h4>
+                  )}
                 </>
               </main>
               <hr />

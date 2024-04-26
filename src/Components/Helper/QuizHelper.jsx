@@ -47,17 +47,19 @@ export const decrementQCount = (categoryTitle) => {
 };
 
 //create category
-export const createCategory = (categoryTitle) => {
+export const createCategory = (categoryTitle, typer) => {
   const createUrl = `${public_url}/questions/${categoryTitle}/questionList/0.json`;
 
-  //for creating question count
-  const counturl = `${public_url}/questions/${categoryTitle}/questionCount.json`;
-  axios.put(counturl, { count: 0 });
-
   // creating the 1st obejct
-  return axios
-    .post(createUrl, { sample: "sample" })
-    .then((Response) => console.log(Response.data));
+  return axios.post(createUrl, { sample: "sample" }).then((Response) => {
+    console.log(Response.data);
+    //for creating question count
+    const counturl = `${public_url}/questions/${categoryTitle}/questionCount.json`;
+    axios.put(counturl, { count: 0 });
+    //for creating question count
+    const url = `${public_url}/questions/${categoryTitle}/type.json`;
+    axios.put(url, { type: typer });
+  });
 };
 //create category
 export const deleteCategory = (categoryTitle) => {
@@ -66,12 +68,20 @@ export const deleteCategory = (categoryTitle) => {
   return axios.delete(createUrl);
 };
 
+//fecth Types
+export const getAllTypes = () => {
+  const createUrl = `${public_url}/questions.json`;
+
+  return axios.get(createUrl);
+};
 //fecth categories
 export const getAllCategories = () => {
   const createUrl = `${public_url}/questions.json`;
 
   return axios.get(createUrl).then((Response) => {
-    console.log(Object.keys(Response.data));
+    Object.values(Response.data).forEach((each) => {
+      console.log(each.type ? each.type : "no type");
+    });
     return Object.keys(Response.data);
   });
 };

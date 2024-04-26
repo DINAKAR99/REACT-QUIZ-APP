@@ -118,7 +118,7 @@ const EditForm = ({ packet, toggle }) => {
               ></Input>
             </div>
 
-            <div className="my-3">
+            {/* <div className="my-3">
               <label htmlFor="content">
                 <b>Category</b>
               </label>
@@ -143,116 +143,118 @@ const EditForm = ({ packet, toggle }) => {
                   </option>
                 ))}
               </Input>
-            </div>
+            </div> */}
+            {questionPacket.options && (
+              <div id="option-group">
+                <div className="my-3">
+                  <label htmlFor="content">
+                    <b>Option A</b>
+                  </label>
+                  <Input
+                    type="text"
+                    id="content"
+                    placeholder="Enter here"
+                    value={questionPacket.options.A}
+                    className="rounded rounded-2 "
+                    style={{ height: "30px" }}
+                    name="A"
+                    onChange={optionChanged}
+                  ></Input>
+                </div>
+                <div className="my-3">
+                  <label htmlFor="content">
+                    <b>Option B</b>
+                  </label>
+                  <Input
+                    type="text"
+                    id="content"
+                    placeholder="Enter here"
+                    className="rounded rounded-2 "
+                    value={questionPacket.options.B}
+                    style={{ height: "30px" }}
+                    name="B"
+                    onChange={optionChanged}
+                  ></Input>
+                </div>
+                <div className="my-3">
+                  <label htmlFor="content">
+                    <b>Option C</b>
+                  </label>
+                  <Input
+                    type="text"
+                    id="content"
+                    placeholder="Enter here"
+                    className="rounded rounded-2 "
+                    value={questionPacket.options.C}
+                    style={{ height: "30px" }}
+                    name="C"
+                    onChange={optionChanged}
+                  ></Input>
+                </div>
 
-            <div id="option-group"></div>
-            <div className="my-3">
-              <label htmlFor="content">
-                <b>Option A</b>
-              </label>
-              <Input
-                type="text"
-                id="content"
-                placeholder="Enter here"
-                value={questionPacket.options.A}
-                className="rounded rounded-2 "
-                style={{ height: "30px" }}
-                name="A"
-                onChange={optionChanged}
-              ></Input>
-            </div>
-            <div className="my-3">
-              <label htmlFor="content">
-                <b>Option B</b>
-              </label>
-              <Input
-                type="text"
-                id="content"
-                placeholder="Enter here"
-                className="rounded rounded-2 "
-                value={questionPacket.options.B}
-                style={{ height: "30px" }}
-                name="B"
-                onChange={optionChanged}
-              ></Input>
-            </div>
-            <div className="my-3">
-              <label htmlFor="content">
-                <b>Option C</b>
-              </label>
-              <Input
-                type="text"
-                id="content"
-                placeholder="Enter here"
-                className="rounded rounded-2 "
-                value={questionPacket.options.C}
-                style={{ height: "30px" }}
-                name="C"
-                onChange={optionChanged}
-              ></Input>
-            </div>
-
-            <div className="my-3">
-              <label htmlFor="content">
-                <b>Option D</b>
-              </label>
-              <Input
-                type="text"
-                id="content"
-                placeholder="Enter here"
-                value={questionPacket.options.D}
-                className="rounded rounded-2 "
-                style={{ height: "30px" }}
-                name="D"
-                onChange={optionChanged}
-              ></Input>
-            </div>
-
+                <div className="my-3">
+                  <label htmlFor="content">
+                    <b>Option D</b>
+                  </label>
+                  <Input
+                    type="text"
+                    id="content"
+                    placeholder="Enter here"
+                    value={questionPacket.options.D}
+                    className="rounded rounded-2 "
+                    style={{ height: "30px" }}
+                    name="D"
+                    onChange={optionChanged}
+                  ></Input>
+                </div>
+              </div>
+            )}
             {/* ///radiobutton */}
-            <div className="my-3">
-              <h5>Answer</h5>
-              <Input
-                type="radio"
-                name="answer"
-                checked={
-                  questionPacket.correctAnswer === questionPacket.options.A
-                }
-                onChange={handleRadioChange}
-                value={questionPacket.options.A}
-              ></Input>
-              &nbsp;A &nbsp;
-              <Input
-                type="radio"
-                name="answer"
-                checked={
-                  questionPacket.correctAnswer === questionPacket.options.B
-                }
-                onChange={handleRadioChange}
-                value={questionPacket.options.B}
-              ></Input>
-              &nbsp;B &nbsp;
-              <Input
-                type="radio"
-                name="answer"
-                checked={
-                  questionPacket.correctAnswer === questionPacket.options.C
-                }
-                onChange={handleRadioChange}
-                value={questionPacket.options.C}
-              ></Input>
-              &nbsp;C &nbsp;
-              <Input
-                type="radio"
-                name="answer"
-                checked={
-                  questionPacket.correctAnswer === questionPacket.options.D
-                }
-                onChange={handleRadioChange}
-                value={questionPacket.options.D}
-              ></Input>
-              &nbsp;D &nbsp;
-            </div>
-
+            {questionPacket.correctAnswer && (
+              <div className="my-3">
+                <h5>Answer</h5>
+                <Input
+                  type="radio"
+                  name="answer"
+                  checked={
+                    questionPacket.correctAnswer === questionPacket.options.A
+                  }
+                  onChange={handleRadioChange}
+                  value={questionPacket.options.A}
+                ></Input>
+                &nbsp;A &nbsp;
+                <Input
+                  type="radio"
+                  name="answer"
+                  checked={
+                    questionPacket.correctAnswer === questionPacket.options.B
+                  }
+                  onChange={handleRadioChange}
+                  value={questionPacket.options.B}
+                ></Input>
+                &nbsp;B &nbsp;
+                <Input
+                  type="radio"
+                  name="answer"
+                  checked={
+                    questionPacket.correctAnswer === questionPacket.options.C
+                  }
+                  onChange={handleRadioChange}
+                  value={questionPacket.options.C}
+                ></Input>
+                &nbsp;C &nbsp;
+                <Input
+                  type="radio"
+                  name="answer"
+                  checked={
+                    questionPacket.correctAnswer === questionPacket.options.D
+                  }
+                  onChange={handleRadioChange}
+                  value={questionPacket.options.D}
+                ></Input>
+                &nbsp;D &nbsp;
+              </div>
+            )}
             <Container className="text-center">
               <Button type="submit" className="rounded" color="dark">
                 Update Question

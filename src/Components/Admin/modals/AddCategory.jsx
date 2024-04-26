@@ -13,6 +13,8 @@ import {
 } from "reactstrap";
 import { createCategory } from "../../Helper/QuizHelper";
 import myContext from "../../context/ContextCore";
+import { Radio } from "@mui/material";
+import toast from "react-hot-toast";
 
 const AddCategory = ({ modal, backdrop, setModal, setToken }) => {
   const setModalFunc = setModal;
@@ -20,6 +22,7 @@ const AddCategory = ({ modal, backdrop, setModal, setToken }) => {
 
   // Define state to manage form input values
   const [category, setCategory] = useState("");
+  const [type, setType] = useState("");
 
   //just a count for useeffect to occur again
   const [count, setCount] = useState(0);
@@ -37,10 +40,15 @@ const AddCategory = ({ modal, backdrop, setModal, setToken }) => {
     toggle();
     // Perform any validation or data processing here
     console.log("Category submitted:", category);
+    console.log("type submitted:", type);
     //push the new category to firebase db
-    createCategory(category).then(() => {
-      setToken((prev) => prev + 1);
 
+    createCategory(category, type).then(() => {
+      setToken((prev) => prev + 1);
+      toast.success("Category Added successfully");
+      setTimeout(() => {
+        window.location.reload();
+      }, 300);
       //now trigger the rerender and change modal backdrop to false
       incrementCount();
     });
@@ -61,22 +69,36 @@ const AddCategory = ({ modal, backdrop, setModal, setToken }) => {
         <ModalBody>
           <Form onSubmit={handleSubmit}>
             <Row className="row-cols-lg-auto g-3 align-items-center">
-              <Col>
-                <Label className="visually-hidden" for="exCategory">
-                  Category
-                </Label>
-                <Input
-                  id="exCategory"
-                  name="category"
-                  placeholder="Enter Category "
-                  value={category}
-                  onChange={handleInputChange} // Call handleInputChange when the input value changes
-                />
-              </Col>
+              <Label className="visually-hidden" for="exCategory">
+                Category
+              </Label>
+              <Input
+                id="exCategory"
+                name="category"
+                placeholder="Enter Category "
+                value={category}
+                onChange={handleInputChange} // Call handleInputChange when the input value changes
+              />
 
-              <Col>
+              <div>
+                MCQ
+                <Radio
+                  name="type"
+                  value="mcq"
+                  checked={"mcq" === type}
+                  onChange={(e) => setType(e.target.value)}
+                ></Radio>
+                CODING
+                <Radio
+                  name="type"
+                  value="coding"
+                  checked={"coding" == type}
+                  onChange={(e) => setType(e.target.value)}
+                ></Radio>
+                <br />
+                <br />
                 <Button type="submit">Submit</Button>
-              </Col>
+              </div>
             </Row>
           </Form>
         </ModalBody>

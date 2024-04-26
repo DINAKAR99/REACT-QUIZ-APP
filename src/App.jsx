@@ -31,13 +31,13 @@ function App() {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-    }, 100);
+    }, 1000);
   }, []);
 
   return (
     <div>
       {loading ? (
-        <div className="App bg-black  ">
+        <div className="App bg-black      ">
           <SyncLoader loading={loading} size={10} color="#38d3b4" />
         </div>
       ) : (
