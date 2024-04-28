@@ -1,14 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet, Navigate } from "react-router-dom";
 
 const UserRoute = () => {
-  let authorized = true;
-  useEffect(() => {
-    if (sessionStorage.getItem("user")) {
-      authorized = true;
-    }
-  });
-  return authorized ? <Outlet /> : <Navigate to={"/login"} />;
+  return sessionStorage.getItem("usermail") ? (
+    <Outlet />
+  ) : (
+    <Navigate to={"/"} />
+  );
 };
 
 export default UserRoute;

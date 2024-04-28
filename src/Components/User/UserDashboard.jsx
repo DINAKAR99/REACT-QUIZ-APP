@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { Col, Container, Row } from "reactstrap";
 import CustomNavbar from "../CustomNavbar";
 import { getAllCategories } from "../Helper/QuizHelper";
+import ScrollToTop from "react-scroll-to-top";
+import { Skeleton } from "@mui/material";
 
 const UserDashboard = () => {
   const text = "WELCOME TO USER DASHBOARD ".split(",");
@@ -27,9 +29,9 @@ const UserDashboard = () => {
 
   useEffect(() => {
     document.title = "User Dashboard";
-    const user = sessionStorage.getItem("usermail").split("@")[0];
 
-    const attemptedQuizCategories = axios
+    const user = sessionStorage.getItem("usermail").split("@")[0];
+    axios
       .get(
         `https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/users/${user}/attempted.json`
       )
@@ -61,24 +63,30 @@ const UserDashboard = () => {
       });
     });
   }, []);
-  const view = () => {
-    console.log(categoryStatus);
-  };
+
+  // Get the button
+
+  // When the user scrolls down 20px from the top of the document, show the button
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1500); // Show skeletons for 5 seconds
+
+    return () => clearTimeout(timer); // Clear the timer if the component is unmounted
+  }, []);
   return (
     <>
-      <CustomNavbar />
-      <Container fluid>
+      <CustomNavbar />{" "}
+      <Container fluid className="cont">
         <Row>
-          {/* <Col sm="3" md="2" className="sidebar p-0 fadeleft  ">
-            <UserSidebar />
-          </Col> */}
+          <h1 className=" text-center fw-bold    ">Dashboard</h1>
           <Col>
             <Container>
-              <Row className="sidebar">
+              <Row className="sidebar ">
                 <Col md={6}>
                   <div className="unlocked ">
-                    &nbsp;
-                    <h4>
+                    <h4 className=" text-center mb-3 ">
                       <b>ALL QUIZ</b>
                     </h4>
                     {fetchedCategory &&
@@ -86,33 +94,45 @@ const UserDashboard = () => {
                         if (categoryStatus[each]) {
                           return (
                             <>
-                              <div
-                                key={index}
-                                className="fader border border-grey rounded p-3  mb-2 shadow-lg  bg-white   "
-                              >
-                                <h5>
-                                  {index + 1}.{each}
-                                </h5>
+                              {loading ? (
+                                <>
+                                  <Skeleton
+                                    animation="wave"
+                                    variant="rectangular"
+                                    className="rounded rounded-2 mb-1  "
+                                    style={{ width: "100%" }}
+                                    height={100}
+                                  />
+                                </>
+                              ) : (
+                                <div
+                                  key={index}
+                                  className=" fader border border-grey rounded p-3  mb-2 shadow-lg  bg-white   "
+                                >
+                                  <h5>
+                                    {index + 1}.{each}
+                                  </h5>
 
-                                {attemptedCategories.includes(each) ? (
-                                  <button
-                                    className="btn "
-                                    style={{ backgroundColor: "lightblue" }}
-                                  >
-                                    <b>attempted</b>
-                                    &nbsp;
-                                    <i className="fa-solid fa-circle-check"></i>
-                                  </button>
-                                ) : (
-                                  <AwesomeButton
-                                    onPress={() => takequiz(each)}
-                                    className="me-2 "
-                                    type="linkedin"
-                                  >
-                                    Take Quiz{" "}
-                                  </AwesomeButton>
-                                )}
-                              </div>
+                                  {attemptedCategories.includes(each) ? (
+                                    <button
+                                      className="btn "
+                                      style={{ backgroundColor: "lightblue" }}
+                                    >
+                                      <b>attempted</b>
+                                      &nbsp;
+                                      <i className="fa-solid fa-circle-check"></i>
+                                    </button>
+                                  ) : (
+                                    <AwesomeButton
+                                      onPress={() => takequiz(each)}
+                                      className="me-2 "
+                                      type="linkedin"
+                                    >
+                                      Take Quiz{" "}
+                                    </AwesomeButton>
+                                  )}
+                                </div>
+                              )}
                             </>
                           );
                         }
@@ -133,16 +153,25 @@ const UserDashboard = () => {
                       })}
                   </div>
                 </Col>
-                <Col md={6}>
+                <Col md={6} className="">
                   <div>
-                    <h4 className="mt-3 ">
+                    <h4 className="mt-2 text-center ">
                       <b>&nbsp; ATTEMPTED QUIZ</b>
                     </h4>
+
                     {attemptedCategories.length > 0 ? (
                       <div>
                         {attemptedCategories.map((each, index) => {
-                          return (
-                            <div className=" fader border border-grey rounded p-3  mb-2 shadow-lg  bg-white   ">
+                          return loading ? (
+                            <Skeleton
+                              animation="wave"
+                              variant="rectangular"
+                              className="rounded rounded-2 mb-1  "
+                              style={{ width: "100%" }}
+                              height={100}
+                            />
+                          ) : (
+                            <div className="  fader border border-grey rounded p-3 pb-4  mb-2 shadow-lg  bg-white   ">
                               <h5>
                                 {index + 1}.{each}
                               </h5>
@@ -180,6 +209,7 @@ const UserDashboard = () => {
           </Col>
         </Row>
       </Container>
+      <ScrollToTop smooth height="15" width="15" />
     </>
   );
 };

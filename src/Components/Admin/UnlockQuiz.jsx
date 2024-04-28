@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Col, Container, Nav, NavItem, NavLink, Row } from "reactstrap";
 import CustomNavbar from "../CustomNavbar";
 import toast from "react-hot-toast";
+import ScrollToTop from "react-scroll-to-top";
 const UnlockQuiz = () => {
   document.title = "quiz unlock";
   const [categories, setCategories] = useState([]);
@@ -128,8 +129,8 @@ const UnlockQuiz = () => {
   return (
     <div>
       <CustomNavbar />
-      <Container fluid>
-        <Row>
+      <Container fluid className="sidebar">
+        <Row className="cont vh-100 ">
           <Col sm="3" md="2" className="sidebar text-white p-0  ">
             <div
               className="sidebar  position-fixed  border-3 bg-black  "
@@ -321,7 +322,8 @@ const UnlockQuiz = () => {
             </Container>
           </Col>
         </Row>
-      </Container>
+      </Container>{" "}
+      <ScrollToTop smooth height="15" width="15" />
     </div>
   );
 };

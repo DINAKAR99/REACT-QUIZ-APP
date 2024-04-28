@@ -275,7 +275,10 @@ const AllQuiz = ({ token }) => {
                           typeList ? typeList[index] : "dwe"
                         );
 
-                        if (typeList[index] === "none") {
+                        if (
+                          typeList[index] === "none" ||
+                          typeList[index] === "mcq"
+                        ) {
                           console.log("dedw");
                           toggle(each);
                         } else {

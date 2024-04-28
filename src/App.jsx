@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import "react-awesome-button/dist/styles.css";
 import { Toaster } from "react-hot-toast";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import { SyncLoader } from "react-spinners";
 import LoginPage from "./Authentication/LoginPage";
 import SignupPage from "./Authentication/SignupPage";
@@ -23,21 +23,38 @@ import UserDashboard from "./Components/User/UserDashboard";
 import UserRoute from "./Components/User/UserRoute";
 import Evaluation from "./Components/Admin/Evaluation";
 import Revoke from "./Components/Admin/Revoke";
+import Login from "./Authentication/Login";
 
 const Lazyy = React.lazy(() => import("./Components/HomePage"));
 function App() {
   const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
     }, 1000);
   }, []);
+  useEffect(() => {
+    const handleLogout = () => {
+      // Clear session storage or perform any other logout-related tasks
+      sessionStorage.clear();
+      // Redirect to the login page or update the UI as needed
+      window.location.href = "/";
+    };
 
+    // Listen for the logout event
+    window.addEventListener("logout", handleLogout);
+
+    // Cleanup: Remove the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("logout", handleLogout);
+    };
+  }, []);
   return (
     <div>
       {loading ? (
-        <div className="App bg-black      ">
+        <div className={`App  bg-black  `}>
           <SyncLoader loading={loading} size={10} color="#38d3b4" />
         </div>
       ) : (
@@ -46,6 +63,7 @@ function App() {
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<HomePage />} />
+
               <Route path="/user" element={<UserRoute />}>
                 <Route path="userDashboard" element={<UserDashboard />} />
                 <Route path="takeQuiz" element={<TakeQuiz />} />
@@ -62,6 +80,7 @@ function App() {
                 <Route path="revoke" element={<Revoke />} />
               </Route>
               <Route path="/login" element={<LoginPage />} />
+              <Route path="/log" element={<Login />} />
               <Route path="/signup" element={<SignupPage />} />
               <Route path="/contact" element={<SupportPage />} />
               <Route path="/about" element={<AboutPage />} />

@@ -1,5 +1,4 @@
-import React from "react";
-
+import React, { useEffect } from "react";
 import * as yup from "Yup";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { ErrorMessage, Field, Form, Formik } from "formik";
@@ -18,6 +17,17 @@ const LoginPage = () => {
   const validate = yup.object({
     email: yup.string().required("Email is required!"),
     password: yup.string().required("Password is required!!"),
+  });
+
+  useEffect(() => {
+    if (
+      sessionStorage.getItem("usermail") &&
+      sessionStorage.getItem("secretkey")
+    ) {
+      window.location.href = "/admin/dashboard";
+    } else if (sessionStorage.getItem("usermail")) {
+      window.location.href = "/user/userDashboard";
+    }
   });
   document.title = "Login";
   const navigate = useNavigate();
@@ -43,7 +53,9 @@ const LoginPage = () => {
           )
           .then((res) => {
             setTimeout(() => {
-              if (res.data.secretkey != null) {
+              console.log(res.data.secretkey);
+
+              if (res.data.secretkey == "maximusdecimus") {
                 navigate("/admin/dashboard");
               } else {
                 navigate("/user/userDashboard");
@@ -158,7 +170,7 @@ const LoginPage = () => {
           </div>
 
           <div className="signinBack d-flex  align-items-center justify-content-center    col-md-6 ">
-            <div className="info  h-100      text-white text-center p-5    ">
+            <div className="info  h-100 text-white text-center p-5    ">
               <div className="mt-5">
                 <h1>Get Started!!</h1>
                 <p>New User ?</p>

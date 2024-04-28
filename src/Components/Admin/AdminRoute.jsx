@@ -1,14 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet, Navigate } from "react-router-dom";
 
 const AdminRoute = () => {
-  let authorized = true;
-  useEffect(() => {
-    if (sessionStorage.getItem("admin")) {
-      authorized = true;
-    }
-  });
-
-  return authorized ? <Outlet /> : <Navigate to={"/login"}></Navigate>;
+  return sessionStorage.getItem("admin") ? (
+    <Outlet />
+  ) : (
+    <Navigate to={"/login"}></Navigate>
+  );
 };
 export default AdminRoute;

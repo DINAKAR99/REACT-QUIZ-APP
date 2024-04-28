@@ -33,7 +33,7 @@ const UserInfoPage = () => {
 
     axios
       .get(
-        `https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/users/${username}/attempted.json`
+        `https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/users/${user.name}/attempted.json`
       )
       .then((response) => {
         console.log(Object.keys(response.data));
@@ -71,6 +71,7 @@ const UserInfoPage = () => {
                     </h4>
                   </div>
                   {attemptedQuizCategories &&
+                  attemptedQuizCategories.length > 0 ? (
                     attemptedQuizCategories.map((each, index) => {
                       return (
                         <>
@@ -89,7 +90,10 @@ const UserInfoPage = () => {
                           </div>
                         </>
                       );
-                    })}
+                    })
+                  ) : (
+                    <h3 className="bg-dark-subtle mt-5   ">No Data Found</h3>
+                  )}
                 </Col>
                 <Col md={6}>
                   <div></div>

@@ -4,19 +4,20 @@ import { Link } from "react-router-dom";
 import { Button } from "reactstrap";
 import HomeNavbar from "./HomeNavbar";
 import logo from "./pictures/BRAINBYTES.gif";
-import hand from "./pictures/rain.png";
-import books from "./pictures/books.png";
+import hand from "./pictures/brain.png";
+import books from "./pictures/booksss.png";
+import ScrollToTop from "react-scroll-to-top";
 const HomePage = () => {
   const ref3 = useRef();
   const ref2 = useRef();
   const ref4 = useRef();
   const ref5 = useRef();
   document.title = "Brainy Bits";
-  const text = " Unravel Your Mind ".split(" ");
+  const text = "Unravel Your Mind ".split(" ");
 
-  const text2 = " Welcome to BrainyBits ".split(" ");
+  const text2 = "Welcome to BrainyBits ".split(" ");
   const text3 =
-    "   Where curiosity meets challenge, and every question   unlocks a world of knowledge!".split(
+    "Where curiosity meets challenge, and every question   unlocks a world of knowledge!".split(
       " "
     );
   let div = window.scrollY;
@@ -28,7 +29,7 @@ const HomePage = () => {
     ref2.current.classList.remove("d-none");
   }
 
-  if (div >= 460) {
+  if (div >= 500) {
     console.log(div); // Call your function
     ref4.current.classList.add("drop-from-right");
     ref4.current.classList.remove("d-none");
@@ -80,8 +81,8 @@ const HomePage = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{
-                    duration: 0.7,
-                    delay: i / 5,
+                    duration: 1,
+                    delay: i / 6,
                   }}
                   key={i}
                 >
@@ -94,8 +95,8 @@ const HomePage = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{
-                    duration: 0.9,
-                    delay: i / 50,
+                    duration: 1,
+                    delay: i / 4,
                   }}
                   key={i}
                   className="motionspan"
@@ -109,7 +110,7 @@ const HomePage = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{
-                    duration: 0.7,
+                    duration: 1,
                     delay: i / 50,
                   }}
                   key={i}
@@ -139,7 +140,7 @@ const HomePage = () => {
               style={{
                 height: "80%",
                 width: "560px",
-                backgroundColor: "#222222",
+                backgroundColor: "rgb(230, 212, 147, 0.607)",
               }}
               ref={ref3}
             >
@@ -147,8 +148,8 @@ const HomePage = () => {
                 src={hand}
                 alt=""
                 style={{
-                  width: "100%",
-                  height: "100%",
+                  width: "60%",
+                  height: "60%",
                 }}
               />
             </div>
@@ -223,7 +224,7 @@ const HomePage = () => {
           </div>
         </main>
       </div>
-
+      <ScrollToTop smooth height="15" width="15" />
       <footer className="bg-dark       text-white-50  ">BRAINYBITS</footer>
     </>
   );

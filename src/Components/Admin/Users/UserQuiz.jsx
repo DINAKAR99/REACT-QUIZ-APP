@@ -4,23 +4,30 @@ import { Button, Col, Container, Row } from "reactstrap";
 import CustomNavbar from "../../CustomNavbar";
 import { getAllQuestionsPerCategory } from "../../Helper/QuizHelper";
 import Sidebar from "../Sidebar";
+import axios from "axios";
 
 const UserQuiz = () => {
   document.title = "user quiz";
   const location = useLocation();
   const { categoryName, user } = location.state;
   console.log(categoryName);
+  console.log(user);
 
   const [questionPack, setQuestionPack] = useState([]);
   const [show, setShow] = useState(false);
   const qPack = [];
   useState(() => {
-    const allquestions = getAllQuestionsPerCategory(categoryName)
+    const allquestions = axios
+      .get(
+        `https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/exam/${categoryName}/attempted/${user.name}/answersheet.json`
+      )
       .then((questionArray) => {
-        questionArray.slice(1, -1).map((question) => {
-          console.log(Object.values(question));
-          qPack.push(Object.values(question)[0]);
-        });
+        questionArray.data
+          .filter((each) => each !== null)
+          .map((question) => {
+            console.log(question);
+            qPack.push(question);
+          });
       })
       .then(() => {
         console.log(qPack);
@@ -77,16 +84,40 @@ const UserQuiz = () => {
                   >
                     <div>
                       <h6 className="mt-3 ">
-                        Note : Below are the options chosen for the questions by
-                        the user{" "}
+                        Note : Below are the questions attempted by the user
+                        with choosen option or written answer{" "}
                       </h6>
                       <ol type={1}>
                         {questionPack.map((QuestionPacket, index) => (
                           <div key={index} className="mt-3">
                             <li key={index} className="mb-2">
-                              <b>{QuestionPacket.question}</b>
+                              <b>
+                                {QuestionPacket.question
+                                  ? QuestionPacket.question
+                                  : ""}
+                              </b>
                             </li>
 
+                            <h6>
+                              option chose :{" "}
+                              {QuestionPacket.selectedOption.replace(
+                                "c",
+                                "<br>"
+                              )}
+                              &nbsp;&nbsp;&nbsp;
+                              {QuestionPacket.isCorrect ? (
+                                <i
+                                  className="fa-solid fa-circle-check"
+                                  style={{ color: "green" }}
+                                ></i>
+                              ) : (
+                                <i
+                                  className="fa-solid fa-circle-xmark"
+                                  style={{ color: "maroon" }}
+                                ></i>
+                              )}
+                            </h6>
+                            {/* 
                             <ol type="A">
                               {Object.values(QuestionPacket.options) &&
                                 Object.values(QuestionPacket.options)?.map(
@@ -116,9 +147,9 @@ const UserQuiz = () => {
                                     );
                                   }
                                 )}
-                            </ol>
+                            </ol> */}
 
-                            {Object.values(QuestionPacket.options).map((each) =>
+                            {/* {Object.values(QuestionPacket.options).map((each) =>
                               each == QuestionPacket.correctAnswer ? (
                                 <h6 className="mt-2 ">
                                   correct option : &nbsp;
@@ -131,7 +162,7 @@ const UserQuiz = () => {
                               ) : (
                                 ""
                               )
-                            )}
+                            )} */}
                           </div>
                         ))}
                       </ol>

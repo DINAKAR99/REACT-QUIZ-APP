@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { signOut } from "firebase/auth";
 import logo from "./pictures/StaticBit.png";
-import aron from "./pictures/aron.jpg";
+import dummy from "./pictures/dummy.png";
 
 import { NavLink as ReactLink, useNavigate } from "react-router-dom";
 import {
@@ -24,6 +24,7 @@ import {
 } from "reactstrap";
 import toast from "react-hot-toast";
 import { auth } from "../firebase";
+import axios from "axios";
 // import { doLogout, getCurrentUserDetail, isloggedIn } from "../auth";
 // import { userContext } from "../context/userContext";
 const CustomNavbar = () => {
@@ -34,23 +35,41 @@ const CustomNavbar = () => {
   const [admin, setAdmin] = useState("");
   const [usermail, setUsermail] = useState("");
   const [modal, setModal] = useState(false);
-
+  const [imageUrl, setImageUrl] = useState("");
   useEffect(() => {
+    let username;
     if (sessionStorage.getItem("usermail")) {
       setLogin(true);
       setUsermail(sessionStorage.getItem("usermail"));
+      username = sessionStorage.getItem("usermail").split("@")[0];
     }
 
     if (sessionStorage.getItem("admin")) {
       setAdmin((e) => "admin_loggedin");
     }
+    //first fecth if user is having  profile picture or not
+    axios
+      .get(
+        `https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/users/${username}/imagegurl.json`
+      )
+      .then((response) => {
+        if (response.data == null) {
+          console.log("yeh no image   ");
+          console.log(response.data);
+        } else {
+          console.log(response.data.url);
+          setImageUrl((e) => response.data.url);
+        }
+      });
   });
 
   const logout = () => {
     signOut(auth)
       .then(() => {
         // Sign-out successful.
-        sessionStorage.removeItem("usermail");
+        sessionStorage.clear();
+        const logoutEvent = new Event("logout");
+        window.dispatchEvent(logoutEvent);
         toast.success("Signed out successfully");
 
         setTimeout(() => {
@@ -64,9 +83,21 @@ const CustomNavbar = () => {
   };
 
   const toggler = () => setModal(!modal);
+  //script
+  // var prevScrollpos = window.pageYOffset;
+  // window.onscroll = function () {
+  //   var currentScrollPos = window.pageYOffset;
+  //   if (prevScrollpos > currentScrollPos) {
+  //     document.getElementById("navbar").style.top = "0";
+  //   } else {
+  //     document.getElementById("navbar").style.top = "-85px";
+  //   }
+  //   prevScrollpos = currentScrollPos;
+  // };
+  //script
 
   return (
-    <div style={{ marginBottom: 85 }}>
+    <div style={{ marginBottom: 80 }}>
       <Modal
         className="text-white"
         isOpen={modal}
@@ -77,12 +108,12 @@ const CustomNavbar = () => {
           top: 60,
         }}
       >
-        <ModalHeader toggle={toggler} className="google-card   ">
+        <ModalHeader toggle={toggler} className="google-card    ">
           {usermail}
         </ModalHeader>
         <ModalBody className="text-center  google-card  ">
           <img
-            src={aron}
+            src={imageUrl ? imageUrl : dummy}
             alt=""
             height={60}
             width={60}
@@ -113,7 +144,7 @@ const CustomNavbar = () => {
         </ModalFooter>
       </Modal>
 
-      <Navbar dark expand="md" fixed=" " className="p-0 bg-black fixed-top ">
+      <Navbar dark expand="md" fixed=" " className="p-0 bg-black fixed-top  ">
         <NavbarBrand tag={ReactLink} to="/">
           {/* QUIZ-MASTER */}
 
@@ -124,7 +155,12 @@ const CustomNavbar = () => {
           <Nav className="me-auto" navbar>
             <NavItem>
               <NavLink tag={ReactLink} to="/" className="text-white ">
-                HOME
+                Home
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink tag={ReactLink} to="/contact" className="text-white ">
+                Contact Us
               </NavLink>
             </NavItem>
 
@@ -133,26 +169,22 @@ const CustomNavbar = () => {
                 <NavItem>
                   <NavLink
                     tag={ReactLink}
-                    className="text-white "
                     to="/user/userDashboard"
+                    className="text-white "
                   >
-                    DASHBOARD
+                    Dashboard
                   </NavLink>
                 </NavItem>
 
-                <UncontrolledDropdown nav inNavbar>
-                  <DropdownToggle nav caret className="text-white ">
-                    MORE
-                  </DropdownToggle>
-                  <DropdownMenu>
-                    <DropdownItem tag={ReactLink} to="/contact">
-                      Contact Us
-                    </DropdownItem>
-                    <DropdownItem tag={ReactLink} to="/admin/dashboard">
-                      Admin
-                    </DropdownItem>
-                  </DropdownMenu>
-                </UncontrolledDropdown>
+                <NavItem>
+                  <NavLink
+                    tag={ReactLink}
+                    to="/admin/dashboard"
+                    className="text-white "
+                  >
+                    Admin
+                  </NavLink>
+                </NavItem>
               </>
             )}
           </Nav>
@@ -168,7 +200,7 @@ const CustomNavbar = () => {
                 <NavItem onClick={toggler}>
                   <NavLink tag={ReactLink}>
                     <img
-                      src={aron}
+                      src={imageUrl ? imageUrl : dummy}
                       alt=""
                       height={40}
                       width={40}

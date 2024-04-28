@@ -95,7 +95,7 @@ const AdminDashboardPage = () => {
             <Col sm="3" md="2" className="sidebar p-0  fadeleft ">
               <Sidebar handleButtonClick={handleSidebarButtonClick} />
             </Col>
-            <Col sm="9" md="10" className="main-content">
+            <Col sm="9" md="10" className="main-content  ">
               <h1 className="text-center">ADMIN DASHBOARD</h1>
               {/* Conditionally render the appropriate form */}
 
@@ -103,13 +103,13 @@ const AdminDashboardPage = () => {
                 <Container>
                   <Row>
                     <Col md={6}>
-                      <div className="border   rounded p-3 shadow-lg ">
+                      <div className="border rounded p-3 shadow-lg bg-light-subtle ">
                         <b>Questions per Technology</b>
                         <PieActiveArc data={pack} />
                       </div>
                     </Col>
                     <Col md={6}>
-                      <div className="border   rounded p-3 shadow-lg ">
+                      <div className="border bg-light-subtle rounded p-3 shadow-lg ">
                         <b> Category wise attempts</b>
                         <PieActiveArc data={pack2} />
                       </div>

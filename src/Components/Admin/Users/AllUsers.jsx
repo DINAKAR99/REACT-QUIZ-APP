@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { Col, Container, Row } from "reactstrap";
 import CustomNavbar from "../../CustomNavbar";
 import Sidebar from "../Sidebar";
+import ScrollToTop from "react-scroll-to-top";
 
 const AllUsers = () => {
   const [users, setUsers] = useState([]);
@@ -42,7 +43,7 @@ const AllUsers = () => {
   return (
     <div>
       <CustomNavbar />
-      <Container fluid>
+      <Container fluid className="sidebar">
         <Row>
           <Col
             sm="3"
@@ -65,7 +66,7 @@ const AllUsers = () => {
                     users.map((each, index) => {
                       return (
                         <>
-                          <div className=" fader border border-grey rounded p-3  mb-2 shadow-lg  bg-white   ">
+                          <div className="   border border-grey rounded p-3  mb-2 shadow-lg  bg-white   ">
                             <h5>
                               {index + 1}. {each.name}
                             </h5>
@@ -93,7 +94,8 @@ const AllUsers = () => {
             </Container>
           </Col>
         </Row>
-      </Container>
+      </Container>{" "}
+      <ScrollToTop smooth height="15" width="15" />
     </div>
   );
 };

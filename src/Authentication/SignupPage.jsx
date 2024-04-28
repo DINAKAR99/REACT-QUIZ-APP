@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { auth } from "../firebase";
 
 import * as yup from "Yup";
@@ -61,6 +61,12 @@ const SignupPage = () => {
         // ..
       });
   };
+
+  useEffect(() => {
+    if (sessionStorage.getItem("usermail")) {
+      window.location.href = "/user/userDashboard";
+    }
+  });
   return (
     <div className="bg-black vh-100 ">
       <CustomNavbar />

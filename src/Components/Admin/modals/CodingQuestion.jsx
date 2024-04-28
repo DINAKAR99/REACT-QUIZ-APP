@@ -26,7 +26,9 @@ const CodingQuestion = ({ toggle, check, categorypacket }) => {
 
   const handleSubmit = () => {
     event.preventDefault();
-
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
     //get question count
     getQCount(currentCategory)
       .then((Response) => {
@@ -78,7 +80,7 @@ const CodingQuestion = ({ toggle, check, categorypacket }) => {
           Click Me
         </Button>
         <Modal isOpen={check} toggle={toggle}>
-          <ModalHeader toggle={toggle}>Modal title</ModalHeader>
+          <ModalHeader toggle={toggle}>New Question</ModalHeader>
           <ModalBody>
             <CKEditor
               editor={ClassicEditor}

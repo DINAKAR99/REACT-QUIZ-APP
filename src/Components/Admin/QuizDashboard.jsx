@@ -4,6 +4,7 @@ import CustomNavbar from "../CustomNavbar";
 
 import AllQuiz from "./AllQuiz";
 import AddCategory from "./modals/AddCategory";
+import ScrollToTop from "react-scroll-to-top";
 
 const QuizDashboard = () => {
   document.title = "Quiz Dashboard";
@@ -37,7 +38,7 @@ const QuizDashboard = () => {
         setToken={setToken}
       />
       <div className="admin-dashboard">
-        <Container fluid>
+        <Container fluid className="sidebar">
           <Row>
             <Col sm="3" md="2" className="sidebar text-white p-0  ">
               <div
@@ -107,6 +108,7 @@ const QuizDashboard = () => {
           </Row>
         </Container>
       </div>
+      <ScrollToTop smooth height="15" width="15" />
     </div>
   );
 };

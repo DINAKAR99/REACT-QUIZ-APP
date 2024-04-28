@@ -19,6 +19,13 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 const Quiz = ({ categoryName }) => {
+  const [quizSubmitted, setQuizSubmitted] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [marks, setMarks] = useState(0);
+  const [user, setUser] = useState("");
+  const [fecthedQuestions, setFetchedQuestions] = useState([]);
+  // const [selectedOption, setSelectedOption] = useState(null);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const quizData = [
     {
       question:
@@ -34,16 +41,39 @@ const Quiz = ({ categoryName }) => {
     },
     // Add more questions here
   ];
+  const [hasOptions, setHasOptions] = useState(false);
+
+  useEffect(() => {
+    if (fecthedQuestions[currentQuestionIndex]?.options) {
+      setHasOptions(true);
+    } else {
+      setHasOptions(false);
+    }
+  }, [fecthedQuestions, currentQuestionIndex]);
+
+  const [editorValues, setEditorValues] = useState({});
+  const [packagee, setPackagee] = useState([]);
+  const handleInputChange = (event, questionId, question) => {
+    const { value } = event.target;
+    setEditorValues((prevValues) => ({
+      ...prevValues,
+      [questionId]: value,
+    }));
+    setPackagee((prevValues) => ({
+      ...prevValues,
+      [questionId]: {
+        isCorrect: true,
+        selectedOption: value.replace(/\n/g, "\\n"),
+        questionId: questionId,
+        question: question,
+      },
+    }));
+
+    console.log(editorValues);
+    console.log(packagee);
+  };
 
   // Inside your Quiz component
-
-  const [quizSubmitted, setQuizSubmitted] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [marks, setMarks] = useState(0);
-  const [user, setUser] = useState("");
-  const [fecthedQuestions, setFetchedQuestions] = useState([]);
-  // const [selectedOption, setSelectedOption] = useState(null);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
   const [selectedOptions, setSelectedOptions] = useState(() => {
     const storedOptions = sessionStorage.getItem("selectedOptions");
@@ -103,7 +133,7 @@ const Quiz = ({ categoryName }) => {
     const user = sessionStorage.getItem("usermail").split("@")[0];
     setUser(user);
   });
-  const handleOptionClick = (option, correctAnswer, realquestionId) => {
+  const handleOptionClick = (option, correctAnswer, realquestionId, quest) => {
     console.log("real question id", realquestionId);
     const questionId = currentQuestionIndex; // Assuming question index serves as question ID
     // check if option and correctAnswer
@@ -129,6 +159,7 @@ const Quiz = ({ categoryName }) => {
         selectedOption: option,
         isCorrect: isCorrect,
         realquestionId: realquestionId,
+        question: quest,
       };
 
       setUserResponses(updatedResponses);
@@ -141,6 +172,7 @@ const Quiz = ({ categoryName }) => {
         category: categoryName, // Replace 'YourCategory' with the actual category
         selectedOption: option,
         isCorrect: isCorrect,
+        question: quest,
       };
 
       if (isCorrect) {
@@ -171,6 +203,7 @@ const Quiz = ({ categoryName }) => {
       // setSelectedOption(null); // Reset selected option for the next question
     }
   };
+  // const handleSubmit = () => {};
   const handleSubmit = () => {
     // sessionStorage.removeItem("selectedOptions");
     console.log(userResponses);
@@ -185,11 +218,17 @@ const Quiz = ({ categoryName }) => {
     setQuizSubmitted(true);
 
     //api call to hit the marks sheet endpoint of particular category
-    axios.put(
-      `https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/exam/${categoryName}/attempted/${user}/answersheet.json`,
-      userResponses
-    );
-
+    if (!hasOptions) {
+      axios.put(
+        `https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/exam/${categoryName}/attempted/${user}/answersheet.json`,
+        packagee
+      );
+    } else {
+      axios.put(
+        `https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/exam/${categoryName}/attempted/${user}/answersheet.json`,
+        userResponses
+      );
+    }
     axios.put(
       `https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/exam/${categoryName}/attempted/${user}//evalution.json`,
       {
@@ -203,23 +242,35 @@ const Quiz = ({ categoryName }) => {
       { attempted: true, Resultstatus: "pending at examiner" }
     );
     //api call to hit the user score  endpoint of particular category conatins percentage , attempted correct and total number of exam
-    axios.put(
-      `https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/questions/${categoryName}/attempted/${user}/score.json`,
-      {
-        percentage: calcPercentage(),
-        attemptedCorrect: marks,
-        totalQuestions: fecthedQuestions?.length,
-      }
-    );
-  };
 
+    if (hasOptions) {
+      axios.put(
+        `https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/questions/${categoryName}/attempted/${user}/score.json`,
+        {
+          percentage: calcPercentage(),
+          attemptedCorrect: marks,
+          totalQuestions: fecthedQuestions?.length,
+        }
+      );
+    } else {
+      axios.put(
+        `https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/questions/${categoryName}/attempted/${user}/score.json`,
+        {
+          percentage: 0,
+          attemptedCorrect: 0,
+          totalQuestions: fecthedQuestions?.length,
+        }
+      );
+    }
+  };
+  // const handleSubmit = () => {};
   const handlePreviousQuestion = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
       // setSelectedOption(null); // Reset selected option for the previous question
     }
   };
-
+  const [question, setQuestion] = useState("Enter the Answer");
   const renderer = ({ hours, minutes, seconds, completed }) => {
     if (completed) {
       handleSubmit();
@@ -229,43 +280,55 @@ const Quiz = ({ categoryName }) => {
       // Render a countdown
       return (
         <h5>
-          Time Remaining :{" "}
-          {hours ? (hours < 9 ? `0${hours}:` : `${hours}:`) : ""}
-          {minutes < 9 ? `0${minutes}` : minutes}:
-          {seconds < 9 ? `0${seconds}` : seconds}
+          <i class="fa-regular fa-clock"></i> Time Remaining :
+          <b>
+            {" "}
+            {hours ? (hours < 9 ? `0${hours}:` : `${hours}:`) : ""}
+            {minutes < 9 ? `0${minutes}` : minutes}:
+            {seconds < 9 ? `0${seconds}` : seconds}
+          </b>
         </h5>
       );
     }
   };
 
+  // Custom configuration to hide specific features
+
   // return;
 
   return (
-    <Container fluid className="d-flex p-0 " style={{ userSelect: "none" }}>
-      <div
-        style={{ width: 220 }}
-        className="right border-3 border-top-0 border-bottom-0    border border-dark    "
-      >
-        <h5 className="text-center  ">Question Pallete</h5>
+    <Container fluid className="d-flex p-0     " style={{ userSelect: "none" }}>
+      {quizSubmitted ? (
+        ""
+      ) : (
+        <div
+          style={{ width: 220 }}
+          className="right border-2 vh-100  border-top-0 border-bottom-0 border border-dark "
+        >
+          <h5 className="text-center mt-3  ">Question Pallete</h5>
 
-        <hr />
-        <div className="d-flex flex-wrap gap-3 ps-2 ">
-          {fecthedQuestions?.map((q, index) => {
-            return (
-              <Button
-                key={index}
-                onClick={() => handleButtonPallete(index)}
-                active={true}
-                color={index === currentQuestionIndex ? "primary" : "secondary"}
-                className="mt-2  "
-              >
-                {index + 1}
-              </Button>
-            );
-          })}
+          <hr />
+          <div className="d-flex flex-wrap gap-3 ps-2 ">
+            {fecthedQuestions?.map((q, index) => {
+              return (
+                <Button
+                  key={index}
+                  onClick={() => handleButtonPallete(index)}
+                  active={true}
+                  color={
+                    index === currentQuestionIndex ? "primary" : "secondary"
+                  }
+                  className="mt-2  "
+                >
+                  {index + 1}
+                </Button>
+              );
+            })}
+          </div>
         </div>
-      </div>
-      <div style={{ height: "100vh", width: "100vw" }}>
+      )}
+
+      <div style={{ width: "100vw" }}>
         <div className="h-100  ">
           {loading ? (
             <div
@@ -275,18 +338,18 @@ const Quiz = ({ categoryName }) => {
               <MoonLoader color="#000000" />
             </div>
           ) : quizSubmitted ? (
-            <div className=" shadow-lg ">
+            <div className=" shadow-lg vh-100  ">
               <QuizCompletionPage
                 marks={marks && marks}
                 question_count={fecthedQuestions?.length}
               />
             </div>
           ) : (
-            <div className="  p-4 shadow-lg h-100   ">
+            <div className="  p-4 shadow-lg vh-100     ">
               <div>
                 <i>Note: Do not refresh the page while taking quiz</i>
               </div>
-              <header className="d-flex mt-5  ">
+              <header className="d-flex mt-3  ">
                 <b>
                   Question {currentQuestionIndex + 1}/{fecthedQuestions.length}
                 </b>
@@ -301,10 +364,13 @@ const Quiz = ({ categoryName }) => {
               <main>
                 <>
                   <h5 className="pb-2">
-                    <b>
-                      {currentQuestionIndex + 1}.&nbsp;
-                      {fecthedQuestions[currentQuestionIndex]?.question}
-                    </b>
+                    <b>{currentQuestionIndex + 1}.&nbsp;</b>
+                    <span
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          fecthedQuestions[currentQuestionIndex]?.question,
+                      }}
+                    ></span>
                   </h5>
                   {fecthedQuestions[currentQuestionIndex] &&
                   fecthedQuestions[currentQuestionIndex].options ? (
@@ -322,7 +388,8 @@ const Quiz = ({ categoryName }) => {
                               option,
                               fecthedQuestions[currentQuestionIndex]
                                 .correctAnswer,
-                              fecthedQuestions[currentQuestionIndex].questionId
+                              fecthedQuestions[currentQuestionIndex].questionId,
+                              fecthedQuestions[currentQuestionIndex].question
                             )
                           }
                         ></Radio>
@@ -331,25 +398,24 @@ const Quiz = ({ categoryName }) => {
                       </div>
                     ))
                   ) : (
-                    <h4>
-                      <CKEditor
-                        editor={ClassicEditor}
-                        data="write the answer here "
-                        onReady={(editor) => {
-                          // You can store the "editor" and use when it is needed.
-                          console.log("Editor is ready to use!", editor);
-                        }}
-                        onChange={(event) => {
-                          console.log(event);
-                        }}
-                        onBlur={(event, editor) => {
-                          console.log("Blur.", editor);
-                        }}
-                        onFocus={(event, editor) => {
-                          console.log("Focus.", editor);
-                        }}
+                    <>
+                      <textarea
+                        value={
+                          editorValues[
+                            fecthedQuestions[currentQuestionIndex].questionId
+                          ] || ""
+                        }
+                        onChange={(event) =>
+                          handleInputChange(
+                            event,
+                            fecthedQuestions[currentQuestionIndex].questionId,
+                            fecthedQuestions[currentQuestionIndex].question
+                          )
+                        }
+                        rows={4} // Adjust the number of rows as needed
+                        cols={50} // Adjust the number of columns as needed
                       />
-                    </h4>
+                    </>
                   )}
                 </>
               </main>
@@ -372,19 +438,19 @@ const Quiz = ({ categoryName }) => {
                 <Modal isOpen={modal} toggle={toggle} size="sm" centered>
                   <ModalHeader toggle={toggle}> </ModalHeader>
                   <ModalBody className="text-center  ">
-                    Are you sure you want to submit ?
+                    Are you sure <br /> you want to submit ?
                   </ModalBody>
                   <ModalFooter className="d-flex  justify-content-center border-0   ">
                     <Button
-                      color="primary"
                       onClick={handleSubmit}
                       className="px-4 "
+                      style={{ backgroundColor: "#4C6085" }}
                     >
                       yes
                     </Button>{" "}
                     <Button
-                      color="secondary"
                       className="px-4  "
+                      style={{ backgroundColor: "#C1292E" }}
                       onClick={toggle}
                     >
                       No
@@ -394,9 +460,13 @@ const Quiz = ({ categoryName }) => {
               </footer>
 
               <hr />
-              <div className=" position-absolute  bottom-0 end-0  ">
-                <div className=" p-4  ">
-                  <Button className="bg-dark  ms-auto  " onClick={toggle}>
+              <div className=" bottom-0   ">
+                <div className=" p-4 ">
+                  <Button
+                    className="bg-dark "
+                    onClick={toggle}
+                    style={{ marginLeft: "90%" }}
+                  >
                     Submit
                   </Button>
                 </div>

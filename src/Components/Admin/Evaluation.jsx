@@ -9,6 +9,7 @@ import { Col, Container, Row } from "reactstrap";
 import CustomNavbar from "../CustomNavbar";
 import Sidebar from "./Sidebar";
 import toast from "react-hot-toast";
+import ScrollToTop from "react-scroll-to-top";
 
 const Evaluation = () => {
   document.title = "Evaluation";
@@ -96,7 +97,7 @@ const Evaluation = () => {
   return (
     <div>
       <CustomNavbar />
-      <Container fluid>
+      <Container fluid className="sidebar cont">
         <Row>
           <Col
             sm="3"
@@ -109,7 +110,10 @@ const Evaluation = () => {
           <Col>
             <Container>
               <Row>
-                <Col md={6} className="border border-1 vh-100   ">
+                <Col
+                  md={6}
+                  className="border border-2 rounded rounded-3 mb-5   border-black  mt-3    vh-100   "
+                >
                   <div>
                     <h3 className="mt-3 ">
                       <b>&nbsp; Evaluation Dashboard</b>
@@ -175,8 +179,8 @@ const Evaluation = () => {
                       {currentUser != "" && (
                         <div className="text-center  ">
                           <h5>User : {currentUser}</h5>
-                          <button className="btn bg-info-subtle        ">
-                            attempted quiz
+                          <button className="btn bg-info-subtle         ">
+                            attempted <quiz></quiz>
                           </button>
 
                           <div className="d-flex mt-3 gap-2 justify-content-center    ">
@@ -207,7 +211,7 @@ const Evaluation = () => {
                   <div>
                     <h3 className="mt-3 ">Evaluation Report</h3>
                   </div>
-                  <table className="table">
+                  <table className="table border border-2 border-black ">
                     <thead>
                       <tr>
                         <th scope="col">#</th>
@@ -241,6 +245,7 @@ const Evaluation = () => {
           </Col>
         </Row>
       </Container>
+      <ScrollToTop smooth height="15" width="15" />
     </div>
   );
 };
