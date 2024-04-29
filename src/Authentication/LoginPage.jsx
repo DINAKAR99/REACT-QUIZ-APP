@@ -8,6 +8,7 @@ import CustomNavbar from "../Components/CustomNavbar";
 import { auth } from "./../firebase";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import zIndex from "@mui/material/styles/zIndex";
 
 const LoginPage = () => {
   const initialValues = {
@@ -32,11 +33,12 @@ const LoginPage = () => {
   document.title = "Login";
   const navigate = useNavigate();
   const submitForm = (values) => {
+    toast.loading("Logging in...");
     // e.preventDefault();
     signInWithEmailAndPassword(auth, values.email, values.password)
       .then((userCredential) => {
         // Signed in
-
+        toast.remove();
         const user = userCredential.user;
         toast.success("Login successful");
 
@@ -79,10 +81,10 @@ const LoginPage = () => {
     <div className="bg-black vh-100   ">
       <CustomNavbar />
       <div className=" container-fluid   d-flex justify-content-center    py-5  loginpageContainer   ">
-        <div className="  d-flex white-shadow    ">
+        <div className="  d-flex white-shadow  rounded  rounded-3    ">
           <div className="form-container col-md-6 text-white  border-end   p-3 sign-in-container ">
             <h1 className="text-center">Sign in</h1>
-            <div className="social-container text-center p-2">
+            {/* <div className="social-container text-center p-2">
               <a href="#" className="social mx-2 p-2     ">
                 <i className="fa fa-facebook-f text-white  " />
               </a>
@@ -92,12 +94,12 @@ const LoginPage = () => {
               <a href="#" className="social mx-2 p-2   text-white">
                 <i className="fa fa-linkedin" />
               </a>
-            </div>
-            <div className="d-flex justify-content-center ">
+            </div> */}
+            {/* <div className="d-flex justify-content-center ">
               <span className="form-text text-white   ">
                 or use your account
               </span>
-            </div>
+            </div> */}
             <Formik
               initialValues={initialValues}
               validationSchema={validate}
@@ -169,7 +171,7 @@ const LoginPage = () => {
             </Formik>
           </div>
 
-          <div className="signinBack d-flex  align-items-center justify-content-center    col-md-6 ">
+          <div className="signinBack d-flex  align-items-center justify-content-center col-md-6 rounded  rounded-3  ">
             <div className="info  h-100 text-white text-center p-5    ">
               <div className="mt-5">
                 <h1>Get Started!!</h1>

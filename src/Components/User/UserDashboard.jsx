@@ -89,50 +89,73 @@ const UserDashboard = () => {
                     <h4 className=" text-center mb-3 ">
                       <b>ALL QUIZ</b>
                     </h4>
+
+                    {loading ? (
+                      <>
+                        <Skeleton
+                          animation="wave"
+                          variant="rectangular"
+                          className="rounded rounded-2 mb-1  "
+                          style={{ width: "100%" }}
+                          height={100}
+                        />
+                        <Skeleton
+                          animation="wave"
+                          variant="rectangular"
+                          className="rounded rounded-2 mb-1  "
+                          style={{ width: "100%" }}
+                          height={100}
+                        />
+                        <Skeleton
+                          animation="wave"
+                          variant="rectangular"
+                          className="rounded rounded-2 mb-1  "
+                          style={{ width: "100%" }}
+                          height={100}
+                        />
+                        <Skeleton
+                          animation="wave"
+                          variant="rectangular"
+                          className="rounded rounded-2 mb-1  "
+                          style={{ width: "100%" }}
+                          height={100}
+                        />
+                      </>
+                    ) : (
+                      ""
+                    )}
                     {fetchedCategory &&
                       fetchedCategory.map((each, index) => {
                         if (categoryStatus[each]) {
                           return (
                             <>
-                              {loading ? (
-                                <>
-                                  <Skeleton
-                                    animation="wave"
-                                    variant="rectangular"
-                                    className="rounded rounded-2 mb-1  "
-                                    style={{ width: "100%" }}
-                                    height={100}
-                                  />
-                                </>
-                              ) : (
-                                <div
-                                  key={index}
-                                  className=" fader border border-grey rounded p-3  mb-2 shadow-lg  bg-white   "
-                                >
-                                  <h5>
-                                    {index + 1}.{each}
-                                  </h5>
+                              <div
+                                key={index}
+                                className=" fader border border-grey rounded p-3  mb-2 shadow-lg  bg-white   "
+                              >
+                                <h5>
+                                  {index + 1}.{each}
+                                </h5>
 
-                                  {attemptedCategories.includes(each) ? (
-                                    <button
-                                      className="btn "
-                                      style={{ backgroundColor: "lightblue" }}
-                                    >
-                                      <b>attempted</b>
-                                      &nbsp;
-                                      <i className="fa-solid fa-circle-check"></i>
-                                    </button>
-                                  ) : (
-                                    <AwesomeButton
-                                      onPress={() => takequiz(each)}
-                                      className="me-2 "
-                                      type="linkedin"
-                                    >
-                                      Take Quiz{" "}
-                                    </AwesomeButton>
-                                  )}
-                                </div>
-                              )}
+                                {attemptedCategories.includes(each) ? (
+                                  <button
+                                    className="btn "
+                                    style={{ backgroundColor: "lightblue" }}
+                                  >
+                                    <b>attempted</b>
+                                    &nbsp;
+                                    <i className="fa-solid fa-circle-check"></i>
+                                  </button>
+                                ) : (
+                                  <AwesomeButton
+                                    onPress={() => takequiz(each)}
+                                    className="me-2 "
+                                    type="linkedin"
+                                  >
+                                    Take Quiz{" "}
+                                  </AwesomeButton>
+                                )}
+                              </div>
                             </>
                           );
                         }
@@ -158,19 +181,44 @@ const UserDashboard = () => {
                     <h4 className="mt-2 text-center ">
                       <b>&nbsp; ATTEMPTED QUIZ</b>
                     </h4>
-
+                    {loading ? (
+                      <>
+                        <Skeleton
+                          animation="wave"
+                          variant="rectangular"
+                          className="rounded rounded-2 mb-1  "
+                          style={{ width: "100%" }}
+                          height={100}
+                        />
+                        <Skeleton
+                          animation="wave"
+                          variant="rectangular"
+                          className="rounded rounded-2 mb-1  "
+                          style={{ width: "100%" }}
+                          height={100}
+                        />
+                        <Skeleton
+                          animation="wave"
+                          variant="rectangular"
+                          className="rounded rounded-2 mb-1  "
+                          style={{ width: "100%" }}
+                          height={100}
+                        />
+                        <Skeleton
+                          animation="wave"
+                          variant="rectangular"
+                          className="rounded rounded-2 mb-1  "
+                          style={{ width: "100%" }}
+                          height={100}
+                        />
+                      </>
+                    ) : (
+                      ""
+                    )}
                     {attemptedCategories.length > 0 ? (
                       <div>
                         {attemptedCategories.map((each, index) => {
-                          return loading ? (
-                            <Skeleton
-                              animation="wave"
-                              variant="rectangular"
-                              className="rounded rounded-2 mb-1  "
-                              style={{ width: "100%" }}
-                              height={100}
-                            />
-                          ) : (
+                          return (
                             <div className="  fader border border-grey rounded p-3 pb-4  mb-2 shadow-lg  bg-white   ">
                               <h5>
                                 {index + 1}.{each}

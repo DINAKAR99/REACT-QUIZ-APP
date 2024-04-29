@@ -94,10 +94,10 @@ const SupportPage = () => {
           </Button>
         </ModalFooter>
       </Modal>
-      <section class="bg-light py-3 py-md-5">
-        <div class="container">
+      <section class="bg-light py-3 py-md-5  ">
+        <div class="container ">
           <div class="row justify-content-md-center">
-            <div class="col-12 col-md-10 col-lg-8 col-xl-7 col-xxl-6">
+            <div class="col-12 col-md-10 col-lg-8 col-xl-7 col-xxl-6 ">
               <p class="text-secondary mb-1 text-center">
                 Thank you for your interest in contacting us. We're here to
                 help! Please use the form below to send us a message, and we'll
@@ -119,18 +119,21 @@ const SupportPage = () => {
 
         <div class="containe  " style={{ position: "relative" }}>
           <div
-            class="bg-white drop-from-bottom parent red border rounded rounded-4 justify-content-lg-center col-6 offset-5   shadow-lg  overflow-hidden"
-            style={{ position: "absolute", top: "0" }}
+            class="bg-white  drop-from-bottom parent red border rounded rounded-4 justify-content-lg-center col-6 offset-5   shadow-lg  overflow-hidden"
+            style={{
+              position: "absolute",
+              top: "0",
+            }}
           >
             <form onSubmit={toggle}>
-              <div class="row gy-4 gy-xl-5   p-5">
+              <div class="row     p-5">
                 <div class="col-12">
                   <label for="fullname" class="form-label">
                     Full Name <span class="text-danger">*</span>
                   </label>
                   <input
                     type="text"
-                    class="form-control"
+                    class="form-control mb-3"
                     id="fullname"
                     pattern="[A-Za-z][A-Za-z\s]*"
                     title="No leading spaces and numbers and  special characters"
@@ -200,11 +203,11 @@ const SupportPage = () => {
                   </div>
                 </div>
                 <div class="col-12">
-                  <label for="message" class="form-label">
+                  <label for="message" class="form-label mt-3">
                     Message <span class="text-danger">*</span>
                   </label>
                   <textarea
-                    class="form-control"
+                    class="form-control "
                     id="message"
                     name="message"
                     rows="3"
@@ -217,7 +220,7 @@ const SupportPage = () => {
                 <div class="col-12">
                   <div class="d-grid">
                     <button
-                      class="btn text-white     btn-lg"
+                      class="btn text-white   mt-3    btn-lg"
                       style={{ backgroundColor: "#235789" }}
                       type="submit"
                     >
@@ -241,18 +244,6 @@ const SupportPage = () => {
           </div>
         </div>
       </section>
-
-      <div className="im">
-        <input
-          type="file"
-          name="file"
-          id="d"
-          onChange={(e) => setImage(e.target.files[0])}
-        />{" "}
-        <button type="submit" onClick={submitImage}>
-          submit
-        </button>
-      </div>
     </>
   );
 };

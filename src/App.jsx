@@ -24,6 +24,8 @@ import UserRoute from "./Components/User/UserRoute";
 import Evaluation from "./Components/Admin/Evaluation";
 import Revoke from "./Components/Admin/Revoke";
 import Login from "./Authentication/Login";
+import ReacthookForm from "./Components/Admin/Users/ReacthookForm";
+import NotFound from "./Components/NotFound";
 
 const Lazyy = React.lazy(() => import("./Components/HomePage"));
 function App() {
@@ -84,6 +86,8 @@ function App() {
               <Route path="/signup" element={<SignupPage />} />
               <Route path="/contact" element={<SupportPage />} />
               <Route path="/about" element={<AboutPage />} />
+              <Route path="/test" element={<ReacthookForm />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
         </>

@@ -122,7 +122,7 @@ const HomePage = () => {
             <Link to="/login">
               <Button
                 size="lg"
-                className="border-gradient rounded-pill ms-5 px-5     "
+                className="border-gradient rounded-pill ms-5 px-5 mt-4     "
               >
                 Get Started
               </Button>
@@ -225,7 +225,9 @@ const HomePage = () => {
         </main>
       </div>
       <ScrollToTop smooth height="15" width="15" />
-      <footer className="bg-dark       text-white-50  ">BRAINYBITS</footer>
+      <footer className="bg-dark text-center  text-white-50  ">
+        BrainyBits © 2024 All Rights Reserved.
+      </footer>
     </>
   );
 };

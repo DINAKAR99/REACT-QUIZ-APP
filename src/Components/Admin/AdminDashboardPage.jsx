@@ -102,13 +102,13 @@ const AdminDashboardPage = () => {
               {selectedForm === "default" && (
                 <Container>
                   <Row>
-                    <Col md={6}>
+                    <Col md={12} className="mb-4  ">
                       <div className="border rounded p-3 shadow-lg bg-light-subtle ">
                         <b>Questions per Technology</b>
                         <PieActiveArc data={pack} />
                       </div>
                     </Col>
-                    <Col md={6}>
+                    <Col md={12}>
                       <div className="border bg-light-subtle rounded p-3 shadow-lg ">
                         <b> Category wise attempts</b>
                         <PieActiveArc data={pack2} />

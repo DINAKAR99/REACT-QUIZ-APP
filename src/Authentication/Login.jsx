@@ -36,14 +36,16 @@ const Login = ({ flip }) => {
 
   const handleLogin = (values) => {
     // e.preventDefault();
+    toast.loading("Logging in...");
     signInWithEmailAndPassword(auth, values.email, values.password)
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        toast.success("Login successful");
         setTimeout(() => {
-          navigate("/log");
-        }, 1000);
+          // toast.remove();
+          // toast.success("Login successful");
+          // navigate("/log");
+        }, 1500);
         console.log(user.email);
 
         sessionStorage.setItem("usermail", user.email);
@@ -194,7 +196,7 @@ const Login = ({ flip }) => {
                             style={{ border: "none" }}
                           >
                             <div class="card-body">
-                              <h3>SignUp &nbsp;</h3>
+                              <h3>SignUps &nbsp;</h3>
                               <span class="fa fa-user-plus fa-3x mb-3 mt-1 "></span>
 
                               {/* <button onClick={handleEditClick}>login</button> */}
@@ -219,6 +221,51 @@ const Login = ({ flip }) => {
                                         />
                                         <ErrorMessage
                                           name="email"
+                                          component="div"
+                                        />
+                                      </div>
+                                      <div class="form-group pb-4 mt-3 ">
+                                        <label className="float-start  mb-1    ">
+                                          Password
+                                        </label>
+                                        <Field
+                                          type="password"
+                                          name="password"
+                                          class="form-control"
+                                          placeholder="enter password"
+                                        />
+                                        <ErrorMessage
+                                          name="password"
+                                          component="div"
+                                        />
+                                      </div>
+                                      <div class="form-group pb-4 mt-3 ">
+                                        <label className="float-start  mb-1    ">
+                                          Password
+                                        </label>
+                                        <Field
+                                          type="password"
+                                          name="password"
+                                          class="form-control"
+                                          placeholder="enter password"
+                                        />
+                                        <ErrorMessage
+                                          name="password"
+                                          component="div"
+                                        />
+                                      </div>
+                                      <div class="form-group pb-4 mt-3 ">
+                                        <label className="float-start  mb-1    ">
+                                          Password
+                                        </label>
+                                        <Field
+                                          type="password"
+                                          name="password"
+                                          class="form-control"
+                                          placeholder="enter password"
+                                        />
+                                        <ErrorMessage
+                                          name="password"
                                           component="div"
                                         />
                                       </div>

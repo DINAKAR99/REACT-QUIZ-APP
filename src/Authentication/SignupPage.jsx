@@ -15,14 +15,14 @@ import axios from "axios";
 const SignupPage = () => {
   const navigate = useNavigate();
   const initialValues = {
-    name: "",
+    userName: "",
     email: "",
     empId: "",
     password: "",
     conPassword: "",
   };
   const validate = yup.object({
-    name: yup.string().required("Name is required"),
+    userName: yup.string().required("Name is required"),
     email: yup.string().email("Email is invalid").required("Email is required"),
     empId: yup.string().required("Employee id is required"),
     password: yup
@@ -36,10 +36,12 @@ const SignupPage = () => {
   });
   document.title = "Signup";
   const handleSignup = (values) => {
-    // console.log(values);
+    console.log(values);
+    toast.loading("Signing up...");
     createUserWithEmailAndPassword(auth, values.email, values.password)
       .then((userCredential) => {
         // Signed in
+        toast.remove();
         const user = userCredential.user;
         toast.success("Account created successfully");
         console.log(user);
@@ -49,7 +51,9 @@ const SignupPage = () => {
         axios
           .put(
             `https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/users/${username}.json`,
-            { username }
+            {
+              ...values,
+            }
           )
           .then(console.log("dwudwd"));
       })
@@ -93,7 +97,7 @@ const SignupPage = () => {
 
         <div className="form-container bg-black    col-md-4   border-0 border-start    p-5 pb-0   sign-in-container white-shadow ">
           <h1 className="text-center text-white   ">Sign Up</h1>
-          <div className="social-container text-center p-2">
+          {/* <div className="social-container text-center p-2">
             <a href="#" className="social mx-2 p-2     ">
               <i className="fa fa-facebook-f text-white  " />
             </a>
@@ -103,7 +107,7 @@ const SignupPage = () => {
             <a href="#" className="social mx-2 p-2   text-white">
               <i className="fa fa-linkedin" />
             </a>
-          </div>
+          </div> */}
 
           <Formik
             initialValues={initialValues}
@@ -123,12 +127,12 @@ const SignupPage = () => {
                     <Field
                       type="text"
                       label="Name"
-                      name="name"
+                      name="userName"
                       style={{ fontSize: "13px" }}
                       placeholder="Enter your name"
-                      className={`form-control rounded-0    bg-transparent  border-0 border-bottom border-white    ${
-                        formik.touched.name &&
-                        formik.errors.name &&
+                      className={`form-control text-white   rounded-0    bg-transparent  border-0 border-bottom border-white    ${
+                        formik.touched.userName &&
+                        formik.errors.userName &&
                         "is-invalid"
                       }`}
                       id="name"
@@ -150,7 +154,7 @@ const SignupPage = () => {
                       label="Email"
                       style={{ fontSize: "13px" }}
                       placeholder="example@gmail.com"
-                      className={`form-control rounded-0 bg-transparent border-0 border-bottom border-white ${
+                      className={`form-control text-white   rounded-0 bg-transparent border-0 border-bottom border-white ${
                         formik.touched.email &&
                         formik.errors.email &&
                         "is-invalid"
@@ -171,10 +175,12 @@ const SignupPage = () => {
                     <Field
                       type="text"
                       name="empId"
+                      maxLength="4"
+                      pattern="^[0-9]*$"
                       label="Employee Id"
                       style={{ fontSize: "13px" }}
                       placeholder="Enter Your Id"
-                      className={`form-control rounded-0  bg-transparent  border-0 border-bottom border-white ${
+                      className={`form-control text-white   rounded-0  bg-transparent  border-0 border-bottom border-white ${
                         formik.touched.empId &&
                         formik.errors.empId &&
                         "is-invalid"
@@ -201,7 +207,7 @@ const SignupPage = () => {
                       style={{ fontSize: "13px" }}
                       label="Password"
                       placeholder="qwert@123"
-                      className={`form-control rounded-0 bg-transparent border-0 border-bottom border-white ${
+                      className={`form-control text-white   rounded-0 bg-transparent border-0 border-bottom border-white ${
                         formik.touched.password &&
                         formik.errors.password &&
                         "is-invalid"
@@ -214,14 +220,14 @@ const SignupPage = () => {
                       className="text-danger"
                     />
                   </div>
-                  <div className="mb-2 mt-1   ">
+                  <div className=" form-group mb-2 mt-1   ">
                     <label htmlFor="confirmPassword" className="text-white ">
                       Confirm Password
                     </label>
                     <input
                       id="confirmPassword"
                       style={{ fontSize: "13px" }}
-                      className={`form-control shadow-none bg-transparent rounded-0 border-0 border-bottom border-white mt-1 ${
+                      className={`form-control text-white   shadow-none bg-transparent rounded-0 border-0 border-bottom border-white mt-1 ${
                         formik.touched.conPassword &&
                         formik.errors.conPassword &&
                         "is-invalid"

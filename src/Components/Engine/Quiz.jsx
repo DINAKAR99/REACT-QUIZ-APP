@@ -328,8 +328,8 @@ const Quiz = ({ categoryName }) => {
         </div>
       )}
 
-      <div style={{ width: "100vw" }}>
-        <div className="h-100  ">
+      <div style={{ width: "100vw" }} className="vh-100  ">
+        <div className="vh-100  ">
           {loading ? (
             <div
               className="border rounded-3     shadow-lg   text-center  d-flex justify-content-center align-items-center "
@@ -345,7 +345,7 @@ const Quiz = ({ categoryName }) => {
               />
             </div>
           ) : (
-            <div className="  p-4 shadow-lg vh-100     ">
+            <div className="  p-4 shadow-lg vh-100      ">
               <div>
                 <i>Note: Do not refresh the page while taking quiz</i>
               </div>
@@ -363,7 +363,7 @@ const Quiz = ({ categoryName }) => {
 
               <main>
                 <>
-                  <h5 className="pb-2">
+                  <h6 className="pb-2">
                     <b>{currentQuestionIndex + 1}.&nbsp;</b>
                     <span
                       dangerouslySetInnerHTML={{
@@ -371,7 +371,7 @@ const Quiz = ({ categoryName }) => {
                           fecthedQuestions[currentQuestionIndex]?.question,
                       }}
                     ></span>
-                  </h5>
+                  </h6>
                   {fecthedQuestions[currentQuestionIndex] &&
                   fecthedQuestions[currentQuestionIndex].options ? (
                     Object.values(
@@ -400,6 +400,7 @@ const Quiz = ({ categoryName }) => {
                   ) : (
                     <>
                       <textarea
+                        class="form-control"
                         value={
                           editorValues[
                             fecthedQuestions[currentQuestionIndex].questionId
@@ -412,7 +413,7 @@ const Quiz = ({ categoryName }) => {
                             fecthedQuestions[currentQuestionIndex].question
                           )
                         }
-                        rows={4} // Adjust the number of rows as needed
+                        rows={8} // Adjust the number of rows as needed
                         cols={50} // Adjust the number of columns as needed
                       />
                     </>

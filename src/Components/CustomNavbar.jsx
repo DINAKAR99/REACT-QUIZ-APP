@@ -1,30 +1,26 @@
-import React, { useState, useEffect } from "react";
 import { signOut } from "firebase/auth";
+import React, { useEffect, useState } from "react";
 import logo from "./pictures/StaticBit.png";
 import dummy from "./pictures/dummy.png";
 
+import axios from "axios";
+import toast from "react-hot-toast";
 import { NavLink as ReactLink, useNavigate } from "react-router-dom";
 import {
+  Button,
   Collapse,
-  Navbar,
-  NavbarToggler,
-  NavbarBrand,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
   Nav,
   NavItem,
   NavLink,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Button,
+  Navbar,
+  NavbarBrand,
+  NavbarToggler,
 } from "reactstrap";
-import toast from "react-hot-toast";
 import { auth } from "../firebase";
-import axios from "axios";
 // import { doLogout, getCurrentUserDetail, isloggedIn } from "../auth";
 // import { userContext } from "../context/userContext";
 const CustomNavbar = () => {
@@ -34,6 +30,7 @@ const CustomNavbar = () => {
   const [login, setLogin] = useState(false);
   const [admin, setAdmin] = useState("");
   const [usermail, setUsermail] = useState("");
+  const [username, setUsername] = useState("");
   const [modal, setModal] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   useEffect(() => {
@@ -47,6 +44,22 @@ const CustomNavbar = () => {
     if (sessionStorage.getItem("admin")) {
       setAdmin((e) => "admin_loggedin");
     }
+
+    //first fecth if username
+    axios
+      .get(
+        `https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/users/${username}.json`
+      )
+      .then((response) => {
+        if (response.data == null) {
+          console.log("yeh no image   ");
+          console.log(response.data);
+        } else {
+          console.log(response.data);
+          setUsername((e) => response.data.userName);
+        }
+      });
+
     //first fecth if user is having  profile picture or not
     axios
       .get(
@@ -64,17 +77,21 @@ const CustomNavbar = () => {
   });
 
   const logout = () => {
+    toast.loading("signing out...");
     signOut(auth)
       .then(() => {
         // Sign-out successful.
         sessionStorage.clear();
-        const logoutEvent = new Event("logout");
-        window.dispatchEvent(logoutEvent);
-        toast.success("Signed out successfully");
+        // const logoutEvent = new Event("logout");
+        // window.dispatchEvent(logoutEvent);
 
         setTimeout(() => {
-          window.location.href = "/";
+          toast.remove();
+          toast.success("Signed out successfully");
         }, 1000);
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 1500);
         console.log("Signed out successfully");
       })
       .catch((error) => {
@@ -83,18 +100,6 @@ const CustomNavbar = () => {
   };
 
   const toggler = () => setModal(!modal);
-  //script
-  // var prevScrollpos = window.pageYOffset;
-  // window.onscroll = function () {
-  //   var currentScrollPos = window.pageYOffset;
-  //   if (prevScrollpos > currentScrollPos) {
-  //     document.getElementById("navbar").style.top = "0";
-  //   } else {
-  //     document.getElementById("navbar").style.top = "-85px";
-  //   }
-  //   prevScrollpos = currentScrollPos;
-  // };
-  //script
 
   return (
     <div style={{ marginBottom: 80 }}>
@@ -108,15 +113,18 @@ const CustomNavbar = () => {
           top: 60,
         }}
       >
-        <ModalHeader toggle={toggler} className="google-card    ">
-          {usermail}
+        <ModalHeader toggle={toggler} className="    ">
+          <h6 className="mx-auto  text-dark   ">
+            {" "}
+            {usermail ? usermail : "loading"}{" "}
+          </h6>
         </ModalHeader>
-        <ModalBody className="text-center  google-card  ">
+        <ModalBody className="text-center    ">
           <img
             src={imageUrl ? imageUrl : dummy}
             alt=""
-            height={60}
-            width={60}
+            height={70}
+            width={70}
             style={{
               border: "1px solid white",
 
@@ -125,7 +133,10 @@ const CustomNavbar = () => {
               objectFit: "cover",
             }}
           ></img>
-          <h3 className="text-uppercase  "> Dinakar </h3>
+          <h5 className="text-uppercase text-dark mt-2  ">
+            {" "}
+            {username ? username.toUpperCase() : "loading"}
+          </h5>
           <Button
             className="rounded-4 px-3  bg-dark   "
             onClick={() => window.open("/user/manageAccount")}
@@ -133,13 +144,14 @@ const CustomNavbar = () => {
             Manage your Account
           </Button>
         </ModalBody>
+
         <ModalFooter
-          className="   d-flex justify-content-center border-0   "
-          style={{ backgroundColor: "#343434" }}
+          className="   d-flex justify-content-center border-0  p "
+          // style={{ backgroundColor: "hsl(0, 0%, 85%)" }}
         >
           <Button className="px-4 bg-dark  rounded-4 " onClick={logout}>
-            <i className="fa-solid fa-arrow-right-from-bracket"></i>
-            Sign out
+            <i className="fa-solid fa-arrow-right-from-bracket"></i> &nbsp; Sign
+            out
           </Button>
         </ModalFooter>
       </Modal>
@@ -192,8 +204,12 @@ const CustomNavbar = () => {
             {login && (
               <>
                 <NavItem>
-                  <NavLink tag={ReactLink} to="#" className="mt-2  ">
-                    {usermail}
+                  <NavLink
+                    tag={ReactLink}
+                    to="#"
+                    className="mt-2 text-capitalize   "
+                  >
+                    {username}
                   </NavLink>
                 </NavItem>
 

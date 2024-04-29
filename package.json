@@ -35,6 +35,7 @@
     "react-dom": "^18.2.0",
     "react-gauge-chart": "^0.4.1",
     "react-gauge-component": "^1.2.0",
+    "react-hook-form": "^7.51.3",
     "react-hot-toast": "^2.4.1",
     "react-lottie": "^1.2.4",
     "react-multi-form": "^1.0.5",
