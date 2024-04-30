@@ -49,10 +49,11 @@ const Evaluation = () => {
         });
       });
   }, []);
-  const nav = useNavigate();
+  const navigate = useNavigate();
   const evaluate = (code) => {
     console.log(code);
 
+    toast.loading("loading...");
     axios
       .put(
         `https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/exam/${currentCategory}/attempted/${currentUser}/evalution.json`,
@@ -64,6 +65,10 @@ const Evaluation = () => {
       .then(() => {
         setTimeout(() => {
           window.location.reload();
+        }, 1500);
+        setTimeout(() => {
+          toast.remove();
+          toast.success("Successfully evaluated");
         }, 1000);
       });
     //now for settting user attempted meta data
@@ -74,12 +79,6 @@ const Evaluation = () => {
         status: code,
       }
     );
-
-    toast.promise(myPromise, {
-      loading: "Loading data...",
-      success: "Evaluation Done",
-      error: "Error sending data",
-    });
   };
 
   const fetchEvaluationData = (category) => {
@@ -93,7 +92,21 @@ const Evaluation = () => {
         setEvaluationData((e) => data.data);
       });
   };
-
+  const showUserExamSheet = () => {
+    // navigate("/admin/userquiz", {
+    //   state: {
+    //     categoryName: currentCategory,
+    //     user: { cii: 23, name: currentUser },
+    //   },
+    // });
+    const url = `/admin/userquiz`;
+    window.localStorage.setItem("EvalCategory", currentCategory);
+    window.localStorage.setItem(
+      "EvalUser",
+      JSON.stringify({ cii: 23, name: currentUser })
+    );
+    window.open(url, "_blank");
+  };
   return (
     <div>
       <CustomNavbar />
@@ -128,13 +141,14 @@ const Evaluation = () => {
                     onChange={(e) => {
                       setCurrentCategory(e.target.value);
                       fetchEvaluationData(e.target.value);
-                      setCurrentUser("");
+                      setCurrentUser((e) => "");
                       console.log(e.target.value);
                     }}
                   >
                     <option defaultValue="" selected disabled>
                       --select--
                     </option>
+
                     {categories &&
                       categories.map((each, index) => {
                         return (
@@ -153,7 +167,8 @@ const Evaluation = () => {
                       </i>
                       <select
                         name="quizcategory "
-                        className="form-select mb-4  "
+                        className="form-select mb-4 "
+                        value={currentUser}
                         onChange={(e) => {
                           setCurrentUser(e.target.value);
 
@@ -179,8 +194,12 @@ const Evaluation = () => {
                       {currentUser != "" && (
                         <div className="text-center  ">
                           <h5>User : {currentUser}</h5>
-                          <button className="btn bg-info-subtle         ">
-                            attempted <quiz></quiz>
+                          <button
+                            className="btn border border-black    "
+                            style={{ backgroundColor: "#ddcc67" }}
+                            onClick={(e) => showUserExamSheet()}
+                          >
+                            View Answer Sheet <quiz></quiz>
                           </button>
 
                           <div className="d-flex mt-3 gap-2 justify-content-center    ">
@@ -213,11 +232,11 @@ const Evaluation = () => {
                   </div>
                   <table className="table border border-2 border-black ">
                     <thead>
-                      <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">User</th>
-                        <th scope="col">Evaluation Status</th>
-                        <th scope="col">Result</th>
+                      <tr className="fw-bold  ">
+                        <th className="fw-bold  ">#</th>
+                        <th className="fw-bold  ">User</th>
+                        <th className="fw-bold  ">Evaluation Status</th>
+                        <th className="fw-bold  ">Result</th>
                       </tr>
                     </thead>
                     <tbody>

@@ -78,7 +78,7 @@ const UserDashboard = () => {
   return (
     <>
       <CustomNavbar />{" "}
-      <Container fluid className="cont">
+      <Container fluid className="cont vh-100 ">
         <Row>
           <h1 className=" text-center fw-bold    ">Dashboard</h1>
           <Col>
@@ -258,6 +258,9 @@ const UserDashboard = () => {
         </Row>
       </Container>
       <ScrollToTop smooth height="15" width="15" />
+      <footer className="bg-dark text-center py-3   text-white-50  ">
+        BrainyBits © 2024 All Rights Reserved.
+      </footer>
     </>
   );
 };

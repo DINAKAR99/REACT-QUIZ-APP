@@ -321,7 +321,13 @@ const AllQuiz = ({ token }) => {
                       (QuestionPacket, index) => (
                         <div key={index} className="mt-3">
                           <li key={index} className="mb-2">
-                            {Object.values(QuestionPacket)[0].question}
+                            {/* {Object.values(QuestionPacket)[0].question} */}
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html:
+                                  Object.values(QuestionPacket)[0].question,
+                              }}
+                            ></div>
                           </li>
                           <div className="mb-3">
                             {Object.values(QuestionPacket)[0].options && (

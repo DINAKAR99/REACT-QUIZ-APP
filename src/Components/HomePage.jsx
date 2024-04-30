@@ -21,7 +21,7 @@ const HomePage = () => {
       " "
     );
   let div = window.scrollY;
-  if (div >= 160) {
+  if (div >= 140) {
     console.log(div); // Call your function
     ref3.current.classList.add("drop-from-left");
     ref2.current.classList.add("drop-from-right");
@@ -69,13 +69,6 @@ const HomePage = () => {
 
           <div className="  align-items-center  ">
             <h1 className="text-white ms-auto p-5 pb-2    ">
-              {/* <p>
-                Unravel Your Mind
-                <br /> Welcome to <b>BrainyBits.</b>
-                <br /> Where curiosity meets challenge, and every question
-                unlocks a world of knowledge!
-              </p> */}
-
               {text.map((el, i) => (
                 <motion.span
                   initial={{ opacity: 0 }}
@@ -225,7 +218,7 @@ const HomePage = () => {
         </main>
       </div>
       <ScrollToTop smooth height="15" width="15" />
-      <footer className="bg-dark text-center  text-white-50  ">
+      <footer className="bg-dark text-center py-3   text-white-50  ">
         BrainyBits © 2024 All Rights Reserved.
       </footer>
     </>

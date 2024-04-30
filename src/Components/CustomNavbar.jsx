@@ -188,7 +188,7 @@ const CustomNavbar = () => {
                   </NavLink>
                 </NavItem>
 
-                <NavItem>
+                {/* <NavItem>
                   <NavLink
                     tag={ReactLink}
                     to="/admin/dashboard"
@@ -196,7 +196,7 @@ const CustomNavbar = () => {
                   >
                     Admin
                   </NavLink>
-                </NavItem>
+                </NavItem> */}
               </>
             )}
           </Nav>

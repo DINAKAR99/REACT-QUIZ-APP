@@ -46,9 +46,7 @@ const AddCategory = ({ modal, backdrop, setModal, setToken }) => {
     createCategory(category, type).then(() => {
       setToken((prev) => prev + 1);
       toast.success("Category Added successfully");
-      setTimeout(() => {
-        window.location.reload();
-      }, 300);
+
       //now trigger the rerender and change modal backdrop to false
       incrementCount();
     });

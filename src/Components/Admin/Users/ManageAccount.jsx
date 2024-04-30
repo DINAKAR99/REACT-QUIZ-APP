@@ -105,6 +105,9 @@ const ManageAccount = () => {
           )
           .then((res) => {
             console.log(res);
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000);
           });
       })
       .catch((err) => {
@@ -148,6 +151,9 @@ const ManageAccount = () => {
           setImageUrl("");
           toast.remove();
           toast.success("Deleted successfully");
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
         });
     }
   };
@@ -168,29 +174,31 @@ const ManageAccount = () => {
     },
   });
   const onSubmit = (data) => {
-    console.log(data);
-    //fecth user from local storage and set to inital values
-    const usermail = sessionStorage.getItem("usermail");
-    setUser((e) => usermail);
-    const username = usermail.split("@")[0];
+    if (confirm("Are you sure you want to update the details?")) {
+      console.log(data);
+      //fecth user from local storage and set to inital values
+      const usermail = sessionStorage.getItem("usermail");
+      setUser((e) => usermail);
+      const username = usermail.split("@")[0];
 
-    //send the data into firebase db
-    toast.loading("Updating Details ...");
-    axios
-      .put(
-        `https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/users/${username}.json`,
-        data
-      )
-      .then((response) => {
-        //now reload after 1 sec
-        setTimeout(() => {
-          toast.remove();
-          toast.success("Updated Successfully");
-        }, 1000);
-        setTimeout(() => {
-          window.location.reload();
-        }, 1500);
-      });
+      //send the data into firebase db
+      toast.loading("Updating Details ...");
+      axios
+        .put(
+          `https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/users/${username}.json`,
+          data
+        )
+        .then((response) => {
+          //now reload after 1 sec
+          setTimeout(() => {
+            toast.remove();
+            toast.success("Updated Successfully");
+          }, 1000);
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        });
+    }
   };
   console.log(errors);
   return (
@@ -216,7 +224,7 @@ const ManageAccount = () => {
               <h3 className="mb-1  ">
                 <Button
                   onClick={(e) => setSecond((e) => !e)}
-                  className="px-4 p-2  text-dark btn-outline-light  rounded rounded-5  "
+                  className="px-4 p-2  text-dark btn-outline-light me-4  rounded rounded-5  "
                   style={{
                     backgroundColor: "#c2e7ff",
                     fontSize: 12,
@@ -224,14 +232,13 @@ const ManageAccount = () => {
                   }}
                 >
                   <i class="fa-solid fa-arrow-left"></i>
-                </Button>{" "}
-                Upload Picture{" "}
+                </Button>
+                Upload Picture
               </h3>
 
               <div className="d-flex justify-content-center   ">
                 <div className="im text-center       ">
                   <div className="d-flex justify-content-center mb-4 ">
-                    {" "}
                     <img
                       id="previewImage"
                       src="#"
@@ -271,17 +278,6 @@ const ManageAccount = () => {
                   onClick={submitImage}
                 >
                   <i class="fa-solid fa-cloud-arrow-up"></i> &nbsp;Upload
-                </Button>
-                <Button
-                  className="px-4 p-2  text-dark btn-outline-light  rounded rounded-5   "
-                  style={{
-                    backgroundColor: "#c2e7ff",
-                    fontSize: 12,
-                    fontWeight: "500",
-                  }}
-                  onClick={toggle}
-                >
-                  <i class="fa-solid fa-trash-can"></i> &nbsp;Remove
                 </Button>
               </ModalFooter>
             </div>
@@ -345,7 +341,7 @@ const ManageAccount = () => {
             </span>
             <span> Account Profile</span>
           </h2>
-          <Col className="sidebar">
+          <Col sm={6} className="sidebar">
             <div
               className="text-center  camera position-relative   mt-5 "
               style={{ height: 120 }}
@@ -394,7 +390,7 @@ const ManageAccount = () => {
               </div>
 
               <div>
-                <h1 className=" ">{user}</h1>
+                <h1 className=" ">{user.split("@")[0]}</h1>
               </div>
             </div>
           </Col>
@@ -520,13 +516,19 @@ const ManageAccount = () => {
                       </div>
                     )}
                   </div>
-                  <input type="submit" className="btn btn-primary mt-3 " />
+                  <div className="d-flex justify-content-center ">
+                    {" "}
+                    <input type="submit" className="btn btn-dark mt-3 " />
+                  </div>
                 </form>
               )}
             </div>
           </Col>
         </Row>
       </Container>
+      <footer className="bg-dark text-center py-3   text-white-50  ">
+        BrainyBits © 2024 All Rights Reserved.
+      </footer>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import aron from "./pictures/dummy.png";
+import dummy from "./pictures/dummy.png";
 
 import { NavLink as ReactLink, useNavigate } from "react-router-dom";
 import {
@@ -29,6 +29,7 @@ const HomeNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [login, setLogin] = useState(false);
   const [user, setUser] = useState(undefined);
+  const [username, setUsername] = useState("");
   const [modal, setModal] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   useEffect(() => {
@@ -48,6 +49,21 @@ const HomeNavbar = () => {
         } else {
           console.log(response.data.url);
           setImageUrl((e) => response.data.url);
+        }
+      });
+
+    //first fecth if username
+    axios
+      .get(
+        `https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/users/${username}.json`
+      )
+      .then((response) => {
+        if (response.data == null) {
+          console.log("yeh no image   ");
+          console.log(response.data);
+        } else {
+          console.log(response.data);
+          setUsername((e) => response.data.userName);
         }
       });
   }, []);
@@ -86,15 +102,15 @@ const HomeNavbar = () => {
           top: 60,
         }}
       >
-        <ModalHeader toggle={toggler} className="google-card    ">
-          {user}
+        <ModalHeader toggle={toggler} className="    ">
+          <h6 className="mx-auto  text-dark   "> {user ? user : "loading"} </h6>
         </ModalHeader>
-        <ModalBody className="text-center  google-card  ">
+        <ModalBody className="text-center    ">
           <img
-            src={imageUrl ? imageUrl : aron}
+            src={imageUrl ? imageUrl : dummy}
             alt=""
-            height={60}
-            width={60}
+            height={70}
+            width={70}
             style={{
               border: "1px solid white",
 
@@ -103,7 +119,10 @@ const HomeNavbar = () => {
               objectFit: "cover",
             }}
           ></img>
-          <h3 className="text-uppercase  "> Dinakar </h3>
+          <h5 className="text-uppercase text-dark mt-2  ">
+            {" "}
+            {username ? username.toUpperCase() : "loading"}
+          </h5>
           <Button
             className="rounded-4 px-3  bg-dark   "
             onClick={() => window.open("/user/manageAccount")}
@@ -111,13 +130,14 @@ const HomeNavbar = () => {
             Manage your Account
           </Button>
         </ModalBody>
+
         <ModalFooter
-          className="   d-flex justify-content-center border-0   "
-          style={{ backgroundColor: "#343434" }}
+          className="   d-flex justify-content-center border-0  p "
+          // style={{ backgroundColor: "hsl(0, 0%, 85%)" }}
         >
           <Button className="px-4 bg-dark  rounded-4 " onClick={logout}>
-            <i className="fa-solid fa-arrow-right-from-bracket"></i>
-            Sign out
+            <i className="fa-solid fa-arrow-right-from-bracket"></i> &nbsp; Sign
+            out
           </Button>
         </ModalFooter>
       </Modal>
@@ -157,7 +177,7 @@ const HomeNavbar = () => {
                 <NavItem onClick={toggler}>
                   <NavLink tag={ReactLink}>
                     <img
-                      src={imageUrl ? imageUrl : aron}
+                      src={imageUrl ? imageUrl : dummy}
                       alt=""
                       height={40}
                       width={40}

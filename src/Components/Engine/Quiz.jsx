@@ -213,9 +213,15 @@ const Quiz = ({ categoryName }) => {
 
     console.log(marks);
 
+    toast.loading("submitting...");
+    setTimeout(() => {
+      toast.remove();
+      toast.success("Successfully submitted");
+    }, 2000);
+    setTimeout(() => {
+      setQuizSubmitted(true);
+    }, 2500);
     sessionStorage.removeItem("countdownEndTime");
-
-    setQuizSubmitted(true);
 
     //api call to hit the marks sheet endpoint of particular category
     if (!hasOptions) {
@@ -244,6 +250,11 @@ const Quiz = ({ categoryName }) => {
     //api call to hit the user score  endpoint of particular category conatins percentage , attempted correct and total number of exam
 
     if (hasOptions) {
+      console.log({
+        percentage: calcPercentage(),
+        attemptedCorrect: marks,
+        totalQuestions: fecthedQuestions?.length,
+      });
       axios.put(
         `https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/questions/${categoryName}/attempted/${user}/score.json`,
         {
@@ -363,14 +374,13 @@ const Quiz = ({ categoryName }) => {
 
               <main>
                 <>
-                  <h6 className="pb-2">
-                    <b>{currentQuestionIndex + 1}.&nbsp;</b>
-                    <span
-                      dangerouslySetInnerHTML={{
-                        __html:
-                          fecthedQuestions[currentQuestionIndex]?.question,
-                      }}
-                    ></span>
+                  <h6 className="pb-2 d-inline  ">
+                    <div>
+                      <h6>
+                        {currentQuestionIndex + 1}.&nbsp;
+                        {fecthedQuestions[currentQuestionIndex]?.question}
+                      </h6>
+                    </div>
                   </h6>
                   {fecthedQuestions[currentQuestionIndex] &&
                   fecthedQuestions[currentQuestionIndex].options ? (
@@ -394,7 +404,6 @@ const Quiz = ({ categoryName }) => {
                           }
                         ></Radio>
                         {option}
-                        {fecthedQuestions[currentQuestionIndex].questionId}
                       </div>
                     ))
                   ) : (

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Button, Col, Container, Row } from "reactstrap";
 import CustomNavbar from "../../CustomNavbar";
 import { getAllQuestionsPerCategory } from "../../Helper/QuizHelper";
@@ -9,12 +9,25 @@ import axios from "axios";
 const UserQuiz = () => {
   document.title = "user quiz";
   const location = useLocation();
-  const { categoryName, user } = location.state;
+  console.log(localStorage.getItem("EvalCategory"));
+  const euser = JSON.parse(localStorage.getItem("EvalUser"));
+  console.log(euser);
+  const param1 = localStorage.getItem("EvalCategory") || "";
+  const param2 = localStorage.getItem("EvalUser")
+    ? JSON.parse(localStorage.getItem("EvalUser"))
+    : null; // Adjust this default value based on your requirements
+
+  const { categoryName, user } = location.state || {
+    categoryName: param1,
+    user: param2,
+  };
+
   console.log(categoryName);
   console.log(user);
 
   const [questionPack, setQuestionPack] = useState([]);
   const [show, setShow] = useState(false);
+  const [score, setScore] = useState("");
   const qPack = [];
   useState(() => {
     const allquestions = axios
@@ -32,6 +45,16 @@ const UserQuiz = () => {
       .then(() => {
         console.log(qPack);
         setQuestionPack(qPack);
+      });
+
+    //fetch user score
+    axios
+      .get(
+        `https://react-quiz-app-001-default-rtdb.asia-southeast1.firebasedatabase.app/questions/${categoryName}/attempted/${user.name}/score.json`
+      )
+      .then((response) => {
+        console.log(response.data.percentage);
+        setScore((e) => response.data.percentage);
       });
   });
   const navigate = useNavigate();
@@ -63,47 +86,53 @@ const UserQuiz = () => {
                     >
                       <i className="fa-solid fa-bars"></i>
                     </Button>
-                    <h2 className="text-center me-auto   ">
-                      User : {user.name} | Empid : {user.empId}
-                    </h2>
                   </div>
                 </header>
                 <Col md={12}>
                   <div>
                     <h4 className="mt-3 ">
-                      <b className="text-uppercase">
-                        &nbsp;{categoryName} QUIZ
-                      </b>
-                      <> &nbsp; &nbsp;score : 7/10 (70%)</>
+                      <>
+                        &nbsp; &nbsp;
+                        <dd className="text-capitalize  ">
+                          <b className="text-uppercase me-5">
+                            &nbsp;{categoryName} QUIZ
+                          </b>
+                          Username - {user.name}
+                          &nbsp; &nbsp;Score-Percentage : {score} %
+                        </dd>
+                      </>
                     </h4>
                   </div>
 
-                  <div
-                    className=" faderborder border-grey  shadow-lg bg-white  rounded p-3 mb-2       p-3 mb-2 overflow-y-scroll    "
-                    style={{ maxHeight: "405px" }}
-                  >
+                  <div className=" faderborder border-grey  shadow-lg bg-white  rounded p-3 mb-2       p-3 mb-2    ">
                     <div>
-                      <h6 className="mt-3 ">
-                        Note : Below are the questions attempted by the user
-                        with choosen option or written answer{" "}
-                      </h6>
+                      <i style={{ fontStyle: "italic" }}>
+                        Below are the questions attempted by the user with
+                        choosen option or written answer
+                      </i>
+
                       <ol type={1}>
                         {questionPack.map((QuestionPacket, index) => (
                           <div key={index} className="mt-3">
                             <li key={index} className="mb-2">
-                              <b>
-                                {QuestionPacket.question
-                                  ? QuestionPacket.question
-                                  : ""}
-                              </b>
+                              <h5>
+                                <span
+                                  dangerouslySetInnerHTML={{
+                                    __html: QuestionPacket.question
+                                      ? QuestionPacket.question
+                                      : "",
+                                  }}
+                                ></span>
+                              </h5>
                             </li>
 
-                            <h6>
-                              option chose :{" "}
-                              {QuestionPacket.selectedOption.replace(
-                                "c",
-                                "<br>"
-                              )}
+                            <h6 className="  ">
+                              <b>answered</b> :
+                              <span
+                                dangerouslySetInnerHTML={{
+                                  __html: QuestionPacket.selectedOption,
+                                }}
+                              ></span>
                               &nbsp;&nbsp;&nbsp;
                               {QuestionPacket.isCorrect ? (
                                 <i
@@ -117,52 +146,6 @@ const UserQuiz = () => {
                                 ></i>
                               )}
                             </h6>
-                            {/* 
-                            <ol type="A">
-                              {Object.values(QuestionPacket.options) &&
-                                Object.values(QuestionPacket.options)?.map(
-                                  (Eachoption, indexx) => {
-                                    return (
-                                      <li key={indexx}>
-                                        <input
-                                          type="radio"
-                                          value={Eachoption}
-                                          checked={
-                                            QuestionPacket.correctAnswer ===
-                                            Eachoption
-                                          }
-                                          readOnly
-                                        />
-                                        {Eachoption}
-                                        {QuestionPacket.correctAnswer ===
-                                        Eachoption ? (
-                                          <i
-                                            className="fa-solid fa-check mx-2 "
-                                            style={{ color: "green" }}
-                                          ></i>
-                                        ) : (
-                                          ""
-                                        )}
-                                      </li>
-                                    );
-                                  }
-                                )}
-                            </ol> */}
-
-                            {/* {Object.values(QuestionPacket.options).map((each) =>
-                              each == QuestionPacket.correctAnswer ? (
-                                <h6 className="mt-2 ">
-                                  correct option : &nbsp;
-                                  {Object.keys(QuestionPacket.options).find(
-                                    (key) =>
-                                      QuestionPacket.options[key] ===
-                                      QuestionPacket.correctAnswer
-                                  )}{" "}
-                                </h6>
-                              ) : (
-                                ""
-                              )
-                            )} */}
                           </div>
                         ))}
                       </ol>

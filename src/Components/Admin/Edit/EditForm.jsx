@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { Button, Container, Input } from "reactstrap";
 import { updateQuestion } from "../../Helper/QuizHelper";
 import myContext from "../../context/ContextCore";
-import toast from "react-hot-toast";
 
 const EditForm = ({ packet, toggle }) => {
   // using context
@@ -39,9 +39,6 @@ const EditForm = ({ packet, toggle }) => {
       questionPacket
     ).then(() => {
       toast.success("Question Updated!");
-      setTimeout(() => {
-        window.location.reload();
-      }, 500);
     });
     // modalToggle
     toggle();
@@ -111,7 +108,7 @@ const EditForm = ({ packet, toggle }) => {
                 id="content"
                 placeholder="Enter Question"
                 className="rounded rounded-2 "
-                aria-rowcount={4}
+                rows={8}
                 name="question"
                 value={questionPacket.question}
                 onChange={fieldChanged}

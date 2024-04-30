@@ -206,7 +206,7 @@ const SignupPage = () => {
                       name="password"
                       style={{ fontSize: "13px" }}
                       label="Password"
-                      placeholder="qwert@123"
+                      placeholder="Enter password"
                       className={`form-control text-white   rounded-0 bg-transparent border-0 border-bottom border-white ${
                         formik.touched.password &&
                         formik.errors.password &&
@@ -234,7 +234,6 @@ const SignupPage = () => {
                       }`}
                       type="password"
                       name="conPassword"
-                      placeholder="confirm password..."
                       {...formik.getFieldProps("conPassword")}
                     />
                     <ErrorMessage
@@ -263,6 +262,9 @@ const SignupPage = () => {
           </Formik>
         </div>
       </div>
+      <footer className="bg-dark text-center py-3   text-white-50  ">
+        BrainyBits © 2024 All Rights Reserved.
+      </footer>
     </div>
   );
 };

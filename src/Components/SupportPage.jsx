@@ -1,10 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CustomNavbar from "./CustomNavbar";
 import axios from "axios";
 import hand from "./pictures/postman.png";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 const SupportPage = () => {
   // create a Ref to access our form element
+  document.title = "Contact Us";
   const formRef = useRef(null);
   const [modal, setModal] = useState(false);
   const [namee, setNamee] = useState("");
@@ -244,6 +245,9 @@ const SupportPage = () => {
           </div>
         </div>
       </section>
+      <footer className="bg-dark text-center py-3   text-white-50  ">
+        BrainyBits © 2024 All Rights Reserved.
+      </footer>
     </>
   );
 };

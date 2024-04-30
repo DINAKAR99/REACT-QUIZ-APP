@@ -76,9 +76,6 @@ const CodingQuestion = ({ toggle, check, categorypacket }) => {
   return (
     <div>
       <div>
-        <Button color="danger" onClick={toggle}>
-          Click Me
-        </Button>
         <Modal isOpen={check} toggle={toggle}>
           <ModalHeader toggle={toggle}>New Question</ModalHeader>
           <ModalBody>
