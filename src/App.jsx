@@ -53,9 +53,9 @@ function App() {
             <Route path="allusers" element={<AllUsers />} />
             <Route path="userInfo" element={<UserInfoPage />} />
             <Route path="userquiz" element={<UserQuiz />} />
-          </Route>
+          </Route>dwdwwd
           <Route path="/login" element={<LoginPage />} />
-          dwdwd
+          dwdwdwdwwdwdw
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/contact" element={<SupportPage />} />
           dedewdwdwwdwdwd
